@@ -1,33 +1,70 @@
 {
-  "updatedAt": "2026-09-07T14:02:43.056Z",
+  "updatedAt": "2026-09-07T14:06:56.488Z",
   "benchmarks": [
     {
       "id": "swe_bench_verified",
-      "name": "SWE-bench Verified"
+      "name": "SWE-bench Verified",
+      "category": "Coding"
     },
     {
       "id": "swe_bench_pro",
-      "name": "SWE-bench Pro"
+      "name": "SWE-bench Pro",
+      "category": "Coding"
+    },
+    {
+      "id": "livecodebench",
+      "name": "LiveCodeBench",
+      "category": "Coding"
     },
     {
       "id": "terminal_bench_2_1",
-      "name": "Terminal-Bench 2.1"
+      "name": "Terminal-Bench 2.1",
+      "category": "Agentic & Tool Use"
+    },
+    {
+      "id": "mcp_atlas",
+      "name": "MCP Atlas",
+      "category": "Agentic & Tool Use"
+    },
+    {
+      "id": "tau_bench",
+      "name": "Tau-Bench",
+      "category": "Agentic & Tool Use"
     },
     {
       "id": "aime_2026",
-      "name": "AIME 2026"
+      "name": "AIME 2026",
+      "category": "Reasoning & Math"
     },
     {
       "id": "gpqa_diamond",
-      "name": "GPQA Diamond"
+      "name": "GPQA Diamond",
+      "category": "Reasoning & Math"
     },
     {
       "id": "hle",
-      "name": "Humanity's Last Exam (HLE)"
+      "name": "Humanity's Last Exam (HLE)",
+      "category": "Reasoning & Math"
+    },
+    {
+      "id": "mmlu_pro",
+      "name": "MMLU-Pro",
+      "category": "Reasoning & Math"
     },
     {
       "id": "osworld_verified",
-      "name": "OSWorld-Verified"
+      "name": "OSWorld-Verified",
+      "category": "Multimodal & Vision"
+    },
+    {
+      "id": "mmmu_pro",
+      "name": "MMMU-Pro",
+      "category": "Multimodal & Vision"
+    },
+    {
+      "id": "math_vision",
+      "name": "MathVision",
+      "category": "Multimodal & Vision"
     }
   ],
   "models": [
@@ -43,7 +80,9 @@
         "aime_2026": "94.1%",
         "gpqa_diamond": "89.2%",
         "hle": "30.8%",
-        "osworld_verified": "84.3%"
+        "osworld_verified": "84.3%",
+        "livecodebench": "90.3%",
+        "math_vision": "90.0%"
       }
     },
     {
@@ -56,7 +95,11 @@
         "swe_bench_pro": "51.2%",
         "terminal_bench_2_1": "41.6%",
         "hle": "24.3%",
-        "aime_2026": "92.6%"
+        "aime_2026": "92.6%",
+        "mcp_atlas": "68.4%",
+        "mmlu_pro": "86.1%",
+        "livecodebench": "80.7%",
+        "mmmu_pro": "75.3%"
       }
     },
     {
@@ -70,7 +113,10 @@
         "terminal_bench_2_1": "59.3%",
         "gpqa_diamond": "87.8%",
         "hle": "24.0%",
-        "aime_2026": "94.1%"
+        "aime_2026": "94.1%",
+        "mmlu_pro": "86.2%",
+        "livecodebench": "83.9%",
+        "mmmu_pro": "75.8%"
       }
     },
     {
@@ -81,7 +127,12 @@
       "scores": {
         "aime_2026": "89.2%",
         "gpqa_diamond": "84.3%",
-        "hle": "19.5%"
+        "hle": "19.5%",
+        "mmlu_pro": "85.2%",
+        "livecodebench": "80.0%",
+        "tau_bench": "76.9%",
+        "mmmu_pro": "76.9%",
+        "math_vision": "85.6%"
       }
     },
     {
@@ -92,7 +143,12 @@
       "scores": {
         "aime_2026": "88.3%",
         "gpqa_diamond": "82.3%",
-        "hle": "8.7%"
+        "hle": "8.7%",
+        "mmlu_pro": "82.6%",
+        "livecodebench": "77.1%",
+        "tau_bench": "68.2%",
+        "mmmu_pro": "73.8%",
+        "math_vision": "82.4%"
       }
     },
     {
@@ -107,7 +163,8 @@
         "aime_2026": "~92.0%",
         "gpqa_diamond": "89.2%",
         "hle": "25.6%",
-        "osworld_verified": "~78.0%"
+        "osworld_verified": "~78.0%",
+        "mcp_atlas": "70.2%"
       }
     },
     {
@@ -122,7 +179,10 @@
         "terminal_bench_2_1": "51.7%",
         "aime_2026": "94.7%",
         "gpqa_diamond": "83.5%",
-        "hle": "22.0%"
+        "hle": "22.0%",
+        "mcp_atlas": "75.5%",
+        "tau_bench": "23.5%",
+        "mmmu_pro": "74.0%"
       }
     }
   ]
