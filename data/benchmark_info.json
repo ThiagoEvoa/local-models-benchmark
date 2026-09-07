@@ -1,0 +1,51 @@
+{
+  "SWE-bench Verified": {
+    "name": "SWE-bench Verified",
+    "category": "Coding & Software Engineering",
+    "description": "A human-validated subset of 500 real-world GitHub issues. Evaluates an LLM agent's capability to resolve actual software bugs and pull requests in complex open-source codebases.",
+    "higherIsBetter": true,
+    "unit": "%"
+  },
+  "SWE-bench Pro": {
+    "name": "SWE-bench Pro",
+    "category": "Agentic Coding",
+    "description": "An advanced, long-horizon evaluation of software engineering agents tackling intricate, multi-file enterprise repository challenges with complex test harness verification.",
+    "higherIsBetter": true,
+    "unit": "%"
+  },
+  "Terminal-Bench 2.1": {
+    "name": "Terminal-Bench 2.1",
+    "category": "Agentic & CLI Operation",
+    "description": "Evaluates an AI agent's ability to operate in real bash/terminal command line environments, execute scripts, troubleshoot systems, and interact with tooling autonomously.",
+    "higherIsBetter": true,
+    "unit": "%"
+  },
+  "AIME 2026": {
+    "name": "AIME 2026",
+    "category": "Advanced Mathematics & Reasoning",
+    "description": "American Invitational Mathematics Examination (2026 edition). Tests deep multi-step mathematical Olympiad reasoning and analytical problem-solving with integer answers.",
+    "higherIsBetter": true,
+    "unit": "%"
+  },
+  "GPQA Diamond": {
+    "name": "GPQA Diamond",
+    "category": "Scientific & Expert Reasoning",
+    "description": "Google-Proof Q&A Diamond subset: extremely challenging PhD-level questions in physics, chemistry, and biology designed specifically to be resistant to web search shortcutting.",
+    "higherIsBetter": true,
+    "unit": "%"
+  },
+  "Humanity's Last Exam (HLE)": {
+    "name": "Humanity's Last Exam (HLE)",
+    "category": "Multidisciplinary Frontier Reasoning",
+    "description": "Cross-disciplinary benchmark spanning mathematics, humanities, and sciences designed to test the boundaries of frontier AI reasoning at the limits of human knowledge.",
+    "higherIsBetter": true,
+    "unit": "%"
+  },
+  "OSWorld-Verified": {
+    "name": "OSWorld-Verified",
+    "category": "Multimodal & Computer Use",
+    "description": "Multimodal benchmark assessing an agent's capability to operate a real operating system desktop VM (GUI clicks, window management, keyboard, and cross-application workflows).",
+    "higherIsBetter": true,
+    "unit": "%"
+  }
+}

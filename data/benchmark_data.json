@@ -1,0 +1,80 @@
+{
+  "updatedAt": "2026-09-07T13:41:11.595Z",
+  "benchmarks": [
+    {
+      "id": "swe_bench_verified",
+      "name": "SWE-bench Verified"
+    },
+    {
+      "id": "swe_bench_pro",
+      "name": "SWE-bench Pro"
+    },
+    {
+      "id": "terminal_bench_2_1",
+      "name": "Terminal-Bench 2.1"
+    },
+    {
+      "id": "aime_2026",
+      "name": "AIME 2026"
+    },
+    {
+      "id": "gpqa_diamond",
+      "name": "GPQA Diamond"
+    },
+    {
+      "id": "hle",
+      "name": "Humanity's Last Exam (HLE)"
+    },
+    {
+      "id": "osworld_verified",
+      "name": "OSWorld-Verified"
+    }
+  ],
+  "models": [
+    {
+      "id": "Qwen3.8-27B",
+      "name": "Qwen3.8-27B",
+      "repo": "Qwen/Qwen3.8-27B",
+      "url": "https://huggingface.co/Qwen/Qwen3.8-27B",
+      "scores": {
+        "swe_bench_verified": "~77.5%",
+        "swe_bench_pro": "61.7%",
+        "terminal_bench_2_1": "73.0%",
+        "aime_2026": "94.1%",
+        "gpqa_diamond": "89.2%",
+        "hle": "30.8%",
+        "osworld_verified": "84.3%"
+      }
+    },
+    {
+      "id": "Ornith-1.5-35B-A3B",
+      "name": "Ornith-1.5-35B-A3B",
+      "repo": "ornith-ai/Ornith-1.5-35B-A3B",
+      "url": "https://huggingface.co/ornith-ai/Ornith-1.5-35B-A3B",
+      "scores": {
+        "swe_bench_verified": "79.0%",
+        "swe_bench_pro": "59.6%",
+        "terminal_bench_2_1": "67.8%",
+        "aime_2026": "~92.0%",
+        "gpqa_diamond": "89.2%",
+        "hle": "25.6%",
+        "osworld_verified": "~78.0%"
+      }
+    },
+    {
+      "id": "Qwen3.6-35B",
+      "name": "Qwen3.6-35B",
+      "repo": "Qwen/Qwen3.6-35B",
+      "url": "https://huggingface.co/Qwen/Qwen3.6-35B",
+      "scores": {
+        "swe_bench_verified": "73.4%",
+        "swe_bench_pro": "49.5%",
+        "terminal_bench_2_1": "51.5%",
+        "aime_2026": "92.7%",
+        "gpqa_diamond": "86.0%",
+        "hle": "21.4%",
+        "osworld_verified": "68.7%"
+      }
+    }
+  ]
+}
