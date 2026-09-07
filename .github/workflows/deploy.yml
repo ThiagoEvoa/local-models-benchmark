@@ -4,6 +4,11 @@ on:
   schedule:
     # Runs daily at 00:00 UTC
     - cron: '0 0 * * *'
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'data/**'
   workflow_dispatch:
     # Allows manual execution anytime via GitHub UI
 
@@ -46,7 +51,8 @@ jobs:
             echo "No data changes to commit."
           else
             git commit -m "chore(data): auto-update benchmarks from model cards [skip ci]"
-            git push
+            git pull --rebase origin main
+            git push origin main
           fi
 
       - name: Setup Pages
