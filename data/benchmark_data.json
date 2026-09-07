@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-07T18:10:45.260Z",
+  "updatedAt": "2026-09-07T19:38:37.062Z",
   "benchmarks": [
     {
       "id": "swe_bench_verified",
@@ -132,6 +132,13 @@
       }
     },
     {
+      "id": "Qwen3-Coder-30B-A3B-Instruct",
+      "name": "Qwen3-Coder-30B-A3B-Instruct",
+      "repo": "Qwen/Qwen3-Coder-30B-A3B-Instruct",
+      "url": "https://huggingface.co/Qwen/Qwen3-Coder-30B-A3B-Instruct",
+      "scores": {}
+    },
+    {
       "id": "gemma-4-31B",
       "name": "gemma-4-31B",
       "repo": "google/gemma-4-31B",
@@ -256,6 +263,20 @@
         "mmmu_pro": "65.0%",
         "math_vision": "70.0%"
       }
+    },
+    {
+      "id": "NVIDIA-Nemotron-3.5-Lightning-30B-A3B-NVFP4",
+      "name": "NVIDIA-Nemotron-3.5-Lightning-30B-A3B-NVFP4",
+      "repo": "nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-NVFP4",
+      "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-NVFP4",
+      "scores": {}
+    },
+    {
+      "id": "MiniMax-H3",
+      "name": "MiniMax-H3",
+      "repo": "MiniMaxAI/MiniMax-H3",
+      "url": "https://huggingface.co/MiniMaxAI/MiniMax-H3",
+      "scores": {}
     }
   ]
 }
