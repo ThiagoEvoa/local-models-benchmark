@@ -110,6 +110,33 @@ function normalizeScore(rawVal) {
   return `${isApprox ? '~' : ''}${num}%`;
 }
 
+function cleanTokens(str) {
+  return str.toLowerCase().replace(/[^a-z0-9]/g, ' ').split(/\s+/).filter(Boolean);
+}
+
+function matchHeaderToModel(colText, modelName) {
+  const normCol = colText.toLowerCase();
+  const normTarget = modelName.toLowerCase();
+  
+  if (normCol.includes(normTarget)) return true;
+
+  // e.g. "Gemma 4  31B" vs "gemma-4-31B"
+  const colTokens = cleanTokens(colText);
+  const targetTokens = cleanTokens(modelName);
+
+  if (targetTokens.length > 0 && targetTokens.every(t => colTokens.includes(t))) {
+    return true;
+  }
+  return false;
+}
+
+function matchBenchmarkName(rowName) {
+  // Strip subtexts/parentheses/footnotes e.g. "AIME 2026 no tools", "HLE with search", "Terminal-Bench 2.1 (Terminus-2)"
+  return BENCHMARK_DEFINITIONS.find(def => 
+    def.patterns.some(p => p.test(rowName))
+  );
+}
+
 function extractScoresFromTable(content, modelName) {
   const scores = {};
   if (!content) return scores;
@@ -132,7 +159,7 @@ function extractScoresFromTable(content, modelName) {
     
     while ((thMatch = thRegex.exec(headerRow)) !== null) {
       const text = thMatch[1].replace(/<[^>]+>/g, '').trim();
-      if (text.toLowerCase().includes(modelName.toLowerCase())) {
+      if (matchHeaderToModel(text, modelName)) {
         targetColIndex = colIdx;
         break;
       }
@@ -155,16 +182,13 @@ function extractScoresFromTable(content, modelName) {
       if (cells.length < 2) continue;
 
       const benchmarkText = cells[0];
-      const matchedDef = BENCHMARK_DEFINITIONS.find(def => 
-        def.patterns.some(p => p.test(benchmarkText))
-      );
+      const matchedDef = matchBenchmarkName(benchmarkText);
 
       if (matchedDef && !scores[matchedDef.id]) {
         let rawVal = null;
         if (targetColIndex !== -1 && cells[targetColIndex] !== undefined) {
           rawVal = cells[targetColIndex];
         } else if (cells.length >= 2) {
-          // If 1st column is benchmark, 2nd is typically the subject model
           rawVal = cells[1];
         }
 
@@ -186,9 +210,10 @@ function extractScoresFromTable(content, modelName) {
     if (line.startsWith('|') && line.endsWith('|')) {
       const cols = line.split('|').slice(1, -1).map(c => c.trim());
       
-      // Header check
-      if (cols.some(c => c.toLowerCase().includes(modelName.toLowerCase()))) {
-        mdTargetCol = cols.findIndex(c => c.toLowerCase().includes(modelName.toLowerCase()));
+      // Header check: look for column containing model
+      const foundIdx = cols.findIndex(c => matchHeaderToModel(c, modelName));
+      if (foundIdx !== -1) {
+        mdTargetCol = foundIdx;
         inMdTable = true;
         continue;
       }
@@ -200,9 +225,7 @@ function extractScoresFromTable(content, modelName) {
 
       if (inMdTable && cols.length > 1) {
         const benchText = cols[0];
-        const matchedDef = BENCHMARK_DEFINITIONS.find(def => 
-          def.patterns.some(p => p.test(benchText))
-        );
+        const matchedDef = matchBenchmarkName(benchText);
 
         if (matchedDef && !scores[matchedDef.id]) {
           const raw = mdTargetCol !== -1 && cols[mdTargetCol] !== undefined ? cols[mdTargetCol] : cols[1];
