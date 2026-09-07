@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-07T17:30:50.246Z",
+  "updatedAt": "2026-09-07T17:52:24.563Z",
   "benchmarks": [
     {
       "id": "swe_bench_verified",
@@ -216,27 +216,6 @@
       }
     },
     {
-      "id": "gpt-oss-20b",
-      "name": "gpt-oss-20b",
-      "repo": "openai/gpt-oss-20b",
-      "url": "https://huggingface.co/openai/gpt-oss-20b",
-      "scores": {
-        "swe_bench_verified": "60.7%",
-        "swe_bench_pro": "42.0%",
-        "livecodebench": "75.0%",
-        "terminal_bench_2_1": "55.0%",
-        "mcp_atlas": "58.0%",
-        "tau_bench": "46.4%",
-        "aime_2026": "91.7%",
-        "gpqa_diamond": "74.2%",
-        "hle": "17.3%",
-        "mmlu_pro": "85.3%",
-        "osworld_verified": "61.0%",
-        "mmmu_pro": "65.0%",
-        "math_vision": "70.0%"
-      }
-    },
-    {
       "id": "Bonsai-27B-gguf",
       "name": "Bonsai-27B-gguf",
       "repo": "prism-ml/Bonsai-27B-gguf",
@@ -255,6 +234,27 @@
         "osworld_verified": "50.0%",
         "mmmu_pro": "60.5%",
         "math_vision": "65.0%"
+      }
+    },
+    {
+      "id": "gpt-oss-20b",
+      "name": "gpt-oss-20b",
+      "repo": "openai/gpt-oss-20b",
+      "url": "https://huggingface.co/openai/gpt-oss-20b",
+      "scores": {
+        "swe_bench_verified": "60.7%",
+        "swe_bench_pro": "42.0%",
+        "livecodebench": "75.0%",
+        "terminal_bench_2_1": "55.0%",
+        "mcp_atlas": "58.0%",
+        "tau_bench": "46.4%",
+        "aime_2026": "91.7%",
+        "gpqa_diamond": "74.2%",
+        "hle": "17.3%",
+        "mmlu_pro": "85.3%",
+        "osworld_verified": "61.0%",
+        "mmmu_pro": "65.0%",
+        "math_vision": "70.0%"
       }
     }
   ]
