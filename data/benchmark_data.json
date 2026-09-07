@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-07T13:54:48.129Z",
+  "updatedAt": "2026-09-07T14:00:22.382Z",
   "benchmarks": [
     {
       "id": "swe_bench_verified",
@@ -78,14 +78,22 @@
       "name": "gemma-4-31B",
       "repo": "google/gemma-4-31B",
       "url": "https://huggingface.co/google/gemma-4-31B",
-      "scores": {}
+      "scores": {
+        "aime_2026": "89.2%",
+        "gpqa_diamond": "84.3%",
+        "hle": "19.5%"
+      }
     },
     {
       "id": "gemma-4-26B-A4B",
       "name": "gemma-4-26B-A4B",
       "repo": "google/gemma-4-26B-A4B",
       "url": "https://huggingface.co/google/gemma-4-26B-A4B",
-      "scores": {}
+      "scores": {
+        "aime_2026": "88.3%",
+        "gpqa_diamond": "82.3%",
+        "hle": "8.7%"
+      }
     },
     {
       "id": "Ornith-1.5-35B-A3B",
@@ -107,7 +115,15 @@
       "name": "Muse-Glimmer-30B",
       "repo": "meta-models/Muse-Glimmer-30B",
       "url": "https://huggingface.co/meta-models/Muse-Glimmer-30B",
-      "scores": {}
+      "scores": {
+        "osworld_verified": "65.9%",
+        "swe_bench_pro": "51.2%",
+        "swe_bench_verified": "76.0%",
+        "terminal_bench_2_1": "51.7%",
+        "aime_2026": "94.7%",
+        "gpqa_diamond": "83.5%",
+        "hle": "22.0%"
+      }
     }
   ]
 }

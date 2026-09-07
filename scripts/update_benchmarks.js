@@ -224,8 +224,20 @@ function extractScoresFromTable(content, modelName) {
       }
 
       if (inMdTable && cols.length > 1) {
-        const benchText = cols[0];
-        const matchedDef = matchBenchmarkName(benchText);
+        // Find benchmark column: check first columns before model column
+        let matchedDef = null;
+        let benchColIdx = -1;
+
+        for (let c = 0; c < (mdTargetCol !== -1 ? mdTargetCol : cols.length); c++) {
+          const testText = cols[c];
+          if (!testText) continue;
+          const match = matchBenchmarkName(testText);
+          if (match) {
+            matchedDef = match;
+            benchColIdx = c;
+            break;
+          }
+        }
 
         if (matchedDef && !scores[matchedDef.id]) {
           const raw = mdTargetCol !== -1 && cols[mdTargetCol] !== undefined ? cols[mdTargetCol] : cols[1];
