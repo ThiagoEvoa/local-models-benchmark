@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-07T19:53:26.934Z",
+  "updatedAt": "2026-09-07T19:55:05.613Z",
   "benchmarks": [
     {
       "id": "swe_bench_verified",
@@ -277,20 +277,6 @@
         "mmmu_pro": "65.0%",
         "math_vision": "70.0%"
       }
-    },
-    {
-      "id": "NVIDIA-Nemotron-3.5-Lightning-30B-A3B-NVFP4",
-      "name": "NVIDIA-Nemotron-3.5-Lightning-30B-A3B-NVFP4",
-      "repo": "nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-NVFP4",
-      "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-NVFP4",
-      "scores": {}
-    },
-    {
-      "id": "MiniMax-H3",
-      "name": "MiniMax-H3",
-      "repo": "MiniMaxAI/MiniMax-H3",
-      "url": "https://huggingface.co/MiniMaxAI/MiniMax-H3",
-      "scores": {}
     }
   ]
 }
