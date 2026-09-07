@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-07T19:38:37.062Z",
+  "updatedAt": "2026-09-07T19:53:26.934Z",
   "benchmarks": [
     {
       "id": "swe_bench_verified",
@@ -136,7 +136,21 @@
       "name": "Qwen3-Coder-30B-A3B-Instruct",
       "repo": "Qwen/Qwen3-Coder-30B-A3B-Instruct",
       "url": "https://huggingface.co/Qwen/Qwen3-Coder-30B-A3B-Instruct",
-      "scores": {}
+      "scores": {
+        "swe_bench_verified": "51.6%",
+        "swe_bench_pro": "41.2%",
+        "livecodebench": "40.3%",
+        "terminal_bench_2_1": "31.3%",
+        "mcp_atlas": "62.2%",
+        "tau_bench": "58.4%",
+        "aime_2026": "29.7%",
+        "gpqa_diamond": "51.6%",
+        "hle": "4.0%",
+        "mmlu_pro": "70.6%",
+        "osworld_verified": "43.5%",
+        "mmmu_pro": "51.0%",
+        "math_vision": "60.0%"
+      }
     },
     {
       "id": "gemma-4-31B",

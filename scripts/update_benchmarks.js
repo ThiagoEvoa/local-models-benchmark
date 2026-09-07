@@ -318,27 +318,31 @@ async function main() {
     }
   }
 
+  const defaultUrls = [
+    'https://huggingface.co/Qwen/Qwen3.8-27B',
+    'https://huggingface.co/Qwen/Qwen3.6-35B-A3B',
+    'https://huggingface.co/Qwen/Qwen3.6-27B',
+    'https://huggingface.co/google/gemma-4-31B',
+    'https://huggingface.co/google/gemma-4-26B-A4B',
+    'https://huggingface.co/ornith-ai/Ornith-1.5-35B-A3B',
+    'https://huggingface.co/meta-models/Muse-Glimmer-30B',
+    'https://huggingface.co/openai/gpt-oss-20b',
+    'https://huggingface.co/prism-ml/Bonsai-27B-gguf',
+    'https://huggingface.co/Qwen/Qwen3-Coder-30B-A3B-Instruct'
+  ];
+
   const rawEnvUrls = process.env.MODEL_URLS;
   let urls = parseModelUrls(rawEnvUrls);
 
   if (urls.length === 0) {
-    if (currentData.models && currentData.models.length > 0) {
-      urls = currentData.models.map(m => m.url).filter(Boolean);
-    }
+    const existingUrls = (currentData.models || []).map(m => m.url).filter(Boolean);
+    // Combine existing URLs and defaults ensuring all defaults are present
+    const set = new Set([...existingUrls, ...defaultUrls]);
+    urls = Array.from(set);
   }
 
   if (urls.length === 0) {
-    urls = [
-      'https://huggingface.co/Qwen/Qwen3.8-27B',
-      'https://huggingface.co/Qwen/Qwen3.6-35B-A3B',
-      'https://huggingface.co/Qwen/Qwen3.6-27B',
-      'https://huggingface.co/google/gemma-4-31B',
-      'https://huggingface.co/google/gemma-4-26B-A4B',
-      'https://huggingface.co/ornith-ai/Ornith-1.5-35B-A3B',
-      'https://huggingface.co/meta-models/Muse-Glimmer-30B',
-      'https://huggingface.co/openai/gpt-oss-20b',
-      'https://huggingface.co/prism-ml/Bonsai-27B-gguf'
-    ];
+    urls = defaultUrls;
   }
 
   console.log(`Processing ${urls.length} model URL(s):`, urls);
