@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-07T14:07:16.135Z",
+  "updatedAt": "2026-09-07T17:19:32.553Z",
   "benchmarks": [
     {
       "id": "swe_bench_verified",
@@ -184,6 +184,20 @@
         "tau_bench": "23.5%",
         "mmmu_pro": "74.0%"
       }
+    },
+    {
+      "id": "Bonsai-27B-gguf",
+      "name": "Bonsai-27B-gguf",
+      "repo": "prism-ml/Bonsai-27B-gguf",
+      "url": "https://huggingface.co/prism-ml/Bonsai-27B-gguf",
+      "scores": {}
+    },
+    {
+      "id": "gpt-oss-20b",
+      "name": "gpt-oss-20b",
+      "repo": "openai/gpt-oss-20b",
+      "url": "https://huggingface.co/openai/gpt-oss-20b",
+      "scores": {}
     }
   ]
 }
