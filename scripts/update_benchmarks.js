@@ -14,6 +14,7 @@ const path = require('path');
 
 const BENCHMARK_INFO_FILE = path.join(__dirname, '..', 'data', 'benchmark_info.json');
 const BENCHMARK_DATA_FILE = path.join(__dirname, '..', 'data', 'benchmark_data.json');
+const CURATED_BENCHMARKS_FILE = path.join(__dirname, '..', 'data', 'curated_benchmarks.json');
 
 // Canonical benchmark definitions with categories
 const BENCHMARK_DEFINITIONS = [
@@ -308,6 +309,15 @@ async function main() {
     }
   }
 
+  let curatedData = { models: {} };
+  if (fs.existsSync(CURATED_BENCHMARKS_FILE)) {
+    try {
+      curatedData = JSON.parse(fs.readFileSync(CURATED_BENCHMARKS_FILE, 'utf8'));
+    } catch (e) {
+      console.warn('Could not read curated benchmarks:', e.message);
+    }
+  }
+
   const rawEnvUrls = process.env.MODEL_URLS;
   let urls = parseModelUrls(rawEnvUrls);
 
@@ -320,9 +330,14 @@ async function main() {
   if (urls.length === 0) {
     urls = [
       'https://huggingface.co/Qwen/Qwen3.8-27B',
-      'https://huggingface.co/ornith-ai/Ornith-1.5-35B-A3B',
+      'https://huggingface.co/Qwen/Qwen3.6-35B-A3B',
+      'https://huggingface.co/Qwen/Qwen3.6-27B',
       'https://huggingface.co/google/gemma-4-31B',
-      'https://huggingface.co/meta-models/Muse-Glimmer-30B'
+      'https://huggingface.co/google/gemma-4-26B-A4B',
+      'https://huggingface.co/ornith-ai/Ornith-1.5-35B-A3B',
+      'https://huggingface.co/meta-models/Muse-Glimmer-30B',
+      'https://huggingface.co/openai/gpt-oss-20b',
+      'https://huggingface.co/prism-ml/Bonsai-27B-gguf'
     ];
   }
 
@@ -337,17 +352,29 @@ async function main() {
       m => m.name.toLowerCase() === info.name.toLowerCase() || m.url === url
     );
 
-    let scores = existingModel?.scores ? { ...existingModel.scores } : {};
+    // Layer 1: Curated standardized baseline (from papers, leaderboards)
+    const curatedScores = curatedData.models?.[info.name] || {};
 
+    // Layer 2: Previous cached scores
+    const cachedScores = existingModel?.scores ? { ...existingModel.scores } : {};
+
+    // Layer 3: Live parsed from model card
+    let parsedScores = {};
     const readme = await fetchReadme(info.repo);
     if (readme) {
       console.log(`  Fetched README (${readme.length} chars). Parsing tables...`);
-      const extracted = extractScoresFromTable(readme, info.name);
-      console.log(`  Extracted scores:`, extracted);
-      scores = { ...scores, ...extracted };
+      parsedScores = extractScoresFromTable(readme, info.name);
+      console.log(`  Extracted scores:`, parsedScores);
     } else {
-      console.warn(`  Could not fetch README for ${info.repo}. Using cached values if present.`);
+      console.warn(`  Could not fetch README for ${info.repo}.`);
     }
+
+    // Merge strategy: Curated Baseline -> Cached -> Live parsed
+    const scores = {
+      ...curatedScores,
+      ...cachedScores,
+      ...parsedScores
+    };
 
     updatedModels.push({
       id: info.name,

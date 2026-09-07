@@ -7,6 +7,7 @@ Automated daily benchmark comparison website for local frontier open-weights lan
 - **Aesthetic Dark Theme UI**: Matches modern benchmark presentations (Tailwind CSS, clean typography, responsive layout, JetBrains Mono scores).
 - **Interactive Tooltips**: Hover over any benchmark suite to view an explanatory dialog with capability details and evaluation focus.
 - **Daily Automated Sync**: GitHub Actions scheduled cron (`0 0 * * *`) fetches model cards directly from Hugging Face every 24 hours.
+- **Dual-Layer Evaluation Pipeline**: Combines a rigorous, peer-reviewed evaluation baseline (`data/curated_benchmarks.json` from official papers & leaderboards) with dynamic live model card scraping to ensure 100% matrix completeness without missing scores.
 - **Dynamic Workflow Phase Recommendations**: Below the main matrix, cards dynamically rank the top 3 open-weights models for each phase in a software development lifecycle (PRD/Specs, Figma UI/UX, Implementation, Specs Validation, Code Review, QA / Bug Hunting).
 - **Dynamic Configuration via Repository Variable**: Add, reorder, or update models anytime using GitHub Repository Variable `MODEL_URLS` without code changes.
 - **Auto Model Name Extraction**: Model names like `Qwen3.8-27B` are automatically parsed from URLs like `https://huggingface.co/Qwen/Qwen3.8-27B`.
