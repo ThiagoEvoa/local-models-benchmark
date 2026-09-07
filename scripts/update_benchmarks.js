@@ -2,13 +2,11 @@
 /**
  * Update LLM Benchmark Data from Hugging Face Model Cards
  * 
- * Supports:
- * - MODEL_URLS environment variable (space, newline, or comma separated list of HF urls)
- * - Automatic extraction of model name from URL (e.g. https://huggingface.co/Qwen/Qwen3.8-27B -> Qwen3.8-27B)
- * - Fetching model card README from raw endpoint or HF API
- * - Parsing HTML and Markdown benchmark tables
- * - Normalizing benchmark names and scores
- * - Preserving cached fallback data if a model card is unparseable
+ * - Ingests MODEL_URLS environment variable (space/newline/comma separated)
+ * - Automatically derives model name from URL
+ * - Groups benchmarks into functional categories: Coding, Agentic & Tool Use, Reasoning & Math, Multimodal & Vision
+ * - Extracts scores from HTML and Markdown tables in README.md
+ * - Preserves existing scores if unparseable
  */
 
 const fs = require('fs');
@@ -17,42 +15,92 @@ const path = require('path');
 const BENCHMARK_INFO_FILE = path.join(__dirname, '..', 'data', 'benchmark_info.json');
 const BENCHMARK_DATA_FILE = path.join(__dirname, '..', 'data', 'benchmark_data.json');
 
-// Canonical benchmark mappings
+// Canonical benchmark definitions with categories
 const BENCHMARK_DEFINITIONS = [
+  // Coding
   {
     id: 'swe_bench_verified',
     name: 'SWE-bench Verified',
+    category: 'Coding',
     patterns: [/swe[-_ ]bench verified/i, /swe[-_ ]verified/i, /swebench verified/i]
   },
   {
     id: 'swe_bench_pro',
     name: 'SWE-bench Pro',
+    category: 'Coding',
     patterns: [/swe[-_ ]bench pro/i, /swebench pro/i]
   },
   {
+    id: 'livecodebench',
+    name: 'LiveCodeBench',
+    category: 'Coding',
+    patterns: [/livecodebench/i, /live[-_ ]code[-_ ]bench/i, /\blcb\b/i]
+  },
+
+  // Agentic & Tool Use
+  {
     id: 'terminal_bench_2_1',
     name: 'Terminal-Bench 2.1',
+    category: 'Agentic & Tool Use',
     patterns: [/terminal[-_ ]bench(?:[ ]*2\.1)?/i, /terminalbench(?:[ ]*2\.1)?/i]
   },
   {
+    id: 'mcp_atlas',
+    name: 'MCP Atlas',
+    category: 'Agentic & Tool Use',
+    patterns: [/mcp[-_ ]atlas/i, /mcp atlas/i]
+  },
+  {
+    id: 'tau_bench',
+    name: 'Tau-Bench',
+    category: 'Agentic & Tool Use',
+    patterns: [/tau[-_ ]bench/i, /tau2\b/i, /𝛕3\\?[-_ ]banking/i, /tau[-_ ]banking/i]
+  },
+
+  // Reasoning & Math
+  {
     id: 'aime_2026',
     name: 'AIME 2026',
+    category: 'Reasoning & Math',
     patterns: [/aime(?:[ ]*2026)?/i, /aime 26/i]
   },
   {
     id: 'gpqa_diamond',
     name: 'GPQA Diamond',
+    category: 'Reasoning & Math',
     patterns: [/gpqa diamond/i, /gpqa-diamond/i, /gpqa \(diamond\)/i]
   },
   {
     id: 'hle',
     name: "Humanity's Last Exam (HLE)",
+    category: 'Reasoning & Math',
     patterns: [/humanity'?s last exam/i, /\bhle\b/i]
   },
   {
+    id: 'mmlu_pro',
+    name: 'MMLU-Pro',
+    category: 'Reasoning & Math',
+    patterns: [/mmlu[-_ ]pro/i, /mmlu pro/i]
+  },
+
+  // Multimodal & Vision
+  {
     id: 'osworld_verified',
     name: 'OSWorld-Verified',
+    category: 'Multimodal & Vision',
     patterns: [/osworld[-_ ]verified/i, /osworld/i]
+  },
+  {
+    id: 'mmmu_pro',
+    name: 'MMMU-Pro',
+    category: 'Multimodal & Vision',
+    patterns: [/mmmu[-_ ]pro/i, /mmmu pro/i]
+  },
+  {
+    id: 'math_vision',
+    name: 'MathVision',
+    category: 'Multimodal & Vision',
+    patterns: [/math[-_ ]vision/i, /mathvision/i]
   }
 ];
 
@@ -65,7 +113,6 @@ function parseModelUrls(input) {
 }
 
 function extractModelInfo(url) {
-  // e.g. https://huggingface.co/Qwen/Qwen3.8-27B
   const cleaned = url.replace(/\/$/, '');
   const parts = cleaned.split('huggingface.co/')[1].split('/');
   const repo = parts.slice(0, 2).join('/');
@@ -102,7 +149,6 @@ function normalizeScore(rawVal) {
   if (!rawVal) return null;
   let val = rawVal.trim().replace(/[*_`]/g, '');
   if (val === '-' || val === '--' || val === 'N/A' || val === '') return null;
-  // keep approximation sign if present
   const isApprox = val.startsWith('~');
   const numMatch = val.match(/([0-9]+(?:\.[0-9]+)?)/);
   if (!numMatch) return null;
@@ -117,13 +163,10 @@ function cleanTokens(str) {
 function matchHeaderToModel(colText, modelName) {
   const normCol = colText.toLowerCase();
   const normTarget = modelName.toLowerCase();
-  
   if (normCol.includes(normTarget)) return true;
 
-  // e.g. "Gemma 4  31B" vs "gemma-4-31B"
   const colTokens = cleanTokens(colText);
   const targetTokens = cleanTokens(modelName);
-
   if (targetTokens.length > 0 && targetTokens.every(t => colTokens.includes(t))) {
     return true;
   }
@@ -131,7 +174,6 @@ function matchHeaderToModel(colText, modelName) {
 }
 
 function matchBenchmarkName(rowName) {
-  // Strip subtexts/parentheses/footnotes e.g. "AIME 2026 no tools", "HLE with search", "Terminal-Bench 2.1 (Terminus-2)"
   return BENCHMARK_DEFINITIONS.find(def => 
     def.patterns.some(p => p.test(rowName))
   );
@@ -147,8 +189,6 @@ function extractScoresFromTable(content, modelName) {
 
   while ((match = tableRegex.exec(content)) !== null) {
     const tableHtml = match[1];
-    
-    // Find header columns to detect which column belongs to modelName
     const theadMatch = tableHtml.match(/<thead[^>]*>([\s\S]*?)<\/thead>/i) || [null, tableHtml];
     const headerRow = theadMatch[1];
     
@@ -166,7 +206,6 @@ function extractScoresFromTable(content, modelName) {
       colIdx++;
     }
 
-    // Parse rows in tbody
     const trRegex = /<tr[^>]*>([\s\S]*?)<\/tr>/gi;
     let trMatch;
     
@@ -181,8 +220,16 @@ function extractScoresFromTable(content, modelName) {
 
       if (cells.length < 2) continue;
 
-      const benchmarkText = cells[0];
-      const matchedDef = matchBenchmarkName(benchmarkText);
+      let matchedDef = null;
+      for (let c = 0; c < (targetColIndex !== -1 ? targetColIndex : cells.length); c++) {
+        const testText = cells[c];
+        if (!testText) continue;
+        const found = matchBenchmarkName(testText);
+        if (found) {
+          matchedDef = found;
+          break;
+        }
+      }
 
       if (matchedDef && !scores[matchedDef.id]) {
         let rawVal = null;
@@ -210,7 +257,6 @@ function extractScoresFromTable(content, modelName) {
     if (line.startsWith('|') && line.endsWith('|')) {
       const cols = line.split('|').slice(1, -1).map(c => c.trim());
       
-      // Header check: look for column containing model
       const foundIdx = cols.findIndex(c => matchHeaderToModel(c, modelName));
       if (foundIdx !== -1) {
         mdTargetCol = foundIdx;
@@ -218,23 +264,18 @@ function extractScoresFromTable(content, modelName) {
         continue;
       }
 
-      // Separator check
       if (cols.every(c => /^:?-+:?$/.test(c))) {
         continue;
       }
 
       if (inMdTable && cols.length > 1) {
-        // Find benchmark column: check first columns before model column
         let matchedDef = null;
-        let benchColIdx = -1;
-
         for (let c = 0; c < (mdTargetCol !== -1 ? mdTargetCol : cols.length); c++) {
           const testText = cols[c];
           if (!testText) continue;
-          const match = matchBenchmarkName(testText);
-          if (match) {
-            matchedDef = match;
-            benchColIdx = c;
+          const found = matchBenchmarkName(testText);
+          if (found) {
+            matchedDef = found;
             break;
           }
         }
@@ -267,29 +308,25 @@ async function main() {
     }
   }
 
-  // URLs from GitHub Repository Variable or fallback to existing models
   const rawEnvUrls = process.env.MODEL_URLS;
   let urls = parseModelUrls(rawEnvUrls);
 
   if (urls.length === 0) {
-    console.log('No MODEL_URLS found in environment, checking existing configured models...');
     if (currentData.models && currentData.models.length > 0) {
       urls = currentData.models.map(m => m.url).filter(Boolean);
     }
   }
 
   if (urls.length === 0) {
-    // Default initial seed
     urls = [
       'https://huggingface.co/Qwen/Qwen3.8-27B',
       'https://huggingface.co/ornith-ai/Ornith-1.5-35B-A3B',
-      'https://huggingface.co/Qwen/Qwen3.6-35B'
+      'https://huggingface.co/google/gemma-4-31B',
+      'https://huggingface.co/meta-models/Muse-Glimmer-30B'
     ];
-    console.log('Using default seed URLs:', urls);
-  } else {
-    console.log(`Processing ${urls.length} model URL(s):`, urls);
   }
 
+  console.log(`Processing ${urls.length} model URL(s):`, urls);
   const updatedModels = [];
 
   for (const url of urls) {
@@ -304,9 +341,9 @@ async function main() {
 
     const readme = await fetchReadme(info.repo);
     if (readme) {
-      console.log(`  Fetched README (${readme.length} chars). Extracting benchmark scores...`);
+      console.log(`  Fetched README (${readme.length} chars). Parsing tables...`);
       const extracted = extractScoresFromTable(readme, info.name);
-      console.log(`  Found parsed benchmarks:`, extracted);
+      console.log(`  Extracted scores:`, extracted);
       scores = { ...scores, ...extracted };
     } else {
       console.warn(`  Could not fetch README for ${info.repo}. Using cached values if present.`);
@@ -323,7 +360,8 @@ async function main() {
 
   const benchmarkList = BENCHMARK_DEFINITIONS.map(d => ({
     id: d.id,
-    name: d.name
+    name: d.name,
+    category: d.category
   }));
 
   const outputPayload = {

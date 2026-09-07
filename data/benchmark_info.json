@@ -1,50 +1,92 @@
 {
-  "SWE-bench Verified": {
+  "swe_bench_verified": {
     "name": "SWE-bench Verified",
-    "category": "Coding & Software Engineering",
-    "description": "A human-validated subset of 500 real-world GitHub issues. Evaluates an LLM agent's capability to resolve actual software bugs and pull requests in complex open-source codebases.",
+    "category": "Coding",
+    "description": "Human-validated subset of 500 real GitHub issues. Evaluates an LLM agent's capability to resolve actual software bugs and write pull requests in complex open-source codebases.",
     "higherIsBetter": true,
     "unit": "%"
   },
-  "SWE-bench Pro": {
+  "swe_bench_pro": {
     "name": "SWE-bench Pro",
-    "category": "Agentic Coding",
-    "description": "An advanced, long-horizon evaluation of software engineering agents tackling intricate, multi-file enterprise repository challenges with complex test harness verification.",
+    "category": "Coding",
+    "description": "Enterprise-grade software engineering benchmark with intricate, multi-file code modifications and strict automated test harnesses.",
     "higherIsBetter": true,
     "unit": "%"
   },
-  "Terminal-Bench 2.1": {
+  "livecodebench": {
+    "name": "LiveCodeBench",
+    "category": "Coding",
+    "description": "Contamination-free competitive programming benchmark collected continuously from LeetCode, AtCoder, and Codeforces to test true generalization.",
+    "higherIsBetter": true,
+    "unit": "%"
+  },
+  "terminal_bench_2_1": {
     "name": "Terminal-Bench 2.1",
-    "category": "Agentic & CLI Operation",
-    "description": "Evaluates an AI agent's ability to operate in real bash/terminal command line environments, execute scripts, troubleshoot systems, and interact with tooling autonomously.",
+    "category": "Agentic & Tool Use",
+    "description": "Evaluates an AI agent's ability to operate in real bash/terminal environments, execute CLI scripts, troubleshoot servers, and use command-line developer tools.",
     "higherIsBetter": true,
     "unit": "%"
   },
-  "AIME 2026": {
+  "mcp_atlas": {
+    "name": "MCP Atlas",
+    "category": "Agentic & Tool Use",
+    "description": "Evaluates autonomous agents on complex multi-turn workflows utilizing the Model Context Protocol (MCP) to interact with external tools and services.",
+    "higherIsBetter": true,
+    "unit": "%"
+  },
+  "tau_bench": {
+    "name": "Tau-Bench",
+    "category": "Agentic & Tool Use",
+    "description": "Measures conversational agents' ability to reason, call dynamic APIs, and follow strict user policies in airline, banking, and retail domains.",
+    "higherIsBetter": true,
+    "unit": "%"
+  },
+  "aime_2026": {
     "name": "AIME 2026",
-    "category": "Advanced Mathematics & Reasoning",
-    "description": "American Invitational Mathematics Examination (2026 edition). Tests deep multi-step mathematical Olympiad reasoning and analytical problem-solving with integer answers.",
+    "category": "Reasoning & Math",
+    "description": "American Invitational Mathematics Examination (2026). Tests deep multi-step mathematical Olympiad reasoning and analytical problem-solving.",
     "higherIsBetter": true,
     "unit": "%"
   },
-  "GPQA Diamond": {
+  "gpqa_diamond": {
     "name": "GPQA Diamond",
-    "category": "Scientific & Expert Reasoning",
-    "description": "Google-Proof Q&A Diamond subset: extremely challenging PhD-level questions in physics, chemistry, and biology designed specifically to be resistant to web search shortcutting.",
+    "category": "Reasoning & Math",
+    "description": "Google-Proof Q&A Diamond subset: extremely difficult PhD-level questions in physics, chemistry, and biology designed to be resistant to web search.",
     "higherIsBetter": true,
     "unit": "%"
   },
-  "Humanity's Last Exam (HLE)": {
+  "hle": {
     "name": "Humanity's Last Exam (HLE)",
-    "category": "Multidisciplinary Frontier Reasoning",
-    "description": "Cross-disciplinary benchmark spanning mathematics, humanities, and sciences designed to test the boundaries of frontier AI reasoning at the limits of human knowledge.",
+    "category": "Reasoning & Math",
+    "description": "Cross-disciplinary benchmark spanning mathematics, humanities, and sciences testing frontier AI reasoning at the upper limits of academic knowledge.",
     "higherIsBetter": true,
     "unit": "%"
   },
-  "OSWorld-Verified": {
+  "mmlu_pro": {
+    "name": "MMLU-Pro",
+    "category": "Reasoning & Math",
+    "description": "A significantly more robust and challenging version of MMLU with 10 options per question, requiring genuine multi-step reasoning over memorization.",
+    "higherIsBetter": true,
+    "unit": "%"
+  },
+  "osworld_verified": {
     "name": "OSWorld-Verified",
-    "category": "Multimodal & Computer Use",
+    "category": "Multimodal & Vision",
     "description": "Multimodal benchmark assessing an agent's capability to operate a real operating system desktop VM (GUI clicks, window management, keyboard, and cross-application workflows).",
+    "higherIsBetter": true,
+    "unit": "%"
+  },
+  "mmmu_pro": {
+    "name": "MMMU-Pro",
+    "category": "Multimodal & Vision",
+    "description": "Massive Multi-discipline Multimodal Understanding Pro subset. Rigorous university-level visual reasoning across charts, diagrams, and technical documents.",
+    "higherIsBetter": true,
+    "unit": "%"
+  },
+  "math_vision": {
+    "name": "MathVision",
+    "category": "Multimodal & Vision",
+    "description": "Evaluates visual mathematical problem solving from competition-level geometry diagrams, plots, and graphical mathematical problems.",
     "higherIsBetter": true,
     "unit": "%"
   }

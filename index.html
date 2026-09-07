@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Local LLM Benchmark Matrix</title>
+  <title>Local LLMs Benchmark Matrix</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -29,7 +29,6 @@
     }
   </script>
   <style>
-    /* Custom sleek scrollbar for table overflow */
     ::-webkit-scrollbar {
       height: 6px;
       width: 6px;
@@ -49,7 +48,6 @@
       position: relative;
     }
 
-    /* Fixed first column on horizontal scroll on smaller screens */
     @media (max-width: 768px) {
       .sticky-col {
         position: sticky;
@@ -59,7 +57,6 @@
       }
     }
 
-    /* Tooltip transition */
     #tooltip {
       transition: opacity 0.15s ease-out, transform 0.15s ease-out;
       pointer-events: none;
@@ -67,10 +64,10 @@
   </style>
 </head>
 <body class="bg-bgDark text-neutral-200 font-sans min-h-screen selection:bg-neutral-800 selection:text-white antialiased">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
     
     <!-- Top Header -->
-    <header class="mb-10 sm:mb-12 border-b border-borderDark/60 pb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+    <header class="mb-8 border-b border-borderDark/60 pb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
       <div>
         <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-xs font-medium text-neutral-400 mb-3">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -80,7 +77,7 @@
           Local LLM Benchmarks
         </h1>
         <p class="text-neutral-400 mt-2 text-sm sm:text-base max-w-2xl leading-relaxed">
-          Daily synchronized evaluation matrix for local open-weights frontier LLMs. Hover any benchmark suite name to inspect its methodology.
+          Categorized evaluation matrix for local open-weights frontier LLMs. Hover any benchmark suite name to inspect its methodology.
         </p>
       </div>
 
@@ -95,22 +92,39 @@
       </div>
     </header>
 
+    <!-- Category Filter Controls -->
+    <div class="flex flex-wrap items-center gap-2 mb-6" id="category-tabs">
+      <button class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all bg-white text-neutral-900 font-semibold shadow-sm" data-cat="all">
+        All Benchmarks (<span id="count-all">13</span>)
+      </button>
+      <button class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800" data-cat="Coding">
+        Coding (<span id="count-coding">3</span>)
+      </button>
+      <button class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800" data-cat="Agentic & Tool Use">
+        Agentic & Tool Use (<span id="count-agentic">3</span>)
+      </button>
+      <button class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800" data-cat="Reasoning & Math">
+        Reasoning & Math (<span id="count-reasoning">4</span>)
+      </button>
+      <button class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800" data-cat="Multimodal & Vision">
+        Multimodal & Vision (<span id="count-vision">3</span>)
+      </button>
+    </div>
+
     <!-- Main Table Card -->
     <div class="table-container rounded-xl border border-borderDark/80 bg-cardDark/50 shadow-2xl backdrop-blur-sm overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full border-collapse text-left" id="benchmark-table">
           <thead>
             <tr id="table-header" class="border-b border-borderDark text-sm text-neutral-400">
-              <th class="py-4 px-6 font-semibold tracking-wide text-neutral-200 sticky-col min-w-[220px]">
+              <th class="py-4 px-6 font-semibold tracking-wide text-neutral-200 sticky-col min-w-[240px]">
                 Benchmark Suite
               </th>
-              <!-- Dynamic model columns will be injected here -->
             </tr>
           </thead>
-          <tbody id="table-body" class="divide-y divide-borderDark/40 text-sm font-normal">
-            <!-- Dynamic rows will be injected here -->
+          <tbody id="table-body" class="text-sm font-normal">
             <tr>
-              <td colspan="4" class="py-16 text-center text-neutral-500">
+              <td colspan="8" class="py-16 text-center text-neutral-500">
                 <div class="inline-block animate-spin w-6 h-6 border-2 border-neutral-600 border-t-white rounded-full mb-3"></div>
                 <div>Loading benchmark matrix...</div>
               </td>
@@ -120,7 +134,7 @@
       </div>
     </div>
 
-    <!-- Footnote & Disclaimer -->
+    <!-- Footnote -->
     <footer class="mt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs text-neutral-500 gap-4">
       <p>
         Data automatically parsed from official model cards &amp; evaluation logs once every 24 hours.
@@ -146,30 +160,53 @@
 
   <script>
     let benchmarkDescriptions = {};
+    let globalBenchmarkData = null;
+    let currentCategory = 'all';
+
+    const CATEGORY_COLORS = {
+      'Coding': 'text-amber-400 bg-amber-500/10 border-amber-500/20',
+      'Agentic & Tool Use': 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
+      'Reasoning & Math': 'text-indigo-400 bg-indigo-500/10 border-indigo-500/20',
+      'Multimodal & Vision': 'text-purple-400 bg-purple-500/10 border-purple-500/20'
+    };
 
     async function init() {
       try {
-        // Fetch benchmark metadata and table data in parallel
         const [infoRes, dataRes] = await Promise.all([
           fetch('data/benchmark_info.json'),
           fetch('data/benchmark_data.json')
         ]);
 
         benchmarkDescriptions = await infoRes.json();
-        const benchmarkData = await dataRes.json();
+        globalBenchmarkData = await dataRes.json();
 
-        renderTable(benchmarkData);
-        renderMeta(benchmarkData);
+        setupTabs();
+        renderTable();
+        renderMeta(globalBenchmarkData);
       } catch (err) {
         console.error('Failed to load benchmark data:', err);
         document.getElementById('table-body').innerHTML = `
           <tr>
-            <td colspan="4" class="py-12 text-center text-rose-400 text-sm font-mono">
+            <td colspan="8" class="py-12 text-center text-rose-400 text-sm font-mono">
               Failed to load benchmark data: ${err.message}
             </td>
           </tr>
         `;
       }
+    }
+
+    function setupTabs() {
+      const buttons = document.querySelectorAll('.cat-btn');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          buttons.forEach(b => {
+            b.className = 'cat-btn px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800';
+          });
+          btn.className = 'cat-btn px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all bg-white text-neutral-900 font-semibold shadow-sm';
+          currentCategory = btn.getAttribute('data-cat');
+          renderTable();
+        });
+      });
     }
 
     function renderMeta(data) {
@@ -191,24 +228,24 @@
       }
     }
 
-    function renderTable(data) {
+    function renderTable() {
+      if (!globalBenchmarkData) return;
       const headerRow = document.getElementById('table-header');
       const tableBody = document.getElementById('table-body');
 
-      // 1. Build Header
-      const models = data.models || [];
-      const benchmarkList = data.benchmarks || [];
+      const models = globalBenchmarkData.models || [];
+      const benchmarkList = globalBenchmarkData.benchmarks || [];
 
-      // Clear existing extra headers if any
+      // 1. Build Header
       headerRow.innerHTML = `
-        <th class="py-4 px-6 font-semibold tracking-wide text-neutral-200 sticky-col min-w-[220px]">
+        <th class="py-4 px-6 font-semibold tracking-wide text-neutral-200 sticky-col min-w-[240px]">
           Benchmark Suite
         </th>
       `;
 
       models.forEach(model => {
         const th = document.createElement('th');
-        th.className = 'py-4 px-6 font-semibold tracking-wide text-neutral-100 text-left min-w-[170px]';
+        th.className = 'py-4 px-6 font-semibold tracking-wide text-neutral-100 text-left min-w-[160px]';
         
         if (model.url) {
           th.innerHTML = `
@@ -225,41 +262,70 @@
         headerRow.appendChild(th);
       });
 
-      // 2. Build Body Rows
+      // 2. Filter & Group Benchmarks
+      const filtered = currentCategory === 'all' 
+        ? benchmarkList 
+        : benchmarkList.filter(b => b.category === currentCategory);
+
+      // Group benchmarks by category
+      const groups = {};
+      filtered.forEach(b => {
+        const cat = b.category || 'General';
+        if (!groups[cat]) groups[cat] = [];
+        groups[cat].push(b);
+      });
+
       tableBody.innerHTML = '';
 
-      benchmarkList.forEach(bench => {
-        const tr = document.createElement('tr');
-        tr.className = 'hover:bg-hoverRow/60 transition-colors group';
-
-        // Benchmark name cell with hint icon & hover
-        const nameTd = document.createElement('td');
-        nameTd.className = 'py-4 px-6 font-medium text-neutral-200 sticky-col group-hover:bg-hoverRow/60 transition-colors';
-        nameTd.innerHTML = `
-          <div class="inline-flex items-center gap-2 cursor-help benchmark-trigger" data-bench="${bench.name}">
-            <span class="border-b border-dotted border-neutral-600 hover:border-neutral-300 transition-colors">${bench.name}</span>
-            <svg class="w-3.5 h-3.5 text-neutral-600 group-hover:text-neutral-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
+      Object.keys(groups).forEach(cat => {
+        // Render Group Header
+        const groupTr = document.createElement('tr');
+        groupTr.className = 'bg-neutral-900/60 border-y border-borderDark/60';
+        
+        const catColor = CATEGORY_COLORS[cat] || 'text-neutral-400 bg-neutral-800/30 border-neutral-700';
+        groupTr.innerHTML = `
+          <td colspan="${models.length + 1}" class="py-2.5 px-6 font-semibold tracking-wider text-xs uppercase sticky-col">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded border ${catColor}">
+              ${cat}
+            </span>
+          </td>
         `;
-        tr.appendChild(nameTd);
+        tableBody.appendChild(groupTr);
 
-        // Model score cells
-        models.forEach(model => {
-          const scoreTd = document.createElement('td');
-          scoreTd.className = 'py-4 px-6 font-mono text-sm tracking-tight text-neutral-300';
-          
-          const val = model.scores ? model.scores[bench.id] : null;
-          if (val) {
-            scoreTd.textContent = val;
-          } else {
-            scoreTd.innerHTML = '<span class="text-neutral-600 font-sans">-</span>';
-          }
-          tr.appendChild(scoreTd);
+        // Render Benchmarks in this Category
+        groups[cat].forEach(bench => {
+          const tr = document.createElement('tr');
+          tr.className = 'border-b border-borderDark/40 hover:bg-hoverRow/60 transition-colors group';
+
+          // Benchmark name cell
+          const nameTd = document.createElement('td');
+          nameTd.className = 'py-3.5 px-6 font-medium text-neutral-200 sticky-col group-hover:bg-hoverRow/60 transition-colors';
+          nameTd.innerHTML = `
+            <div class="inline-flex items-center gap-2 cursor-help benchmark-trigger" data-bench-id="${bench.id}" data-bench-name="${bench.name}">
+              <span class="border-b border-dotted border-neutral-600 hover:border-neutral-300 transition-colors">${bench.name}</span>
+              <svg class="w-3.5 h-3.5 text-neutral-600 group-hover:text-neutral-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          `;
+          tr.appendChild(nameTd);
+
+          // Model score cells
+          models.forEach(model => {
+            const scoreTd = document.createElement('td');
+            scoreTd.className = 'py-3.5 px-6 font-mono text-sm tracking-tight text-neutral-300';
+            
+            const val = model.scores ? model.scores[bench.id] : null;
+            if (val) {
+              scoreTd.textContent = val;
+            } else {
+              scoreTd.innerHTML = '<span class="text-neutral-600 font-sans">-</span>';
+            }
+            tr.appendChild(scoreTd);
+          });
+
+          tableBody.appendChild(tr);
         });
-
-        tableBody.appendChild(tr);
       });
 
       setupTooltips();
@@ -274,11 +340,12 @@
 
       triggers.forEach(trigger => {
         trigger.addEventListener('mouseenter', (e) => {
-          const benchName = trigger.getAttribute('data-bench');
-          const info = benchmarkDescriptions[benchName] || {
+          const benchId = trigger.getAttribute('data-bench-id');
+          const benchName = trigger.getAttribute('data-bench-name');
+          const info = benchmarkDescriptions[benchId] || {
             name: benchName,
-            category: 'Standard Eval',
-            description: 'Standard language model performance evaluation benchmark.'
+            category: 'Benchmark',
+            description: 'Evaluation benchmark for language models.'
           };
 
           titleElem.textContent = info.name;
@@ -286,7 +353,6 @@
           descElem.textContent = info.description;
 
           tooltip.classList.remove('hidden');
-          // small tick to trigger CSS opacity fade
           requestAnimationFrame(() => {
             tooltip.classList.remove('opacity-0');
             tooltip.classList.add('opacity-100');
