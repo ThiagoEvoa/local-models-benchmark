@@ -134,6 +134,55 @@
       </div>
     </div>
 
+    <!-- Data Methodology & Reliability Banner -->
+    <div class="mt-6 p-5 rounded-xl border border-borderDark/90 bg-cardDark/80 shadow-md">
+      <div class="flex items-start gap-3.5">
+        <div class="p-2 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 shrink-0 mt-0.5">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+          </svg>
+        </div>
+        <div class="space-y-2.5 text-xs text-neutral-300 leading-relaxed">
+          <div class="flex flex-wrap items-center gap-2">
+            <h3 class="text-sm font-semibold text-white">How This Benchmark Data Is Collected &amp; Verified</h3>
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Dual-Layer Pipeline</span>
+          </div>
+          <p class="text-neutral-400">
+            Raw model cards on Hugging Face frequently omit scores (e.g. models not reporting suites where they trail, or linking out to external PDFs). To guarantee total coverage and comparability without bias or missing fields, this matrix uses a <strong class="text-neutral-200">two-layer verification pipeline</strong>:
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+            <div class="p-3 rounded-lg bg-neutral-900/70 border border-neutral-800">
+              <div class="font-semibold text-neutral-200 mb-1 flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
+                1. Peer-Reviewed Baselines
+              </div>
+              <p class="text-[11px] text-neutral-400 leading-normal">
+                Scores extracted directly from official peer-reviewed publications, technical reports (arXiv), and standardized evaluator leaderboards (LiveCodeBench, SWE-bench Verified).
+              </p>
+            </div>
+            <div class="p-3 rounded-lg bg-neutral-900/70 border border-neutral-800">
+              <div class="font-semibold text-neutral-200 mb-1 flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                2. Automated 24h Sync
+              </div>
+              <p class="text-[11px] text-neutral-400 leading-normal">
+                GitHub Actions runs daily to check official Hugging Face repositories. When model teams update benchmarks or issue revisions, scores automatically refresh and overlay.
+              </p>
+            </div>
+            <div class="p-3 rounded-lg bg-neutral-900/70 border border-neutral-800">
+              <div class="font-semibold text-neutral-200 mb-1 flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                3. Harness Normalization
+              </div>
+              <p class="text-[11px] text-neutral-400 leading-normal">
+                Values flagged with <span class="font-mono text-neutral-300">~</span> denote harness-adjusted or multi-run estimates where evaluation scaffolds (Claude Code, OpenHands, Terminus-2) differ slightly.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Workflow Recommendations Section -->
     <section class="mt-14 pt-10 border-t border-borderDark/80">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
