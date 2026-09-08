@@ -104,13 +104,13 @@
           <h2 class="text-lg sm:text-xl font-bold text-white flex items-center gap-2" id="chart-title">
             Intelligence Index Comparison
           </h2>
-          <p class="text-xs text-neutral-400 mt-0.5" id="chart-subtitle">
-            Hover any bar to view exact score and source link.
+          <p class="text-xs text-neutral-400 mt-1 max-w-2xl leading-relaxed" id="chart-description">
+            Cross-disciplinary composite index assessing overall intelligence across coding, reasoning, and agentic workflows.
           </p>
         </div>
 
         <!-- Frontier Models Filter Toggle -->
-        <div class="flex items-center gap-2" id="frontier-toggle-container">
+        <div class="flex items-center gap-2 flex-shrink-0" id="frontier-toggle-container">
           <label class="text-xs text-neutral-400 flex items-center gap-2 cursor-pointer select-none bg-neutral-900 border border-neutral-800 px-3 py-1.5 rounded-lg hover:border-neutral-700 transition-colors">
             <input type="checkbox" id="toggle-frontier" checked class="rounded bg-neutral-800 border-neutral-700 text-blue-500 focus:ring-0 w-3.5 h-3.5">
             <span>Show Frontier Models</span>
@@ -118,18 +118,29 @@
         </div>
       </div>
 
-      <!-- Chart Frame -->
+      <!-- Chart Frame (Scroll container) -->
       <div class="relative w-full rounded-xl bg-[#09090B] border border-neutral-800/80 p-6 pt-10 pb-16 overflow-x-auto select-none" id="chart-frame">
         
-        <!-- Guide Lines (Dotted) -->
-        <div class="absolute inset-x-6 top-14 h-[1px] dotted-grid pointer-events-none"></div>
-        <div class="absolute inset-x-6 top-32 h-[1px] dotted-grid pointer-events-none"></div>
-        <div class="absolute inset-x-6 top-52 h-[1px] dotted-grid pointer-events-none"></div>
+        <!-- Inner full-width container to ensure dotted background lines span entire scrolled width -->
+        <div class="relative min-w-max w-full">
+          <!-- Guide Lines (Dotted) -->
+          <div class="absolute inset-x-0 top-14 h-[1px] dotted-grid pointer-events-none"></div>
+          <div class="absolute inset-x-0 top-32 h-[1px] dotted-grid pointer-events-none"></div>
+          <div class="absolute inset-x-0 top-52 h-[1px] dotted-grid pointer-events-none"></div>
 
-        <!-- Unified Chart Columns Container -->
-        <div class="flex items-end justify-start sm:justify-center gap-6 sm:gap-8 md:gap-10 min-w-max px-4 mx-auto" id="chart-track">
-          <!-- Dynamic Model Columns Rendered Here -->
+          <!-- Unified Chart Columns Container -->
+          <div class="flex items-end justify-start sm:justify-center gap-6 sm:gap-8 md:gap-10 px-4 mx-auto" id="chart-track">
+            <!-- Dynamic Model Columns Rendered Here -->
+          </div>
         </div>
+      </div>
+
+      <!-- Instruction note below chart -->
+      <div class="mt-4 flex items-center justify-between text-xs text-neutral-500">
+        <p id="chart-subtitle">
+          Hover any bar to view exact score and source link.
+        </p>
+        <span class="text-[11px] font-mono text-neutral-600">Higher score is better &uarr;</span>
       </div>
     </main>
 
@@ -270,13 +281,17 @@
       const bObj = (rawData.benchmarks || []).find(b => b.id === id);
       const topCatElem = document.getElementById('active-benchmark-category');
       const chartTitle = document.getElementById('chart-title');
+      const chartDesc = document.getElementById('chart-description');
 
       if (id === 'composite') {
         topCatElem.textContent = 'All Categories Composite';
         chartTitle.textContent = 'Artificial Analysis Intelligence Index';
+        chartDesc.textContent = 'Cross-disciplinary composite index assessing overall intelligence across coding, reasoning, and agentic workflows.';
       } else if (bObj) {
         topCatElem.textContent = bObj.category;
         chartTitle.textContent = `${bObj.name} Evaluation Rankings`;
+        const info = benchmarkDescriptions[bObj.id] || {};
+        chartDesc.textContent = info.description || `${bObj.name} evaluation results across tested models.`;
       }
 
       renderChart();
@@ -334,18 +349,11 @@
         const m = entry.model;
         const barHeightPct = Math.min(100, Math.max(16, (entry.scoreVal / maxScore) * 100));
 
-        // Colors matching reference screenshot:
-        // Local models (Qwen, Gemma, Ornith, etc.) highlighted in electric blue
-        // Frontier models in slate / gray
-        let barColor = m.isFrontier ? 'bg-[#7E8696]' : 'bg-[#3B82F6] bar-glow';
+        // Colors:
+        // Grey for frontier models (#7E8696)
+        // Dark blue for local models (#1D4ED8 / #2563EB)
+        let barColor = m.isFrontier ? 'bg-[#7E8696]' : 'bg-[#1D4ED8] bar-glow';
         let scoreColor = 'text-white font-bold';
-
-        if (!m.isFrontier && idx === 0) {
-          barColor = 'bg-[#3B82F6] bar-glow';
-        } else if (m.isFrontier && idx > 5) {
-          barColor = 'bg-[#A4C2FF]';
-          scoreColor = 'text-[#203D7A] font-semibold';
-        }
 
         // Single unified column container: bar + separator line + provider icon + angled label
         const col = document.createElement('div');
