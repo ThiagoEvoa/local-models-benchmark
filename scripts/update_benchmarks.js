@@ -421,15 +421,38 @@ async function main() {
     // Tier 1: Curated Official Source Extraction
     // Verified submissions to SWE-bench, LiveCodeBench, tbench, MCP Atlas, etc.
     // ---------------------------------------------------------------
-    // Match curated data by key
+    // Match curated data by model name with strict feature matching
     let foundCuratedKey = null;
-    const cleanName = model.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+    function extractFeatures(str) {
+      const norm = str.toLowerCase();
+      const nums = norm.match(/[0-9]+(?:\.[0-9]+)?/g) || [];
+      const baseWords = ['qwen', 'gemma', 'ornith', 'muse', 'gpt', 'bonsai', 'claude'];
+      const base = baseWords.find(w => norm.includes(w)) || '';
+      return { base, nums, rawClean: norm.replace(/[^a-z0-9]/g, '') };
+    }
+
+    const tFeat = extractFeatures(model.name);
+    let bestScore = -1;
+
     if (curatedData.models) {
       for (const k of Object.keys(curatedData.models)) {
-        const cleanK = k.toLowerCase().replace(/[^a-z0-9]/g, '');
-        if (cleanK === cleanName || cleanK.includes(cleanName) || cleanName.includes(cleanK)) {
+        const kFeat = extractFeatures(k);
+        if (tFeat.base && kFeat.base && tFeat.base !== kFeat.base) continue;
+
+        let score = 0;
+        if (tFeat.rawClean === kFeat.rawClean) {
+          score += 100;
+        }
+
+        const matchingNums = tFeat.nums.filter(n => kFeat.nums.includes(n));
+        if (tFeat.nums.length > 0 && matchingNums.length === tFeat.nums.length) {
+          score += 50 + matchingNums.length * 10;
+        }
+
+        if (score > bestScore && score >= 50) {
+          bestScore = score;
           foundCuratedKey = k;
-          break;
         }
       }
     }

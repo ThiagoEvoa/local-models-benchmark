@@ -111,7 +111,7 @@
       </div>
 
       <!-- Chart Frame -->
-      <div class="relative w-full rounded-xl bg-[#09090B] border border-neutral-800/80 p-6 pt-10 pb-16 overflow-hidden select-none" id="chart-frame">
+      <div class="relative w-full rounded-xl bg-[#09090B] border border-neutral-800/80 p-6 pt-10 pb-16 overflow-x-auto select-none" id="chart-frame">
         
         <!-- Guide Lines (Dotted) -->
         <div class="absolute inset-x-6 top-14 h-[1px] dotted-grid pointer-events-none"></div>
@@ -119,7 +119,7 @@
         <div class="absolute inset-x-6 top-52 h-[1px] dotted-grid pointer-events-none"></div>
 
         <!-- Unified Chart Columns Container -->
-        <div class="flex items-end justify-center gap-8 sm:gap-14 md:gap-20 w-full px-4" id="chart-track">
+        <div class="flex items-end justify-start sm:justify-center gap-6 sm:gap-8 md:gap-10 min-w-max px-4 mx-auto" id="chart-track">
           <!-- Dynamic Model Columns Rendered Here -->
         </div>
       </div>
