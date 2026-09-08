@@ -140,9 +140,23 @@
         </div>
       </div>
 
-      <!-- Footer note below chart -->
-      <div class="mt-4 flex items-center justify-end text-xs text-neutral-500">
-        <span class="text-[11px] font-mono text-neutral-600">Higher score is better &uarr;</span>
+      <!-- Footer note and legend below chart -->
+      <div class="mt-5 pt-4 border-t border-neutral-800/60 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-neutral-400">
+        <!-- Legend -->
+        <div class="flex items-center gap-5 select-none" id="chart-legend">
+          <div class="flex items-center gap-2">
+            <span class="w-3.5 h-3.5 rounded-sm bg-[#1D4ED8] border border-blue-500/40 shadow-sm inline-block"></span>
+            <span class="text-neutral-300 font-medium">Local Models</span>
+            <span class="text-[11px] text-neutral-500">(open weights runnable locally)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-3.5 h-3.5 rounded-sm bg-[#7E8696] border border-neutral-600/40 shadow-sm inline-block"></span>
+            <span class="text-neutral-300 font-medium">Frontier Models</span>
+            <span class="text-[11px] text-neutral-500">(closed/cloud reference)</span>
+          </div>
+        </div>
+
+        <span class="text-[11px] font-mono text-neutral-500">Higher score is better &uarr;</span>
       </div>
     </main>
 
