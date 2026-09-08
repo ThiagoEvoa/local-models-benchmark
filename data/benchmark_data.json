@@ -1,9 +1,13 @@
 {
-  "updatedAt": "2026-09-08T18:44:38.676Z",
+  "updatedAt": "2026-09-08T18:48:46.248Z",
   "targetModels": [
     "qwen3.8-27b",
     "qwen3.6-27b",
-    "qwen3.6-35b"
+    "qwen3.6-35b",
+    "ornith1.5-35b",
+    "gemma4-26b",
+    "gemma4-31b",
+    "muse-glimmer-30b"
   ],
   "benchmarks": [
     {
@@ -402,6 +406,418 @@
         "math_vision": {
           "value": 84,
           "display": "84.0%",
+          "source": "official",
+          "sourceName": "CUHK MathVision Benchmark",
+          "sourceUrl": "https://mathvision-cuhk.github.io/"
+        }
+      }
+    },
+    {
+      "id": "ornith1.5-35b",
+      "name": "ornith1.5-35b",
+      "slug": "ornith1-5-35b",
+      "repo": "ornith1.5-35b",
+      "url": "https://huggingface.co/ornith1.5-35b",
+      "provider": "Independent",
+      "logo": "default_model.svg",
+      "compositeIndex": 73,
+      "scores": {
+        "swe_bench_verified": {
+          "value": 79,
+          "display": "79.0%",
+          "source": "official",
+          "sourceName": "SWE-bench Verified Leaderboard",
+          "sourceUrl": "https://www.swebench.com/verified.html"
+        },
+        "swe_bench_pro": {
+          "value": 59.6,
+          "display": "59.6%",
+          "source": "official",
+          "sourceName": "SWE-bench Pro Leaderboard",
+          "sourceUrl": "https://www.swebench.com/"
+        },
+        "livecodebench": {
+          "value": 85,
+          "display": "85.0%",
+          "source": "official",
+          "sourceName": "LiveCodeBench Leaderboard",
+          "sourceUrl": "https://livecodebench.github.io/leaderboard.html"
+        },
+        "terminal_bench_2_1": {
+          "value": 67.8,
+          "display": "67.8%",
+          "source": "official",
+          "sourceName": "Terminal-Bench Official Hub (tbench.ai)",
+          "sourceUrl": "https://www.tbench.ai/"
+        },
+        "mcp_atlas": {
+          "value": 70.2,
+          "display": "70.2%",
+          "source": "official",
+          "sourceName": "Scale AI Labs MCP Atlas Leaderboard",
+          "sourceUrl": "https://scale.com/leaderboard/mcp_atlas"
+        },
+        "tau_bench": {
+          "value": 62,
+          "display": "62.0%",
+          "source": "official",
+          "sourceName": "Sierra Research (tau2-bench)",
+          "sourceUrl": "https://github.com/sierra-research/tau2-bench"
+        },
+        "aime_2026": {
+          "value": 92,
+          "display": "92.0%",
+          "source": "official",
+          "sourceName": "AIME / Competition self-reported",
+          "sourceUrl": "https://artofproblemsolving.com/wiki/index.php/AIME_Problems_and_Solutions"
+        },
+        "gpqa_diamond": {
+          "value": 89.2,
+          "display": "89.2%",
+          "source": "official",
+          "sourceName": "GPQA Official (David Rein et al.)",
+          "sourceUrl": "https://github.com/idavidrein/gpqa"
+        },
+        "hle": {
+          "value": 25.6,
+          "display": "25.6%",
+          "source": "official",
+          "sourceName": "Humanity's Last Exam (CAIS + Scale)",
+          "sourceUrl": "https://agi.safe.ai/hle"
+        },
+        "mmlu_pro": {
+          "value": 86,
+          "display": "86.0%",
+          "source": "official",
+          "sourceName": "TIGER AI Lab (MMLU-Pro)",
+          "sourceUrl": "https://github.com/TIGER-AI-Lab/MMLU-Pro"
+        },
+        "osworld_verified": {
+          "value": 78,
+          "display": "78.0%",
+          "source": "official",
+          "sourceName": "OSWorld Verified Leaderboard",
+          "sourceUrl": "https://os-world.github.io/"
+        },
+        "mmmu_pro": {
+          "value": 72,
+          "display": "72.0%",
+          "source": "official",
+          "sourceName": "MMMU-Pro Official Benchmark",
+          "sourceUrl": "https://mmmu-benchmark.github.io/"
+        },
+        "math_vision": {
+          "value": 82,
+          "display": "82.0%",
+          "source": "official",
+          "sourceName": "CUHK MathVision Benchmark",
+          "sourceUrl": "https://mathvision-cuhk.github.io/"
+        }
+      }
+    },
+    {
+      "id": "gemma4-26b",
+      "name": "gemma4-26b",
+      "slug": "gemma4-26b",
+      "repo": "google/gemma4-26b",
+      "url": "https://huggingface.co/google/gemma4-26b",
+      "provider": "Google",
+      "logo": "google_small.svg",
+      "compositeIndex": 61.9,
+      "scores": {
+        "swe_bench_verified": {
+          "value": 63,
+          "display": "63.0%",
+          "source": "official",
+          "sourceName": "SWE-bench Verified Leaderboard",
+          "sourceUrl": "https://www.swebench.com/verified.html"
+        },
+        "swe_bench_pro": {
+          "value": 34,
+          "display": "34.0%",
+          "source": "official",
+          "sourceName": "SWE-bench Pro Leaderboard",
+          "sourceUrl": "https://www.swebench.com/"
+        },
+        "livecodebench": {
+          "value": 77.1,
+          "display": "77.1%",
+          "source": "official",
+          "sourceName": "LiveCodeBench Leaderboard",
+          "sourceUrl": "https://livecodebench.github.io/leaderboard.html"
+        },
+        "terminal_bench_2_1": {
+          "value": 40,
+          "display": "40.0%",
+          "source": "official",
+          "sourceName": "Terminal-Bench Official Hub (tbench.ai)",
+          "sourceUrl": "https://www.tbench.ai/"
+        },
+        "mcp_atlas": {
+          "value": 50,
+          "display": "50.0%",
+          "source": "official",
+          "sourceName": "Scale AI Labs MCP Atlas Leaderboard",
+          "sourceUrl": "https://scale.com/leaderboard/mcp_atlas"
+        },
+        "tau_bench": {
+          "value": 68.2,
+          "display": "68.2%",
+          "source": "official",
+          "sourceName": "Sierra Research (tau2-bench)",
+          "sourceUrl": "https://github.com/sierra-research/tau2-bench"
+        },
+        "aime_2026": {
+          "value": 88.3,
+          "display": "88.3%",
+          "source": "official",
+          "sourceName": "AIME / Competition self-reported",
+          "sourceUrl": "https://artofproblemsolving.com/wiki/index.php/AIME_Problems_and_Solutions"
+        },
+        "gpqa_diamond": {
+          "value": 82.3,
+          "display": "82.3%",
+          "source": "official",
+          "sourceName": "GPQA Official (David Rein et al.)",
+          "sourceUrl": "https://github.com/idavidrein/gpqa"
+        },
+        "hle": {
+          "value": 8.7,
+          "display": "8.7%",
+          "source": "official",
+          "sourceName": "Humanity's Last Exam (CAIS + Scale)",
+          "sourceUrl": "https://agi.safe.ai/hle"
+        },
+        "mmlu_pro": {
+          "value": 82.6,
+          "display": "82.6%",
+          "source": "official",
+          "sourceName": "TIGER AI Lab (MMLU-Pro)",
+          "sourceUrl": "https://github.com/TIGER-AI-Lab/MMLU-Pro"
+        },
+        "osworld_verified": {
+          "value": 54,
+          "display": "54.0%",
+          "source": "official",
+          "sourceName": "OSWorld Verified Leaderboard",
+          "sourceUrl": "https://os-world.github.io/"
+        },
+        "mmmu_pro": {
+          "value": 73.8,
+          "display": "73.8%",
+          "source": "official",
+          "sourceName": "MMMU-Pro Official Benchmark",
+          "sourceUrl": "https://mmmu-benchmark.github.io/"
+        },
+        "math_vision": {
+          "value": 82.4,
+          "display": "82.4%",
+          "source": "official",
+          "sourceName": "CUHK MathVision Benchmark",
+          "sourceUrl": "https://mathvision-cuhk.github.io/"
+        }
+      }
+    },
+    {
+      "id": "gemma4-31b",
+      "name": "gemma4-31b",
+      "slug": "gemma4-31b",
+      "repo": "google/gemma4-31b",
+      "url": "https://huggingface.co/google/gemma4-31b",
+      "provider": "Google",
+      "logo": "google_small.svg",
+      "compositeIndex": 65.9,
+      "scores": {
+        "swe_bench_verified": {
+          "value": 66.6,
+          "display": "66.6%",
+          "source": "official",
+          "sourceName": "SWE-bench Verified Leaderboard",
+          "sourceUrl": "https://www.swebench.com/verified.html"
+        },
+        "swe_bench_pro": {
+          "value": 36.9,
+          "display": "36.9%",
+          "source": "official",
+          "sourceName": "SWE-bench Pro Leaderboard",
+          "sourceUrl": "https://www.swebench.com/"
+        },
+        "livecodebench": {
+          "value": 80,
+          "display": "80.0%",
+          "source": "official",
+          "sourceName": "LiveCodeBench Leaderboard",
+          "sourceUrl": "https://livecodebench.github.io/leaderboard.html"
+        },
+        "terminal_bench_2_1": {
+          "value": 43.4,
+          "display": "43.4%",
+          "source": "official",
+          "sourceName": "Terminal-Bench Official Hub (tbench.ai)",
+          "sourceUrl": "https://www.tbench.ai/"
+        },
+        "mcp_atlas": {
+          "value": 54.2,
+          "display": "54.2%",
+          "source": "official",
+          "sourceName": "Scale AI Labs MCP Atlas Leaderboard",
+          "sourceUrl": "https://scale.com/leaderboard/mcp_atlas"
+        },
+        "tau_bench": {
+          "value": 76.9,
+          "display": "76.9%",
+          "source": "official",
+          "sourceName": "Sierra Research (tau2-bench)",
+          "sourceUrl": "https://github.com/sierra-research/tau2-bench"
+        },
+        "aime_2026": {
+          "value": 89.2,
+          "display": "89.2%",
+          "source": "official",
+          "sourceName": "AIME / Competition self-reported",
+          "sourceUrl": "https://artofproblemsolving.com/wiki/index.php/AIME_Problems_and_Solutions"
+        },
+        "gpqa_diamond": {
+          "value": 84.3,
+          "display": "84.3%",
+          "source": "official",
+          "sourceName": "GPQA Official (David Rein et al.)",
+          "sourceUrl": "https://github.com/idavidrein/gpqa"
+        },
+        "hle": {
+          "value": 19.5,
+          "display": "19.5%",
+          "source": "official",
+          "sourceName": "Humanity's Last Exam (CAIS + Scale)",
+          "sourceUrl": "https://agi.safe.ai/hle"
+        },
+        "mmlu_pro": {
+          "value": 85.2,
+          "display": "85.2%",
+          "source": "official",
+          "sourceName": "TIGER AI Lab (MMLU-Pro)",
+          "sourceUrl": "https://github.com/TIGER-AI-Lab/MMLU-Pro"
+        },
+        "osworld_verified": {
+          "value": 58.5,
+          "display": "58.5%",
+          "source": "official",
+          "sourceName": "OSWorld Verified Leaderboard",
+          "sourceUrl": "https://os-world.github.io/"
+        },
+        "mmmu_pro": {
+          "value": 76.9,
+          "display": "76.9%",
+          "source": "official",
+          "sourceName": "MMMU-Pro Official Benchmark",
+          "sourceUrl": "https://mmmu-benchmark.github.io/"
+        },
+        "math_vision": {
+          "value": 85.6,
+          "display": "85.6%",
+          "source": "official",
+          "sourceName": "CUHK MathVision Benchmark",
+          "sourceUrl": "https://mathvision-cuhk.github.io/"
+        }
+      }
+    },
+    {
+      "id": "muse-glimmer-30b",
+      "name": "muse-glimmer-30b",
+      "slug": "muse-glimmer-30b",
+      "repo": "muse-glimmer-30b",
+      "url": "https://huggingface.co/muse-glimmer-30b",
+      "provider": "Meta",
+      "logo": "meta_small.svg",
+      "compositeIndex": 66.4,
+      "scores": {
+        "swe_bench_verified": {
+          "value": 76,
+          "display": "76.0%",
+          "source": "official",
+          "sourceName": "SWE-bench Verified Leaderboard",
+          "sourceUrl": "https://www.swebench.com/verified.html"
+        },
+        "swe_bench_pro": {
+          "value": 51.2,
+          "display": "51.2%",
+          "source": "official",
+          "sourceName": "SWE-bench Pro Leaderboard",
+          "sourceUrl": "https://www.swebench.com/"
+        },
+        "livecodebench": {
+          "value": 81,
+          "display": "81.0%",
+          "source": "official",
+          "sourceName": "LiveCodeBench Leaderboard",
+          "sourceUrl": "https://livecodebench.github.io/leaderboard.html"
+        },
+        "terminal_bench_2_1": {
+          "value": 51.7,
+          "display": "51.7%",
+          "source": "official",
+          "sourceName": "Terminal-Bench Official Hub (tbench.ai)",
+          "sourceUrl": "https://www.tbench.ai/"
+        },
+        "mcp_atlas": {
+          "value": 75.5,
+          "display": "75.5%",
+          "source": "official",
+          "sourceName": "Scale AI Labs MCP Atlas Leaderboard",
+          "sourceUrl": "https://scale.com/leaderboard/mcp_atlas"
+        },
+        "tau_bench": {
+          "value": 23.5,
+          "display": "23.5%",
+          "source": "official",
+          "sourceName": "Sierra Research (tau2-bench)",
+          "sourceUrl": "https://github.com/sierra-research/tau2-bench"
+        },
+        "aime_2026": {
+          "value": 94.7,
+          "display": "94.7%",
+          "source": "official",
+          "sourceName": "AIME / Competition self-reported",
+          "sourceUrl": "https://artofproblemsolving.com/wiki/index.php/AIME_Problems_and_Solutions"
+        },
+        "gpqa_diamond": {
+          "value": 83.5,
+          "display": "83.5%",
+          "source": "official",
+          "sourceName": "GPQA Official (David Rein et al.)",
+          "sourceUrl": "https://github.com/idavidrein/gpqa"
+        },
+        "hle": {
+          "value": 22,
+          "display": "22.0%",
+          "source": "official",
+          "sourceName": "Humanity's Last Exam (CAIS + Scale)",
+          "sourceUrl": "https://agi.safe.ai/hle"
+        },
+        "mmlu_pro": {
+          "value": 84,
+          "display": "84.0%",
+          "source": "official",
+          "sourceName": "TIGER AI Lab (MMLU-Pro)",
+          "sourceUrl": "https://github.com/TIGER-AI-Lab/MMLU-Pro"
+        },
+        "osworld_verified": {
+          "value": 65.9,
+          "display": "65.9%",
+          "source": "official",
+          "sourceName": "OSWorld Verified Leaderboard",
+          "sourceUrl": "https://os-world.github.io/"
+        },
+        "mmmu_pro": {
+          "value": 74,
+          "display": "74.0%",
+          "source": "official",
+          "sourceName": "MMMU-Pro Official Benchmark",
+          "sourceUrl": "https://mmmu-benchmark.github.io/"
+        },
+        "math_vision": {
+          "value": 80,
+          "display": "80.0%",
           "source": "official",
           "sourceName": "CUHK MathVision Benchmark",
           "sourceUrl": "https://mathvision-cuhk.github.io/"
