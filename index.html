@@ -104,9 +104,14 @@
           <h2 class="text-lg sm:text-xl font-bold text-white flex items-center gap-2" id="chart-title">
             Intelligence Index Comparison
           </h2>
-          <p class="text-xs text-neutral-400 mt-1 max-w-2xl leading-relaxed" id="chart-description">
-            Cross-disciplinary composite index assessing overall intelligence across coding, reasoning, and agentic workflows.
-          </p>
+          <div class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-neutral-400 max-w-3xl leading-relaxed">
+            <span id="chart-description">
+              Cross-disciplinary composite index assessing overall intelligence across coding, reasoning, and agentic workflows.
+            </span>
+            <a id="chart-source-link" href="https://artificialanalysis.ai" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-blue-400 hover:text-blue-300 font-medium transition-colors">
+              Source &rarr;
+            </a>
+          </div>
         </div>
 
         <!-- Frontier Models Filter Toggle -->
@@ -143,19 +148,6 @@
         <span class="text-[11px] font-mono text-neutral-600">Higher score is better &uarr;</span>
       </div>
     </main>
-
-    <!-- Benchmark Descriptions & Verification Links -->
-    <section class="rounded-xl border border-borderDark/60 bg-cardDark/50 p-5 sm:p-6 mb-10">
-      <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-3 flex items-center gap-2">
-        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-        </svg>
-        Official Evaluation Sources
-      </h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 text-xs" id="benchmarks-reference-grid">
-        <!-- Rendered official benchmark links -->
-      </div>
-    </section>
 
     <!-- Footer -->
     <footer class="flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs text-neutral-500 gap-4 border-t border-borderDark/40 pt-6">
@@ -232,7 +224,6 @@
         }
 
         renderBenchmarkTabs();
-        renderOfficialReferenceGrid();
         renderChart();
 
         const toggleBtn = document.getElementById('toggle-frontier');
@@ -282,16 +273,29 @@
       const topCatElem = document.getElementById('active-benchmark-category');
       const chartTitle = document.getElementById('chart-title');
       const chartDesc = document.getElementById('chart-description');
+      const chartSource = document.getElementById('chart-source-link');
 
       if (id === 'composite') {
         topCatElem.textContent = 'All Categories Composite';
         chartTitle.textContent = 'Artificial Analysis Intelligence Index';
         chartDesc.textContent = 'Cross-disciplinary composite index assessing overall intelligence across coding, reasoning, and agentic workflows.';
+        if (chartSource) {
+          chartSource.href = 'https://artificialanalysis.ai';
+          chartSource.classList.remove('hidden');
+        }
       } else if (bObj) {
         topCatElem.textContent = bObj.category;
         chartTitle.textContent = `${bObj.name} Evaluation Rankings`;
         const info = benchmarkDescriptions[bObj.id] || {};
         chartDesc.textContent = info.description || `${bObj.name} evaluation results across tested models.`;
+        if (chartSource) {
+          if (bObj.officialUrl) {
+            chartSource.href = bObj.officialUrl;
+            chartSource.classList.remove('hidden');
+          } else {
+            chartSource.classList.add('hidden');
+          }
+        }
       }
 
       renderChart();
@@ -447,34 +451,6 @@
           tooltip.classList.add('hidden');
         }
       }, 150);
-    }
-
-    function renderOfficialReferenceGrid() {
-      const grid = document.getElementById('benchmarks-reference-grid');
-      grid.innerHTML = '';
-      const list = rawData.benchmarks || [];
-
-      list.forEach(b => {
-        const info = benchmarkDescriptions[b.id] || {};
-        const card = document.createElement('div');
-        card.className = 'p-3 rounded-lg bg-neutral-900/60 border border-neutral-800 hover:border-neutral-700 transition-colors flex flex-col justify-between';
-        card.innerHTML = `
-          <div>
-            <div class="flex items-center justify-between mb-1">
-              <span class="font-bold text-neutral-200">${b.name}</span>
-              <span class="text-[10px] px-1.5 py-0.5 rounded bg-neutral-800 text-neutral-400 font-mono">${b.category}</span>
-            </div>
-            <p class="text-neutral-400 text-[11px] leading-relaxed line-clamp-2 mb-2">
-              ${info.description || ''}
-            </p>
-          </div>
-          <div class="pt-2 border-t border-neutral-800 flex items-center justify-between text-[11px]">
-            <span class="text-neutral-500 font-medium truncate max-w-[170px]">${b.officialSource || 'Official Source'}</span>
-            <a href="${b.officialUrl}" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 font-medium">Source &rarr;</a>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
     }
 
     window.addEventListener('DOMContentLoaded', init);
