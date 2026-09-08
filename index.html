@@ -140,11 +140,8 @@
         </div>
       </div>
 
-      <!-- Instruction note below chart -->
-      <div class="mt-4 flex items-center justify-between text-xs text-neutral-500">
-        <p id="chart-subtitle">
-          Hover any bar to view exact score and source link.
-        </p>
+      <!-- Footer note below chart -->
+      <div class="mt-4 flex items-center justify-end text-xs text-neutral-500">
         <span class="text-[11px] font-mono text-neutral-600">Higher score is better &uarr;</span>
       </div>
     </main>
@@ -158,26 +155,6 @@
         <span>Higher score is better &uarr;</span>
       </div>
     </footer>
-  </div>
-
-  <!-- Interactive Floating Popover Tooltip (Matches Screenshot Style Exactly) -->
-  <div id="chart-tooltip" class="fixed z-50 hidden opacity-0 transition-opacity duration-150 rounded-xl bg-white text-neutral-900 shadow-2xl p-3.5 w-64 border border-neutral-200 pointer-events-none font-sans">
-    <div class="flex items-center gap-2 mb-2 pb-2 border-b border-neutral-100">
-      <h4 id="tooltip-model-name" class="font-bold text-neutral-900 text-xs truncate"></h4>
-    </div>
-    
-    <div class="flex items-baseline justify-between mb-2">
-      <span id="tooltip-metric-label" class="text-xs text-neutral-600 font-medium">Intelligence Index:</span>
-      <span id="tooltip-score-val" class="text-sm font-bold text-neutral-900 font-mono"></span>
-    </div>
-
-    <div class="pt-2 border-t border-neutral-100 flex flex-col gap-1 text-[11px] text-neutral-500">
-      <div class="flex items-center justify-between">
-        <span>Source:</span>
-        <span id="tooltip-source-badge" class="font-medium text-neutral-800 truncate max-w-[140px]"></span>
-      </div>
-      <div class="text-[10px] text-blue-600 font-medium mt-0.5">Click for more info &rarr;</div>
-    </div>
   </div>
 
   <script>
@@ -359,14 +336,14 @@
         let barColor = m.isFrontier ? 'bg-[#7E8696]' : 'bg-[#1D4ED8] bar-glow';
         let scoreColor = 'text-white font-bold';
 
-        // Single unified column container: bar + separator line + provider icon + angled label
+        // Single unified column container: bar + separator line + angled label
         const col = document.createElement('div');
-        col.className = 'group flex flex-col items-center w-24 sm:w-28 cursor-pointer flex-shrink-0';
+        col.className = 'flex flex-col items-center w-24 sm:w-28 flex-shrink-0';
 
         col.innerHTML = `
           <!-- Bar Track Area -->
           <div class="w-full h-[260px] flex items-end justify-center pb-0 border-b border-neutral-700/80">
-            <div class="w-16 sm:w-20 rounded-t-xl ${barColor} flex items-center justify-center transition-all duration-200 group-hover:brightness-110 group-hover:scale-y-[1.02] origin-bottom shadow-lg" style="height: ${barHeightPct}%;">
+            <div class="w-16 sm:w-20 rounded-t-xl ${barColor} flex items-center justify-center origin-bottom shadow-lg" style="height: ${barHeightPct}%;">
               <span class="text-sm font-mono ${scoreColor} select-none">
                 ${Math.round(entry.scoreVal)}
               </span>
@@ -375,82 +352,14 @@
 
           <!-- Angled Model Label (strictly below baseline, centered with the bar) -->
           <div class="w-full h-28 flex justify-center pt-3 overflow-visible">
-            <span class="text-xs font-semibold text-neutral-300 whitespace-nowrap transform -rotate-45 origin-top-right text-right -translate-x-3 group-hover:text-blue-400 transition-colors" title="${m.name}">
+            <span class="text-xs font-semibold text-neutral-300 whitespace-nowrap transform -rotate-45 origin-top-right text-right -translate-x-3" title="${m.name}">
               ${m.name}
             </span>
           </div>
         `;
 
-        // Tooltip and click interactions on whole column
-        col.addEventListener('mouseenter', (e) => showTooltip(e, entry));
-        col.addEventListener('mousemove', (e) => updateTooltipPos(e));
-        col.addEventListener('mouseleave', hideTooltip);
-        col.addEventListener('click', () => {
-          const targetUrl = entry.sourceObj?.sourceUrl || m.url || `https://artificialanalysis.ai/models/${m.slug}#intelligence-breakdown`;
-          window.open(targetUrl, '_blank', 'noopener,noreferrer');
-        });
-
         chartTrack.appendChild(col);
       });
-    }
-
-    // Tooltip logic
-    const tooltip = document.getElementById('chart-tooltip');
-    const tooltipModelName = document.getElementById('tooltip-model-name');
-    const tooltipMetricLabel = document.getElementById('tooltip-metric-label');
-    const tooltipScoreVal = document.getElementById('tooltip-score-val');
-    const tooltipSourceBadge = document.getElementById('tooltip-source-badge');
-
-    function showTooltip(e, entry) {
-      const m = entry.model;
-      tooltipModelName.textContent = m.name;
-
-      const activeB = (rawData.benchmarks || []).find(b => b.id === activeBenchmarkId);
-      tooltipMetricLabel.textContent = activeB ? `${activeB.name}:` : 'Intelligence Index:';
-      tooltipScoreVal.textContent = entry.scoreDisplay;
-
-      if (entry.sourceObj) {
-        let badgeText = entry.sourceObj.sourceName || 'Official Source';
-        if (entry.sourceObj.source === 'fallback-aa') {
-          badgeText = 'Artificial Analysis';
-        } else if (entry.sourceObj.source === 'fallback-hf') {
-          badgeText = 'Hugging Face Card';
-        }
-        tooltipSourceBadge.textContent = badgeText;
-      } else {
-        tooltipSourceBadge.textContent = 'Official Leaderboard';
-      }
-
-      tooltip.classList.remove('hidden');
-      requestAnimationFrame(() => {
-        tooltip.classList.remove('opacity-0');
-        tooltip.classList.add('opacity-100');
-      });
-      updateTooltipPos(e);
-    }
-
-    function updateTooltipPos(e) {
-      const tooltipWidth = 260;
-      let left = e.clientX + 16;
-      let top = e.clientY - 60;
-
-      if (left + tooltipWidth > window.innerWidth) {
-        left = e.clientX - tooltipWidth - 16;
-      }
-      if (top < 10) top = 10;
-
-      tooltip.style.left = `${left}px`;
-      tooltip.style.top = `${top}px`;
-    }
-
-    function hideTooltip() {
-      tooltip.classList.remove('opacity-100');
-      tooltip.classList.add('opacity-0');
-      setTimeout(() => {
-        if (tooltip.classList.contains('opacity-0')) {
-          tooltip.classList.add('hidden');
-        }
-      }, 150);
     }
 
     window.addEventListener('DOMContentLoaded', init);
