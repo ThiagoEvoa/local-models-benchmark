@@ -192,6 +192,24 @@ function formatModelDisplayName(raw) {
   return name;
 }
 
+// Frontier reference model identifiers
+const FRONTIER_MODEL_PATTERNS = [
+  /claude[-_ ]?fable/i,
+  /gpt[-_ ]?6/i,
+  /claude[-_ ]?opus/i,
+  /muse[-_ ]?spark/i,
+  /glm[-_ ]?5/i,
+  /gemini[-_ ]?3\.[78]/i,
+  /gpt[-_ ]?5\.6/i,
+  /deepseek[-_ ]?v4/i,
+  /kimi[-_ ]?k3/i,
+  /grok[-_ ]?4/i
+];
+
+function isFrontierModel(name) {
+  return FRONTIER_MODEL_PATTERNS.some(p => p.test(name));
+}
+
 // Convert input model list into structured model descriptor
 function resolveModelList() {
   const envModelNames = process.env.MODEL_NAMES;
@@ -252,12 +270,14 @@ function resolveModelList() {
 
     const aaSlug = formatSlugForArtificialAnalysis(name);
     const provider = getProviderDetails(name);
+    const frontier = isFrontierModel(name);
 
     models.push({
       id: name,
       name,
       slug: aaSlug,
       repo,
+      isFrontier: frontier,
       url: `https://huggingface.co/${repo}`,
       aaUrl: `https://artificialanalysis.ai/models/${aaSlug}#intelligence-breakdown`,
       provider: provider.brand,
@@ -427,7 +447,7 @@ async function main() {
     function extractFeatures(str) {
       const norm = str.toLowerCase();
       const nums = norm.match(/[0-9]+(?:\.[0-9]+)?/g) || [];
-      const baseWords = ['qwen', 'gemma', 'ornith', 'muse', 'gpt', 'bonsai', 'claude'];
+      const baseWords = ['qwen', 'gemma', 'ornith', 'muse', 'gpt', 'bonsai', 'claude', 'glm', 'gemini', 'kimi', 'deepseek'];
       const base = baseWords.find(w => norm.includes(w)) || '';
       return { base, nums, rawClean: norm.replace(/[^a-z0-9]/g, '') };
     }
@@ -438,16 +458,29 @@ async function main() {
     if (curatedData.models) {
       for (const k of Object.keys(curatedData.models)) {
         const kFeat = extractFeatures(k);
-        if (tFeat.base && kFeat.base && tFeat.base !== kFeat.base) continue;
+        // Base word MUST match if either has one
+        if (tFeat.base !== kFeat.base) continue;
 
         let score = 0;
         if (tFeat.rawClean === kFeat.rawClean) {
           score += 100;
         }
 
+        // Subword check like "spark" or "glimmer"
+        if (tFeat.base === 'muse') {
+          const tSpark = /spark/i.test(model.name);
+          const kSpark = /spark/i.test(k);
+          if (tSpark !== kSpark) continue;
+        }
+
         const matchingNums = tFeat.nums.filter(n => kFeat.nums.includes(n));
         if (tFeat.nums.length > 0 && matchingNums.length === tFeat.nums.length) {
           score += 50 + matchingNums.length * 10;
+        }
+
+        // Fallback matching when no numbers exist (e.g. muse-spark)
+        if (tFeat.nums.length === 0 && tFeat.base === kFeat.base) {
+          score += 50;
         }
 
         if (score > bestScore && score >= 50) {
@@ -520,6 +553,7 @@ async function main() {
       name: model.name,
       slug: model.slug,
       repo: model.repo,
+      isFrontier: model.isFrontier,
       url: model.url,
       provider: model.provider,
       logo: model.logo,
