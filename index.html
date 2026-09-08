@@ -18,12 +18,11 @@
             mono: ['JetBrains Mono', 'ui-monospace', 'monospace']
           },
           colors: {
-            bgDark: '#0B0B0C',
-            cardDark: '#121214',
-            borderDark: '#212124',
-            hoverRow: '#17171A',
+            bgDark: '#0E0E11',
+            cardDark: '#16161A',
+            borderDark: '#26262B',
             accentBlue: '#3B82F6',
-            highlightBlue: '#4C9BFF'
+            highlightBlue: '#60A5FA'
           }
         }
       }
@@ -35,7 +34,7 @@
       width: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: #0B0B0C;
+      background: #0E0E11;
     }
     ::-webkit-scrollbar-thumb {
       background: #27272A;
@@ -45,134 +44,133 @@
       background: #3F3F46;
     }
 
-    /* Grid dotted lines like the reference screenshot */
+    /* Dotted grid lines matching Artificial Analysis reference screenshot */
     .dotted-grid {
-      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.12) 2px, transparent 2px);
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.15) 2px, transparent 2px);
       background-size: 6px 1px;
       background-repeat: repeat-x;
     }
 
     .bar-glow {
-      box-shadow: 0 0 16px -2px rgba(59, 130, 246, 0.4);
+      box-shadow: 0 0 20px 0 rgba(59, 130, 246, 0.45);
     }
   </style>
 </head>
 <body class="bg-bgDark text-neutral-200 font-sans min-h-screen selection:bg-neutral-800 selection:text-white antialiased">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
     
     <!-- Top Header -->
-    <header class="mb-8 border-b border-borderDark/60 pb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
+    <header class="mb-8 border-b border-borderDark/80 pb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
       <div>
         <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-xs font-medium text-neutral-400 mb-3">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          Ingesting <code class="text-blue-400 font-mono text-[11px]">vars.MODEL_NAMES</code> &bull; Multi-tier Extraction
+          <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
+          Repo Variable: <code class="text-blue-400 font-mono text-[11px]">vars.MODEL_NAMES</code>
         </div>
-        <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-white flex items-center gap-3">
-          Local LLM Benchmark Intelligence Index
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-white flex items-center gap-3">
+          Local LLM Benchmark Intelligence
         </h1>
-        <p class="text-neutral-400 mt-2 text-sm sm:text-base max-w-2xl leading-relaxed">
-          Interactive vertical comparative chart benchmarked against official evaluation suites, Artificial Analysis fallback, and Hugging Face model cards.
+        <p class="text-neutral-400 mt-1.5 text-xs sm:text-sm max-w-2xl leading-relaxed">
+          Comparing specified models from repository variables across 12 standardized evaluation benchmarks.
         </p>
       </div>
 
-      <div class="flex flex-col items-start md:items-end gap-1.5 text-xs text-neutral-500 font-mono">
-        <div id="last-updated" class="flex items-center gap-1.5">
-          <span>Updated:</span>
-          <span class="text-neutral-400 font-semibold" id="last-updated-val">Loading...</span>
+      <div class="flex flex-col items-start md:items-end gap-1 text-xs text-neutral-500 font-mono">
+        <div class="flex items-center gap-1.5">
+          <span>Synced:</span>
+          <span class="text-neutral-300 font-semibold" id="last-updated-val">Loading...</span>
         </div>
-        <a id="repo-link" href="https://github.com/ThiagoEvoa/local-models-benchmark" target="_blank" rel="noopener noreferrer" class="text-neutral-400 hover:text-white transition-colors underline decoration-neutral-700 underline-offset-4">
+        <a href="https://github.com/ThiagoEvoa/local-models-benchmark" target="_blank" rel="noopener noreferrer" class="text-neutral-400 hover:text-white transition-colors underline decoration-neutral-700 underline-offset-4">
           View on GitHub &rarr;
         </a>
       </div>
     </header>
 
-    <!-- Benchmark Filter Controls Bar -->
+    <!-- Benchmark Filter Selector Bar -->
     <section class="mb-6">
-      <div class="flex items-center justify-between gap-4 mb-3">
-        <span class="text-xs font-semibold uppercase tracking-wider text-neutral-400">Select Benchmark Suite:</span>
-        <div class="text-xs text-neutral-500 font-mono" id="active-benchmark-info">
-          <!-- Populated dynamically -->
-        </div>
+      <div class="flex items-center justify-between gap-4 mb-2.5">
+        <span class="text-xs font-bold uppercase tracking-wider text-neutral-400">Select Benchmark:</span>
+        <span class="text-xs text-neutral-500 font-mono" id="active-benchmark-category"></span>
       </div>
 
       <div class="flex flex-wrap items-center gap-2" id="benchmark-tabs">
         <button class="bench-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-white text-neutral-950 shadow-sm" data-benchmark="composite">
-          Intelligence Index (Composite)
+          Intelligence Index
         </button>
-        <!-- Dynamic benchmark buttons injected here -->
+        <!-- Injected benchmark pills -->
       </div>
     </section>
 
-    <!-- Source Provenance Indicator Banner -->
-    <section class="mb-6 p-3.5 rounded-xl bg-cardDark/70 border border-borderDark flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
-      <div class="flex items-center gap-2.5">
-        <span class="text-neutral-400">Current Benchmark Metric:</span>
+    <!-- Benchmark Extraction & Provenance Bar -->
+    <section class="mb-6 p-4 rounded-xl bg-cardDark border border-borderDark flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="text-neutral-400">Active Metric:</span>
         <span id="current-metric-name" class="font-bold text-white text-sm">Intelligence Index</span>
-        <span id="current-metric-category" class="px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider bg-blue-500/10 text-blue-400 border border-blue-500/20">All Categories</span>
+        <span id="current-metric-category" class="px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider bg-blue-500/10 text-blue-400 border border-blue-500/20">Composite</span>
       </div>
-      <div class="flex items-center gap-2 text-neutral-400" id="current-metric-source-container">
-        <span>Extraction Priority:</span>
-        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 font-medium text-[11px]">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Official Source
+
+      <div class="flex items-center gap-2 text-neutral-400">
+        <span>Fallback Hierarchy:</span>
+        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 font-medium text-[11px]">
+          1. Official Source
         </span>
         <span class="text-neutral-600">&rarr;</span>
-        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 text-amber-300 font-medium text-[11px]">
-          Artificial Analysis
+        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 text-amber-300 font-medium text-[11px]">
+          2. Artificial Analysis
         </span>
         <span class="text-neutral-600">&rarr;</span>
-        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-purple-500/10 border border-purple-500/20 text-purple-300 font-medium text-[11px]">
-          Hugging Face
+        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-purple-500/10 border border-purple-500/20 text-purple-300 font-medium text-[11px]">
+          3. Hugging Face
         </span>
       </div>
     </section>
 
-    <!-- Interactive Benchmark Chart (Matches User Screenshot) -->
-    <main class="rounded-2xl border border-borderDark/80 bg-cardDark/80 shadow-2xl backdrop-blur-sm p-6 sm:p-8 relative overflow-hidden mb-8">
+    <!-- Main Chart Section (Replicating Screenshot Layout Exactly) -->
+    <main class="rounded-2xl border border-borderDark bg-cardDark/95 shadow-2xl p-6 sm:p-8 mb-8">
       
-      <!-- Chart Subheader & Controls -->
-      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-borderDark/50">
+      <div class="mb-6 pb-4 border-b border-borderDark/60 flex items-center justify-between">
         <div>
-          <h2 class="text-xl font-bold text-white flex items-center gap-2.5" id="chart-title">
+          <h2 class="text-lg sm:text-xl font-bold text-white flex items-center gap-2" id="chart-title">
             Intelligence Index Comparison
           </h2>
-          <p class="text-xs text-neutral-400 mt-1" id="chart-subtitle">
-            Ranked descending &bull; Higher is better &bull; Hover bar for details &amp; exact source attribution
+          <p class="text-xs text-neutral-400 mt-0.5" id="chart-subtitle">
+            Hover any bar to view exact score, provider, and source link.
           </p>
         </div>
-
-        <!-- Target Models Toggle -->
-        <div class="flex items-center gap-2">
-          <label class="text-xs text-neutral-400 flex items-center gap-2 cursor-pointer select-none bg-neutral-900 border border-neutral-800 px-3 py-1.5 rounded-lg hover:border-neutral-700 transition-colors">
-            <input type="checkbox" id="toggle-frontier-models" checked class="rounded bg-neutral-800 border-neutral-700 text-blue-500 focus:ring-0 w-3.5 h-3.5">
-            <span>Show Frontier Baselines</span>
-          </label>
+        <div class="text-xs font-mono text-neutral-400">
+          Showing <span id="model-count" class="text-white font-bold">3</span> models
         </div>
       </div>
 
-      <!-- Chart Canvas Area -->
-      <div class="relative w-full overflow-x-auto pt-10 pb-20 select-none min-h-[380px]" id="chart-viewport">
-        <!-- Horizontal guideline rows -->
-        <div class="absolute inset-x-0 top-12 h-[1px] dotted-grid pointer-events-none"></div>
-        <div class="absolute inset-x-0 top-32 h-[1px] dotted-grid pointer-events-none"></div>
-        <div class="absolute inset-x-0 top-52 h-[1px] dotted-grid pointer-events-none"></div>
-        <div class="absolute inset-x-0 bottom-24 h-[1px] bg-neutral-800 pointer-events-none"></div>
+      <!-- Chart Frame -->
+      <div class="relative w-full rounded-xl bg-[#09090B] border border-neutral-800/80 p-6 pt-10 pb-8 overflow-hidden select-none" id="chart-frame">
+        
+        <!-- Guide Lines (Dotted) -->
+        <div class="absolute inset-x-6 top-14 h-[1px] dotted-grid pointer-events-none"></div>
+        <div class="absolute inset-x-6 top-32 h-[1px] dotted-grid pointer-events-none"></div>
+        <div class="absolute inset-x-6 top-52 h-[1px] dotted-grid pointer-events-none"></div>
+        <div class="absolute inset-x-6 top-[280px] h-[1px] bg-neutral-800 pointer-events-none"></div>
 
-        <!-- Rendered bars container -->
-        <div class="flex items-end justify-start sm:justify-center gap-3 sm:gap-4 md:gap-5 min-w-max px-4 h-64" id="bars-track">
-          <!-- Dynamic bars will be rendered here -->
+        <!-- Bars Flex Container -->
+        <div class="flex items-end justify-center gap-6 sm:gap-10 md:gap-16 h-[280px] w-full px-4" id="bars-track">
+          <!-- Dynamic Model Bars Rendered Here -->
+        </div>
+
+        <!-- Lower Section: Providers & Labels (Aligned strictly below each bar) -->
+        <div class="flex items-start justify-center gap-6 sm:gap-10 md:gap-16 w-full pt-4 px-4 min-h-[90px]" id="labels-track">
+          <!-- Model Labels and Logos Injected Here -->
         </div>
       </div>
     </main>
 
-    <!-- Source Verification & Methodology Details Card -->
-    <section class="rounded-xl border border-borderDark/60 bg-cardDark/40 p-5 sm:p-6 mb-10">
+    <!-- Benchmark Descriptions & Verification Links -->
+    <section class="rounded-xl border border-borderDark/60 bg-cardDark/50 p-5 sm:p-6 mb-10">
       <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-3 flex items-center gap-2">
         <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
-        Benchmark Suites &amp; Official Verification Hubs
+        Official Evaluation Sources
       </h3>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 text-xs" id="benchmarks-reference-grid">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 text-xs" id="benchmarks-reference-grid">
         <!-- Rendered official benchmark links -->
       </div>
     </section>
@@ -180,7 +178,7 @@
     <!-- Footer -->
     <footer class="flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs text-neutral-500 gap-4 border-t border-borderDark/40 pt-6">
       <p>
-        Data automatically parsed from official sources, Artificial Analysis, and Hugging Face model cards.
+        Data automatically extracted from official evaluation hubs, Artificial Analysis, and Hugging Face.
       </p>
       <div class="flex items-center gap-4">
         <span>Higher score is better &uarr;</span>
@@ -188,7 +186,7 @@
     </footer>
   </div>
 
-  <!-- Interactive Floating Popover Tooltip (Matches Screenshot Style) -->
+  <!-- Interactive Floating Popover Tooltip (Matches Screenshot Style Exactly) -->
   <div id="chart-tooltip" class="fixed z-50 hidden opacity-0 transition-opacity duration-150 rounded-xl bg-white text-neutral-900 shadow-2xl p-3.5 w-64 border border-neutral-200 pointer-events-none font-sans">
     <div class="flex items-center gap-2 mb-2 pb-2 border-b border-neutral-100">
       <div id="tooltip-logo" class="w-5 h-5 flex-shrink-0 flex items-center justify-center"></div>
@@ -209,20 +207,12 @@
     </div>
   </div>
 
-  <!-- SVG Provider Brand Icons -->
   <script>
+    // SVG Logos
     const LOGO_SVGS = {
       'alibaba': `<svg viewBox="0 0 24 24" class="w-5 h-5" fill="#FF6A00"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15.5h-2V11h2v6.5zm-1-8.2a1.3 1.3 0 110-2.6 1.3 1.3 0 010 2.6z"/></svg>`,
       'google': `<svg viewBox="0 0 24 24" class="w-5 h-5"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/><path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 10.8 0 12.5s.7 2.8 1.9 5.2l3.7-2.9z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.4-6.4-5.2L1.9 17C3.7 20.7 7.5 24 12 24z"/></svg>`,
       'openai': `<svg viewBox="0 0 24 24" class="w-5 h-5 text-white" fill="currentColor"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.8956zm16.0993 3.8558L12.5973 8.3829l2.02-1.1638a.0804.0804 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.402-.686zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L8.909 9.2297V6.8974a.0662.0662 0 0 1 .0331-.0615l4.8776-2.815a4.4992 4.4992 0 0 1 6.6027 4.6738zM12 14.195l-3.3685-1.9443 3.3685-1.9443 3.3685 1.9443z"/></svg>`,
-      'anthropic': `<svg viewBox="0 0 24 24" class="w-5 h-5 text-white" fill="currentColor"><path d="M13.82 3h3.81L24 21h-3.82l-2.09-5.18H9.91L7.82 21H4l6.37-18h3.45zm2.74 9.91l-2.73-6.73-2.73 6.73h5.46zM0 21l3.5-9.84h3.76L3.76 21H0z"/></svg>`,
-      'meta': `<svg viewBox="0 0 24 24" class="w-5 h-5 text-blue-500" fill="currentColor"><path d="M16.96 5C14.7 5 12.8 6.4 12 7.7 11.2 6.4 9.3 5 7.04 5 3.3 5 0 8.3 0 13c0 4.8 3.5 9 7.7 9 2.5 0 4.5-1.3 5.3-2.6.8 1.3 2.8 2.6 5.3 2.6 4.2 0 7.7-4.2 7.7-9 0-4.7-3.3-8-9.04-8zm-9.7 14.2c-3.1 0-5.5-3.3-5.5-6.8 0-3.3 2.2-6.1 5.3-6.1 2.3 0 3.9 1.7 4.8 3.5-1.5 2.6-3.2 6.5-4.6 9.4zm9.4 0c-1.4-2.9-3.1-6.8-4.6-9.4.9-1.8 2.5-3.5 4.8-3.5 3.1 0 5.3 2.8 5.3 6.1 0 3.5-2.4 6.8-5.5 6.8z"/></svg>`,
-      'xai': `<svg viewBox="0 0 24 24" class="w-5 h-5 text-white" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`,
-      'deepseek': `<svg viewBox="0 0 24 24" class="w-5 h-5 text-blue-400" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.7 14.7c-2.3 2.3-6 2.3-8.3 0-1.8-1.8-2.2-4.5-1.2-6.7l2.1 2.1c-.2 1.1.2 2.3 1 3.1 1.2 1.2 3.1 1.2 4.2 0 .8-.8 1-2 .5-3l1.8-1.8c1.3 1.9 1.1 4.5-.1 6.3z"/></svg>`,
-      'kimi': `<svg viewBox="0 0 24 24" class="w-5 h-5 text-blue-500" fill="currentColor"><circle cx="12" cy="12" r="10"/><path fill="#fff" d="M8 7h3v10H8zm5 0h3l-3 5 3 5h-3l-2-3.5L13 7z"/></svg>`,
-      'zhipu': `<svg viewBox="0 0 24 24" class="w-5 h-5 text-white" fill="currentColor"><rect width="20" height="20" x="2" y="2" rx="4" fill="#1E293B"/><path fill="#38BDF8" d="M7 7h10l-6 10h6v-2H11l6-10H7v2z"/></svg>`,
-      'nvidia': `<svg viewBox="0 0 24 24" class="w-5 h-5 text-green-500" fill="currentColor"><path d="M8.9 7.7c.6-1.1 1.7-1.8 3.1-1.8 1.4 0 2.5.7 3.1 1.8 1.1 2 .8 4.6-.7 6.3l-2.4 2.7-2.4-2.7c-1.5-1.7-1.8-4.3-.7-6.3zm3.1-4.7C6.5 3 2 7.5 2 13s4.5 10 10 10 10-4.5 10-10S17.5 3 12 3z"/></svg>`,
-      'mistral': `<svg viewBox="0 0 24 24" class="w-5 h-5" fill="#FF7000"><path d="M4 4h4v4H4zm12 0h4v4h-4zm-8 4h8v4H8zm-4 4h4v4H4zm12 0h4v4h-4zm-8 4h8v4H8z"/></svg>`,
       'default': `<svg viewBox="0 0 24 24" class="w-5 h-5 text-neutral-400" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>`
     };
 
@@ -230,26 +220,14 @@
       const p = (provider || '').toLowerCase();
       const m = (modelName || '').toLowerCase();
       if (p.includes('alibaba') || m.includes('qwen')) return LOGO_SVGS.alibaba;
-      if (p.includes('google') || m.includes('gemma') || m.includes('gemini')) return LOGO_SVGS.google;
-      if (p.includes('anthropic') || m.includes('claude')) return LOGO_SVGS.anthropic;
+      if (p.includes('google') || m.includes('gemma')) return LOGO_SVGS.google;
       if (p.includes('openai') || m.includes('gpt')) return LOGO_SVGS.openai;
-      if (p.includes('meta') || m.includes('muse') || m.includes('llama')) return LOGO_SVGS.meta;
-      if (p.includes('xai') || m.includes('grok')) return LOGO_SVGS.xai;
-      if (p.includes('deepseek')) return LOGO_SVGS.deepseek;
-      if (p.includes('moonshot') || m.includes('kimi')) return LOGO_SVGS.kimi;
-      if (p.includes('zhipu') || m.includes('glm')) return LOGO_SVGS.zhipu;
-      if (p.includes('nvidia') || m.includes('nemotron')) return LOGO_SVGS.nvidia;
-      if (p.includes('mistral') || m.includes('devstral')) return LOGO_SVGS.mistral;
       return LOGO_SVGS.default;
     }
-  </script>
 
-  <!-- Application Logic -->
-  <script>
     let rawData = null;
     let benchmarkDescriptions = {};
-    let activeBenchmarkId = 'composite'; // 'composite' or one of the 12 benchmarks
-    let showFrontierBaselines = true;
+    let activeBenchmarkId = 'composite';
 
     async function init() {
       try {
@@ -261,7 +239,6 @@
         rawData = await dataRes.json();
         benchmarkDescriptions = await infoRes.json();
 
-        // Update header time
         if (rawData.updatedAt) {
           const date = new Date(rawData.updatedAt);
           document.getElementById('last-updated-val').textContent = date.toLocaleDateString(undefined, {
@@ -276,14 +253,8 @@
         renderOfficialReferenceGrid();
         renderChart();
 
-        // Checkbox listener
-        document.getElementById('toggle-frontier-models').addEventListener('change', (e) => {
-          showFrontierBaselines = e.target.checked;
-          renderChart();
-        });
-
       } catch (err) {
-        console.error('Initialization failure:', err);
+        console.error('Initialization error:', err);
       }
     }
 
@@ -300,7 +271,6 @@
         container.appendChild(btn);
       });
 
-      // Composite button listener
       const compositeBtn = container.querySelector('[data-benchmark="composite"]');
       if (compositeBtn) {
         compositeBtn.addEventListener('click', () => switchBenchmark('composite'));
@@ -310,7 +280,6 @@
     function switchBenchmark(id) {
       activeBenchmarkId = id;
 
-      // Update button active states
       document.querySelectorAll('.bench-btn').forEach(btn => {
         if (btn.dataset.benchmark === id) {
           btn.className = 'bench-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-white text-neutral-950 shadow-sm';
@@ -319,19 +288,21 @@
         }
       });
 
-      // Update subheader banner info
       const bObj = (rawData.benchmarks || []).find(b => b.id === id);
       const titleElem = document.getElementById('current-metric-name');
       const catElem = document.getElementById('current-metric-category');
+      const topCatElem = document.getElementById('active-benchmark-category');
       const chartTitle = document.getElementById('chart-title');
 
       if (id === 'composite') {
         titleElem.textContent = 'Artificial Analysis Intelligence Index';
-        catElem.textContent = 'Cross-Disciplinary Composite';
+        catElem.textContent = 'Composite';
+        topCatElem.textContent = 'All Categories Composite';
         chartTitle.textContent = 'Artificial Analysis Intelligence Index';
       } else if (bObj) {
         titleElem.textContent = bObj.name;
         catElem.textContent = bObj.category;
+        topCatElem.textContent = bObj.category;
         chartTitle.textContent = `${bObj.name} Evaluation Rankings`;
       }
 
@@ -339,24 +310,16 @@
     }
 
     function renderChart() {
-      const track = document.getElementById('bars-track');
-      track.innerHTML = '';
+      const barsTrack = document.getElementById('bars-track');
+      const labelsTrack = document.getElementById('labels-track');
+      barsTrack.innerHTML = '';
+      labelsTrack.innerHTML = '';
 
-      const targetModels = rawData.models || [];
-      const comparisonBaselines = rawData.comparisonBaselines || [];
+      // ONLY use models provided by MODEL_NAMES (models array from data)
+      const models = rawData.models || [];
+      document.getElementById('model-count').textContent = models.length;
 
-      // Combine models based on toggle
-      let combined = [...targetModels];
-      if (showFrontierBaselines) {
-        combined = [...combined, ...comparisonBaselines];
-      }
-
-      // Calculate score for active benchmark
-      const modelEntries = combined.map(m => {
-        const isTarget = (rawData.targetModels || []).some(tm => 
-          tm.toLowerCase() === m.name.toLowerCase() || tm.toLowerCase() === m.id.toLowerCase()
-        );
-
+      const modelEntries = models.map(m => {
         let scoreVal = null;
         let scoreDisplay = 'N/A';
         let sourceObj = null;
@@ -380,85 +343,94 @@
 
         return {
           model: m,
-          isTarget,
           scoreVal,
           scoreDisplay,
           sourceObj
         };
       }).filter(item => item.scoreVal !== null && item.scoreVal > 0);
 
-      // Sort descending by score (matching screenshot)
+      // Sort descending (matching screenshot)
       modelEntries.sort((a, b) => b.scoreVal - a.scoreVal);
 
       if (modelEntries.length === 0) {
-        track.innerHTML = `<div class="text-neutral-500 text-xs py-10 font-mono">No evaluation scores reported for this benchmark yet.</div>`;
+        barsTrack.innerHTML = `<div class="text-neutral-500 text-xs py-20 font-mono">No evaluation scores reported for this benchmark yet.</div>`;
         return;
       }
 
-      const maxScore = Math.max(...modelEntries.map(e => e.scoreVal), 100);
+      const maxScore = 100; // Benchmark percent ceiling
 
-      // Render vertical rounded bars
       modelEntries.forEach((entry, idx) => {
         const m = entry.model;
-        const barHeightPct = Math.min(100, Math.max(12, (entry.scoreVal / maxScore) * 100));
+        const barHeightPct = Math.min(100, Math.max(15, (entry.scoreVal / maxScore) * 100));
 
-        // Colors matching screenshot:
-        // Target models highlighted in vibrant solid blue #3B82F6, top 3 in gray/slate or light blue
-        let barBgClass = 'bg-[#8E95A5]'; // default screenshot gray
-        let textScoreClass = 'text-white/80';
-        let glowClass = '';
+        // Colors matching reference screenshot:
+        // Top 1: Solid vibrant blue (#3B82F6)
+        // Top 2: Slightly softer blue (#60A5FA)
+        // Top 3: Lighter slate blue (#93C5FD)
+        let barColor = 'bg-[#3B82F6] bar-glow';
+        let scoreColor = 'text-white font-bold';
 
-        if (entry.isTarget) {
-          barBgClass = 'bg-[#3B82F6] bar-glow'; // Vibrant electric blue like Qwen3.8 in screenshot
-          textScoreClass = 'text-white font-bold';
-        } else if (idx >= 4 && idx <= 12) {
-          barBgClass = 'bg-[#A4C2FF]'; // lighter slate blue from screenshot
-          textScoreClass = 'text-[#244280] font-semibold';
+        if (idx === 1) {
+          barColor = 'bg-[#60A5FA]';
+          scoreColor = 'text-white font-semibold';
+        } else if (idx === 2) {
+          barColor = 'bg-[#93C5FD]';
+          scoreColor = 'text-neutral-900 font-semibold';
         }
 
-        const colWrapper = document.createElement('div');
-        colWrapper.className = 'group relative flex flex-col items-center justify-end h-full w-12 sm:w-14 cursor-pointer flex-shrink-0';
+        // 1. Bar Column
+        const barCol = document.createElement('div');
+        barCol.className = 'group relative flex flex-col items-center justify-end h-full w-20 sm:w-24 cursor-pointer';
 
-        // Column HTML: Vertical Bar + Logo + Slanted Label
-        colWrapper.innerHTML = `
-          <!-- Bar container -->
+        barCol.innerHTML = `
           <div class="w-full flex flex-col items-center justify-end" style="height: ${barHeightPct}%;">
-            <div class="w-full rounded-t-lg ${barBgClass} flex items-center justify-center transition-all duration-200 group-hover:brightness-110 group-hover:scale-y-[1.02] origin-bottom relative" style="height: 100%;">
-              <span class="text-xs font-mono ${textScoreClass} select-none">
+            <div class="w-full rounded-t-xl ${barColor} flex items-center justify-center transition-all duration-200 group-hover:brightness-110 group-hover:scale-y-[1.02] origin-bottom shadow-lg" style="height: 100%;">
+              <span class="text-sm font-mono ${scoreColor} select-none">
                 ${Math.round(entry.scoreVal)}
               </span>
             </div>
           </div>
+        `;
 
-          <!-- Bottom Provider Logo Icon -->
-          <div class="mt-2.5 mb-1.5 flex items-center justify-center w-7 h-7 rounded-full bg-neutral-900 border border-neutral-800 group-hover:border-neutral-600 transition-colors">
+        // Tooltip listeners for the bar
+        barCol.addEventListener('mouseenter', (e) => showTooltip(e, entry));
+        barCol.addEventListener('mousemove', (e) => updateTooltipPos(e));
+        barCol.addEventListener('mouseleave', hideTooltip);
+        barCol.addEventListener('click', () => {
+          const targetUrl = entry.sourceObj?.sourceUrl || m.url || `https://artificialanalysis.ai/models/${m.slug}#intelligence-breakdown`;
+          window.open(targetUrl, '_blank', 'noopener,noreferrer');
+        });
+
+        barsTrack.appendChild(barCol);
+
+        // 2. Corresponding Label and Logo below the horizontal baseline
+        const labelCol = document.createElement('div');
+        labelCol.className = 'flex flex-col items-center justify-start w-20 sm:w-24 cursor-pointer group';
+
+        labelCol.innerHTML = `
+          <!-- Provider Logo Circle -->
+          <div class="w-7 h-7 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center mb-2 group-hover:border-neutral-600 transition-colors">
             ${getBrandIconSvg(m.provider, m.name)}
           </div>
 
-          <!-- Angled Label (~ -45deg) -->
-          <div class="h-20 w-12 flex items-start justify-center overflow-visible">
-            <span class="text-[11px] font-medium text-neutral-300 whitespace-nowrap transform -rotate-45 origin-top-left translate-y-2 translate-x-2 group-hover:text-white transition-colors" title="${m.name}">
+          <!-- Model Name angled at -45deg matching screenshot -->
+          <div class="relative w-full h-16 flex justify-center">
+            <span class="text-xs font-semibold text-neutral-300 whitespace-nowrap transform -rotate-45 origin-top-left translate-y-1 translate-x-4 group-hover:text-blue-400 transition-colors" title="${m.name}">
               ${m.name}
             </span>
           </div>
         `;
 
-        // Tooltip interactions
-        colWrapper.addEventListener('mouseenter', (e) => showTooltip(e, entry));
-        colWrapper.addEventListener('mousemove', (e) => updateTooltipPos(e));
-        colWrapper.addEventListener('mouseleave', hideTooltip);
-
-        // Click interaction: Open model url or official evaluation benchmark
-        colWrapper.addEventListener('click', () => {
+        labelCol.addEventListener('click', () => {
           const targetUrl = entry.sourceObj?.sourceUrl || m.url || `https://artificialanalysis.ai/models/${m.slug}#intelligence-breakdown`;
           window.open(targetUrl, '_blank', 'noopener,noreferrer');
         });
 
-        track.appendChild(colWrapper);
+        labelsTrack.appendChild(labelCol);
       });
     }
 
-    // Tooltip management
+    // Tooltip logic
     const tooltip = document.getElementById('chart-tooltip');
     const tooltipLogo = document.getElementById('tooltip-logo');
     const tooltipModelName = document.getElementById('tooltip-model-name');
@@ -475,7 +447,6 @@
       tooltipMetricLabel.textContent = activeB ? `${activeB.name}:` : 'Intelligence Index:';
       tooltipScoreVal.textContent = entry.scoreDisplay;
 
-      // Provenance badge
       if (entry.sourceObj) {
         let badgeText = entry.sourceObj.sourceName || 'Official Source';
         if (entry.sourceObj.source === 'fallback-aa') {
@@ -498,11 +469,9 @@
 
     function updateTooltipPos(e) {
       const tooltipWidth = 260;
-      const tooltipHeight = 110;
       let left = e.clientX + 16;
       let top = e.clientY - 60;
 
-      // Edge prevention
       if (left + tooltipWidth > window.innerWidth) {
         left = e.clientX - tooltipWidth - 16;
       }
@@ -522,7 +491,6 @@
       }, 150);
     }
 
-    // Render benchmark reference cards
     function renderOfficialReferenceGrid() {
       const grid = document.getElementById('benchmarks-reference-grid');
       grid.innerHTML = '';
@@ -531,7 +499,7 @@
       list.forEach(b => {
         const info = benchmarkDescriptions[b.id] || {};
         const card = document.createElement('div');
-        card.className = 'p-3 rounded-lg bg-neutral-900/60 border border-neutral-800/80 hover:border-neutral-700 transition-colors flex flex-col justify-between';
+        card.className = 'p-3 rounded-lg bg-neutral-900/60 border border-neutral-800 hover:border-neutral-700 transition-colors flex flex-col justify-between';
         card.innerHTML = `
           <div>
             <div class="flex items-center justify-between mb-1">
@@ -542,7 +510,7 @@
               ${info.description || ''}
             </p>
           </div>
-          <div class="pt-2 border-t border-neutral-800/60 flex items-center justify-between text-[11px]">
+          <div class="pt-2 border-t border-neutral-800 flex items-center justify-between text-[11px]">
             <span class="text-neutral-500 font-medium truncate max-w-[170px]">${b.officialSource || 'Official Source'}</span>
             <a href="${b.officialUrl}" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 font-medium">Source &rarr;</a>
           </div>
@@ -551,7 +519,6 @@
       });
     }
 
-    // Initialize on DOM ready
     window.addEventListener('DOMContentLoaded', init);
   </script>
 </body>

@@ -633,12 +633,12 @@ async function main() {
     officialUrl: d.officialUrl
   }));
 
+  // Only output the target models from vars.MODEL_NAMES
   const outputPayload = {
     updatedAt: new Date().toISOString(),
     targetModels: modelList.map(m => m.name),
     benchmarks: benchmarkList,
-    models: finalModels,
-    comparisonBaselines: frontierBaselines
+    models: finalModels
   };
 
   fs.writeFileSync(BENCHMARK_DATA_FILE, JSON.stringify(outputPayload, null, 2), 'utf8');
