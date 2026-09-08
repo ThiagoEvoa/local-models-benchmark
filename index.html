@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Local LLMs Benchmark Matrix</title>
+  <title>Local LLMs Benchmark Intelligence Chart</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -22,7 +22,8 @@
             cardDark: '#121214',
             borderDark: '#212124',
             hoverRow: '#17171A',
-            accent: '#3B82F6'
+            accentBlue: '#3B82F6',
+            highlightBlue: '#4C9BFF'
           }
         }
       }
@@ -44,47 +45,40 @@
       background: #3F3F46;
     }
 
-    .table-container {
-      position: relative;
+    /* Grid dotted lines like the reference screenshot */
+    .dotted-grid {
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.12) 2px, transparent 2px);
+      background-size: 6px 1px;
+      background-repeat: repeat-x;
     }
 
-    @media (max-width: 768px) {
-      .sticky-col {
-        position: sticky;
-        left: 0;
-        z-index: 10;
-        background-color: #0B0B0C;
-      }
-    }
-
-    #tooltip {
-      transition: opacity 0.15s ease-out, transform 0.15s ease-out;
-      pointer-events: none;
+    .bar-glow {
+      box-shadow: 0 0 16px -2px rgba(59, 130, 246, 0.4);
     }
   </style>
 </head>
 <body class="bg-bgDark text-neutral-200 font-sans min-h-screen selection:bg-neutral-800 selection:text-white antialiased">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
     
     <!-- Top Header -->
-    <header class="mb-8 border-b border-borderDark/60 pb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+    <header class="mb-8 border-b border-borderDark/60 pb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
       <div>
         <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-xs font-medium text-neutral-400 mb-3">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          Automated Daily Sync &bull; GitHub Pages
+          Ingesting <code class="text-blue-400 font-mono text-[11px]">vars.MODEL_NAMES</code> &bull; Multi-tier Extraction
         </div>
         <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-white flex items-center gap-3">
-          Local LLM Benchmarks
+          Local LLM Benchmark Intelligence Index
         </h1>
         <p class="text-neutral-400 mt-2 text-sm sm:text-base max-w-2xl leading-relaxed">
-          Categorized evaluation matrix for local open-weights frontier LLMs. Hover any benchmark suite name to inspect its methodology.
+          Interactive vertical comparative chart benchmarked against official evaluation suites, Artificial Analysis fallback, and Hugging Face model cards.
         </p>
       </div>
 
       <div class="flex flex-col items-start md:items-end gap-1.5 text-xs text-neutral-500 font-mono">
         <div id="last-updated" class="flex items-center gap-1.5">
           <span>Updated:</span>
-          <span class="text-neutral-400 font-semibold">Loading...</span>
+          <span class="text-neutral-400 font-semibold" id="last-updated-val">Loading...</span>
         </div>
         <a id="repo-link" href="https://github.com/ThiagoEvoa/local-models-benchmark" target="_blank" rel="noopener noreferrer" class="text-neutral-400 hover:text-white transition-colors underline decoration-neutral-700 underline-offset-4">
           View on GitHub &rarr;
@@ -92,816 +86,472 @@
       </div>
     </header>
 
-    <!-- Category Filter Controls -->
-    <div class="flex flex-wrap items-center gap-2 mb-6" id="category-tabs">
-      <button class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all bg-white text-neutral-900 font-semibold shadow-sm" data-cat="all">
-        All Benchmarks (<span id="count-all">13</span>)
-      </button>
-      <button class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800" data-cat="Coding">
-        Coding (<span id="count-coding">3</span>)
-      </button>
-      <button class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800" data-cat="Agentic & Tool Use">
-        Agentic & Tool Use (<span id="count-agentic">3</span>)
-      </button>
-      <button class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800" data-cat="Reasoning & Math">
-        Reasoning & Math (<span id="count-reasoning">4</span>)
-      </button>
-      <button class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800" data-cat="Multimodal & Vision">
-        Multimodal & Vision (<span id="count-vision">3</span>)
-      </button>
-    </div>
-
-    <!-- Main Table Card -->
-    <div class="table-container rounded-xl border border-borderDark/80 bg-cardDark/50 shadow-2xl backdrop-blur-sm overflow-hidden">
-      <div class="overflow-x-auto">
-        <table class="w-full border-collapse text-left" id="benchmark-table">
-          <thead>
-            <tr id="table-header" class="border-b border-borderDark text-sm text-neutral-400">
-              <th class="py-4 px-6 font-semibold tracking-wide text-neutral-200 sticky-col min-w-[240px]">
-                Benchmark Suite
-              </th>
-            </tr>
-          </thead>
-          <tbody id="table-body" class="text-sm font-normal">
-            <tr>
-              <td colspan="8" class="py-16 text-center text-neutral-500">
-                <div class="inline-block animate-spin w-6 h-6 border-2 border-neutral-600 border-t-white rounded-full mb-3"></div>
-                <div>Loading benchmark matrix...</div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Data Methodology & Reliability Banner -->
-    <div class="mt-6 p-5 rounded-xl border border-borderDark/90 bg-cardDark/80 shadow-md">
-      <div class="flex items-start gap-3.5">
-        <div class="p-2 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 shrink-0 mt-0.5">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-          </svg>
-        </div>
-        <div class="space-y-2.5 text-xs text-neutral-300 leading-relaxed">
-          <div class="flex flex-wrap items-center gap-2">
-            <h3 class="text-sm font-semibold text-white">How This Benchmark Data Is Collected &amp; Verified</h3>
-            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Dual-Layer Pipeline</span>
-          </div>
-          <p class="text-neutral-400">
-            Raw model cards on Hugging Face frequently omit scores (e.g. models not reporting suites where they trail, or linking out to external PDFs). To guarantee total coverage and comparability without bias or missing fields, this matrix uses a <strong class="text-neutral-200">two-layer verification pipeline</strong>:
-          </p>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
-            <div class="p-3 rounded-lg bg-neutral-900/70 border border-neutral-800">
-              <div class="font-semibold text-neutral-200 mb-1 flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
-                1. Peer-Reviewed Baselines
-              </div>
-              <p class="text-[11px] text-neutral-400 leading-normal">
-                Scores extracted directly from official peer-reviewed publications, technical reports (arXiv), and standardized evaluator leaderboards (LiveCodeBench, SWE-bench Verified).
-              </p>
-            </div>
-            <div class="p-3 rounded-lg bg-neutral-900/70 border border-neutral-800">
-              <div class="font-semibold text-neutral-200 mb-1 flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                2. Automated 24h Sync
-              </div>
-              <p class="text-[11px] text-neutral-400 leading-normal">
-                GitHub Actions runs daily to check official Hugging Face repositories. When model teams update benchmarks or issue revisions, scores automatically refresh and overlay.
-              </p>
-            </div>
-            <div class="p-3 rounded-lg bg-neutral-900/70 border border-neutral-800">
-              <div class="font-semibold text-neutral-200 mb-1 flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                3. Harness Normalization
-              </div>
-              <p class="text-[11px] text-neutral-400 leading-normal">
-                Values flagged with <span class="font-mono text-neutral-300">~</span> denote harness-adjusted or multi-run estimates where evaluation scaffolds (Claude Code, OpenHands, Terminus-2) differ slightly.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Workflow Recommendations Section -->
-    <section class="mt-14 pt-10 border-t border-borderDark/80">
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
-        <div>
-          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-blue-950/40 border border-blue-800/40 text-xs font-medium text-blue-400 mb-3">
-            <svg class="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-            </svg>
-            Pipeline Recommendations
-          </div>
-          <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white flex items-center gap-2.5">
-            Top 3 Models by Workflow Phase
-          </h2>
-          <p class="text-neutral-400 mt-2 text-sm max-w-2xl leading-relaxed">
-            Dynamically computed rankings matching your engineering lifecycle tasks against verified coding, agentic, vision, and reasoning benchmarks.
-          </p>
-        </div>
-
-        <div class="flex flex-col sm:flex-row sm:items-center gap-3">
-          <button id="open-leaderboard-modal-btn" type="button" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-neutral-200 hover:text-white border border-neutral-700/80 text-xs font-medium transition-all shadow-sm group">
-            <svg class="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-            </svg>
-            <span>Overall Leaderboard</span>
-            <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20 font-mono">Top 1 &rarr; Last</span>
-          </button>
-          <div class="text-xs text-neutral-500 font-mono flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-            <span>Ranked dynamically from active matrix scores</span>
-          </div>
+    <!-- Benchmark Filter Controls Bar -->
+    <section class="mb-6">
+      <div class="flex items-center justify-between gap-4 mb-3">
+        <span class="text-xs font-semibold uppercase tracking-wider text-neutral-400">Select Benchmark Suite:</span>
+        <div class="text-xs text-neutral-500 font-mono" id="active-benchmark-info">
+          <!-- Populated dynamically -->
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="workflow-cards-container">
-        <!-- Dynamic workflow cards rendered here -->
+      <div class="flex flex-wrap items-center gap-2" id="benchmark-tabs">
+        <button class="bench-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-white text-neutral-950 shadow-sm" data-benchmark="composite">
+          Intelligence Index (Composite)
+        </button>
+        <!-- Dynamic benchmark buttons injected here -->
       </div>
     </section>
 
-    <!-- Footnote -->
-    <footer class="mt-12 flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs text-neutral-500 gap-4 border-t border-borderDark/40 pt-6">
+    <!-- Source Provenance Indicator Banner -->
+    <section class="mb-6 p-3.5 rounded-xl bg-cardDark/70 border border-borderDark flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+      <div class="flex items-center gap-2.5">
+        <span class="text-neutral-400">Current Benchmark Metric:</span>
+        <span id="current-metric-name" class="font-bold text-white text-sm">Intelligence Index</span>
+        <span id="current-metric-category" class="px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider bg-blue-500/10 text-blue-400 border border-blue-500/20">All Categories</span>
+      </div>
+      <div class="flex items-center gap-2 text-neutral-400" id="current-metric-source-container">
+        <span>Extraction Priority:</span>
+        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 font-medium text-[11px]">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Official Source
+        </span>
+        <span class="text-neutral-600">&rarr;</span>
+        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 text-amber-300 font-medium text-[11px]">
+          Artificial Analysis
+        </span>
+        <span class="text-neutral-600">&rarr;</span>
+        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-purple-500/10 border border-purple-500/20 text-purple-300 font-medium text-[11px]">
+          Hugging Face
+        </span>
+      </div>
+    </section>
+
+    <!-- Interactive Benchmark Chart (Matches User Screenshot) -->
+    <main class="rounded-2xl border border-borderDark/80 bg-cardDark/80 shadow-2xl backdrop-blur-sm p-6 sm:p-8 relative overflow-hidden mb-8">
+      
+      <!-- Chart Subheader & Controls -->
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-borderDark/50">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center gap-2.5" id="chart-title">
+            Intelligence Index Comparison
+          </h2>
+          <p class="text-xs text-neutral-400 mt-1" id="chart-subtitle">
+            Ranked descending &bull; Higher is better &bull; Hover bar for details &amp; exact source attribution
+          </p>
+        </div>
+
+        <!-- Target Models Toggle -->
+        <div class="flex items-center gap-2">
+          <label class="text-xs text-neutral-400 flex items-center gap-2 cursor-pointer select-none bg-neutral-900 border border-neutral-800 px-3 py-1.5 rounded-lg hover:border-neutral-700 transition-colors">
+            <input type="checkbox" id="toggle-frontier-models" checked class="rounded bg-neutral-800 border-neutral-700 text-blue-500 focus:ring-0 w-3.5 h-3.5">
+            <span>Show Frontier Baselines</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Chart Canvas Area -->
+      <div class="relative w-full overflow-x-auto pt-10 pb-20 select-none min-h-[380px]" id="chart-viewport">
+        <!-- Horizontal guideline rows -->
+        <div class="absolute inset-x-0 top-12 h-[1px] dotted-grid pointer-events-none"></div>
+        <div class="absolute inset-x-0 top-32 h-[1px] dotted-grid pointer-events-none"></div>
+        <div class="absolute inset-x-0 top-52 h-[1px] dotted-grid pointer-events-none"></div>
+        <div class="absolute inset-x-0 bottom-24 h-[1px] bg-neutral-800 pointer-events-none"></div>
+
+        <!-- Rendered bars container -->
+        <div class="flex items-end justify-start sm:justify-center gap-3 sm:gap-4 md:gap-5 min-w-max px-4 h-64" id="bars-track">
+          <!-- Dynamic bars will be rendered here -->
+        </div>
+      </div>
+    </main>
+
+    <!-- Source Verification & Methodology Details Card -->
+    <section class="rounded-xl border border-borderDark/60 bg-cardDark/40 p-5 sm:p-6 mb-10">
+      <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-3 flex items-center gap-2">
+        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        Benchmark Suites &amp; Official Verification Hubs
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 text-xs" id="benchmarks-reference-grid">
+        <!-- Rendered official benchmark links -->
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs text-neutral-500 gap-4 border-t border-borderDark/40 pt-6">
       <p>
-        Data automatically parsed from official model cards &amp; evaluation logs once every 24 hours.
+        Data automatically parsed from official sources, Artificial Analysis, and Hugging Face model cards.
       </p>
       <div class="flex items-center gap-4">
-        <span>~ Estimated / Harness adjusted</span>
+        <span>Higher score is better &uarr;</span>
       </div>
     </footer>
   </div>
 
-  <!-- Interactive Hint Tooltip Dialog -->
-  <div id="tooltip" class="fixed z-50 hidden opacity-0 w-80 p-4 rounded-xl bg-neutral-900/95 border border-neutral-700 shadow-2xl backdrop-blur-md text-xs text-neutral-300 pointer-events-none">
-    <div class="flex items-center justify-between gap-2 border-b border-neutral-800 pb-2 mb-2">
-      <h4 id="tooltip-title" class="font-bold text-neutral-100 text-sm"></h4>
-      <span id="tooltip-category" class="px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider bg-neutral-800 text-blue-400 border border-neutral-700"></span>
+  <!-- Interactive Floating Popover Tooltip (Matches Screenshot Style) -->
+  <div id="chart-tooltip" class="fixed z-50 hidden opacity-0 transition-opacity duration-150 rounded-xl bg-white text-neutral-900 shadow-2xl p-3.5 w-64 border border-neutral-200 pointer-events-none font-sans">
+    <div class="flex items-center gap-2 mb-2 pb-2 border-b border-neutral-100">
+      <div id="tooltip-logo" class="w-5 h-5 flex-shrink-0 flex items-center justify-center"></div>
+      <h4 id="tooltip-model-name" class="font-bold text-neutral-900 text-xs truncate"></h4>
     </div>
-    <p id="tooltip-desc" class="text-neutral-400 leading-relaxed mb-2.5"></p>
-    <div class="flex items-center justify-between text-[11px] text-neutral-400 pt-1.5 border-t border-neutral-800/80">
-      <span>Evaluation direction:</span>
-      <span class="font-mono text-emerald-400">Higher is better &uarr;</span>
+    
+    <div class="flex items-baseline justify-between mb-2">
+      <span id="tooltip-metric-label" class="text-xs text-neutral-600 font-medium">Intelligence Index:</span>
+      <span id="tooltip-score-val" class="text-sm font-bold text-neutral-900 font-mono"></span>
     </div>
-  </div>
 
-  <!-- Overall Models Leaderboard Modal -->
-  <div id="leaderboard-modal" class="fixed inset-0 z-50 hidden opacity-0 transition-opacity duration-200" aria-labelledby="modal-headline" role="dialog" aria-modal="true">
-    <!-- Backdrop overlay -->
-    <div id="leaderboard-backdrop" class="fixed inset-0 bg-neutral-950/80 backdrop-blur-sm transition-opacity"></div>
-
-    <!-- Modal Content -->
-    <div class="fixed inset-0 z-10 overflow-y-auto p-4 sm:p-6 md:p-10 flex items-center justify-center">
-      <div class="relative w-full max-w-3xl rounded-2xl bg-neutral-900 border border-neutral-700/80 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-        
-        <!-- Header -->
-        <div class="p-5 sm:p-6 border-b border-neutral-800 flex items-start justify-between gap-4 bg-neutral-950/50">
-          <div>
-            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-xs font-semibold text-amber-300 mb-2">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-              </svg>
-              Global Standings
-            </div>
-            <h3 id="modal-headline" class="text-xl sm:text-2xl font-bold text-white tracking-tight">
-              General Model Rankings (Top 1 to Last)
-            </h3>
-            <p class="text-xs sm:text-sm text-neutral-400 mt-1 leading-relaxed">
-              Complete ranking computed across all evaluated benchmarks (SWE, coding, agentic tool-use, reasoning, vision).
-            </p>
-          </div>
-          <button id="close-leaderboard-modal-btn" type="button" class="p-2 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Close dialog">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-          </button>
-        </div>
-
-        <!-- Body / Ranked List -->
-        <div class="p-5 sm:p-6 overflow-y-auto space-y-3" id="leaderboard-models-list">
-          <!-- Dynamically populated rows -->
-        </div>
-
-        <!-- Footer -->
-        <div class="px-5 py-3.5 sm:px-6 bg-neutral-950/70 border-t border-neutral-800 text-[11px] text-neutral-500 flex flex-col sm:flex-row items-center justify-between gap-2 font-mono">
-          <span>Formula: Arithmetic mean across available benchmark evaluation scores.</span>
-          <span class="text-neutral-400">Press <kbd class="px-1.5 py-0.5 rounded bg-neutral-800 border border-neutral-700 text-neutral-300">Esc</kbd> to close</span>
-        </div>
+    <div class="pt-2 border-t border-neutral-100 flex flex-col gap-1 text-[11px] text-neutral-500">
+      <div class="flex items-center justify-between">
+        <span>Source:</span>
+        <span id="tooltip-source-badge" class="font-medium text-neutral-800 truncate max-w-[140px]"></span>
       </div>
+      <div class="text-[10px] text-blue-600 font-medium mt-0.5">Click for more info &rarr;</div>
     </div>
   </div>
 
+  <!-- SVG Provider Brand Icons -->
   <script>
-    let benchmarkDescriptions = {};
-    let globalBenchmarkData = null;
-    let currentCategory = 'all';
-
-    const CATEGORY_COLORS = {
-      'Coding': 'text-amber-400 bg-amber-500/10 border-amber-500/20',
-      'Agentic & Tool Use': 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
-      'Reasoning & Math': 'text-indigo-400 bg-indigo-500/10 border-indigo-500/20',
-      'Multimodal & Vision': 'text-purple-400 bg-purple-500/10 border-purple-500/20'
+    const LOGO_SVGS = {
+      'alibaba': `<svg viewBox="0 0 24 24" class="w-5 h-5" fill="#FF6A00"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15.5h-2V11h2v6.5zm-1-8.2a1.3 1.3 0 110-2.6 1.3 1.3 0 010 2.6z"/></svg>`,
+      'google': `<svg viewBox="0 0 24 24" class="w-5 h-5"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/><path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 10.8 0 12.5s.7 2.8 1.9 5.2l3.7-2.9z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.4-6.4-5.2L1.9 17C3.7 20.7 7.5 24 12 24z"/></svg>`,
+      'openai': `<svg viewBox="0 0 24 24" class="w-5 h-5 text-white" fill="currentColor"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.8956zm16.0993 3.8558L12.5973 8.3829l2.02-1.1638a.0804.0804 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.402-.686zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L8.909 9.2297V6.8974a.0662.0662 0 0 1 .0331-.0615l4.8776-2.815a4.4992 4.4992 0 0 1 6.6027 4.6738zM12 14.195l-3.3685-1.9443 3.3685-1.9443 3.3685 1.9443z"/></svg>`,
+      'anthropic': `<svg viewBox="0 0 24 24" class="w-5 h-5 text-white" fill="currentColor"><path d="M13.82 3h3.81L24 21h-3.82l-2.09-5.18H9.91L7.82 21H4l6.37-18h3.45zm2.74 9.91l-2.73-6.73-2.73 6.73h5.46zM0 21l3.5-9.84h3.76L3.76 21H0z"/></svg>`,
+      'meta': `<svg viewBox="0 0 24 24" class="w-5 h-5 text-blue-500" fill="currentColor"><path d="M16.96 5C14.7 5 12.8 6.4 12 7.7 11.2 6.4 9.3 5 7.04 5 3.3 5 0 8.3 0 13c0 4.8 3.5 9 7.7 9 2.5 0 4.5-1.3 5.3-2.6.8 1.3 2.8 2.6 5.3 2.6 4.2 0 7.7-4.2 7.7-9 0-4.7-3.3-8-9.04-8zm-9.7 14.2c-3.1 0-5.5-3.3-5.5-6.8 0-3.3 2.2-6.1 5.3-6.1 2.3 0 3.9 1.7 4.8 3.5-1.5 2.6-3.2 6.5-4.6 9.4zm9.4 0c-1.4-2.9-3.1-6.8-4.6-9.4.9-1.8 2.5-3.5 4.8-3.5 3.1 0 5.3 2.8 5.3 6.1 0 3.5-2.4 6.8-5.5 6.8z"/></svg>`,
+      'xai': `<svg viewBox="0 0 24 24" class="w-5 h-5 text-white" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`,
+      'deepseek': `<svg viewBox="0 0 24 24" class="w-5 h-5 text-blue-400" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.7 14.7c-2.3 2.3-6 2.3-8.3 0-1.8-1.8-2.2-4.5-1.2-6.7l2.1 2.1c-.2 1.1.2 2.3 1 3.1 1.2 1.2 3.1 1.2 4.2 0 .8-.8 1-2 .5-3l1.8-1.8c1.3 1.9 1.1 4.5-.1 6.3z"/></svg>`,
+      'kimi': `<svg viewBox="0 0 24 24" class="w-5 h-5 text-blue-500" fill="currentColor"><circle cx="12" cy="12" r="10"/><path fill="#fff" d="M8 7h3v10H8zm5 0h3l-3 5 3 5h-3l-2-3.5L13 7z"/></svg>`,
+      'zhipu': `<svg viewBox="0 0 24 24" class="w-5 h-5 text-white" fill="currentColor"><rect width="20" height="20" x="2" y="2" rx="4" fill="#1E293B"/><path fill="#38BDF8" d="M7 7h10l-6 10h6v-2H11l6-10H7v2z"/></svg>`,
+      'nvidia': `<svg viewBox="0 0 24 24" class="w-5 h-5 text-green-500" fill="currentColor"><path d="M8.9 7.7c.6-1.1 1.7-1.8 3.1-1.8 1.4 0 2.5.7 3.1 1.8 1.1 2 .8 4.6-.7 6.3l-2.4 2.7-2.4-2.7c-1.5-1.7-1.8-4.3-.7-6.3zm3.1-4.7C6.5 3 2 7.5 2 13s4.5 10 10 10 10-4.5 10-10S17.5 3 12 3z"/></svg>`,
+      'mistral': `<svg viewBox="0 0 24 24" class="w-5 h-5" fill="#FF7000"><path d="M4 4h4v4H4zm12 0h4v4h-4zm-8 4h8v4H8zm-4 4h4v4H4zm12 0h4v4h-4zm-8 4h8v4H8z"/></svg>`,
+      'default': `<svg viewBox="0 0 24 24" class="w-5 h-5 text-neutral-400" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>`
     };
+
+    function getBrandIconSvg(provider, modelName) {
+      const p = (provider || '').toLowerCase();
+      const m = (modelName || '').toLowerCase();
+      if (p.includes('alibaba') || m.includes('qwen')) return LOGO_SVGS.alibaba;
+      if (p.includes('google') || m.includes('gemma') || m.includes('gemini')) return LOGO_SVGS.google;
+      if (p.includes('anthropic') || m.includes('claude')) return LOGO_SVGS.anthropic;
+      if (p.includes('openai') || m.includes('gpt')) return LOGO_SVGS.openai;
+      if (p.includes('meta') || m.includes('muse') || m.includes('llama')) return LOGO_SVGS.meta;
+      if (p.includes('xai') || m.includes('grok')) return LOGO_SVGS.xai;
+      if (p.includes('deepseek')) return LOGO_SVGS.deepseek;
+      if (p.includes('moonshot') || m.includes('kimi')) return LOGO_SVGS.kimi;
+      if (p.includes('zhipu') || m.includes('glm')) return LOGO_SVGS.zhipu;
+      if (p.includes('nvidia') || m.includes('nemotron')) return LOGO_SVGS.nvidia;
+      if (p.includes('mistral') || m.includes('devstral')) return LOGO_SVGS.mistral;
+      return LOGO_SVGS.default;
+    }
+  </script>
+
+  <!-- Application Logic -->
+  <script>
+    let rawData = null;
+    let benchmarkDescriptions = {};
+    let activeBenchmarkId = 'composite'; // 'composite' or one of the 12 benchmarks
+    let showFrontierBaselines = true;
 
     async function init() {
       try {
-        const [infoRes, dataRes] = await Promise.all([
-          fetch('data/benchmark_info.json'),
-          fetch('data/benchmark_data.json')
+        const [dataRes, infoRes] = await Promise.all([
+          fetch('data/benchmark_data.json'),
+          fetch('data/benchmark_info.json')
         ]);
 
+        rawData = await dataRes.json();
         benchmarkDescriptions = await infoRes.json();
-        globalBenchmarkData = await dataRes.json();
 
-        setupTabs();
-        renderTable();
-        renderWorkflowRecommendations();
-        setupLeaderboardModal();
-        renderMeta(globalBenchmarkData);
+        // Update header time
+        if (rawData.updatedAt) {
+          const date = new Date(rawData.updatedAt);
+          document.getElementById('last-updated-val').textContent = date.toLocaleDateString(undefined, {
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+        }
+
+        renderBenchmarkTabs();
+        renderOfficialReferenceGrid();
+        renderChart();
+
+        // Checkbox listener
+        document.getElementById('toggle-frontier-models').addEventListener('change', (e) => {
+          showFrontierBaselines = e.target.checked;
+          renderChart();
+        });
+
       } catch (err) {
-        console.error('Failed to load benchmark data:', err);
-        document.getElementById('table-body').innerHTML = `
-          <tr>
-            <td colspan="8" class="py-12 text-center text-rose-400 text-sm font-mono">
-              Failed to load benchmark data: ${err.message}
-            </td>
-          </tr>
-        `;
+        console.error('Initialization failure:', err);
       }
     }
 
-    function setupTabs() {
-      const buttons = document.querySelectorAll('.cat-btn');
-      buttons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          buttons.forEach(b => {
-            b.className = 'cat-btn px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800';
-          });
-          btn.className = 'cat-btn px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all bg-white text-neutral-900 font-semibold shadow-sm';
-          currentCategory = btn.getAttribute('data-cat');
-          renderTable();
-        });
+    function renderBenchmarkTabs() {
+      const container = document.getElementById('benchmark-tabs');
+      const benchmarks = rawData.benchmarks || [];
+
+      benchmarks.forEach(b => {
+        const btn = document.createElement('button');
+        btn.className = 'bench-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800';
+        btn.dataset.benchmark = b.id;
+        btn.textContent = b.name;
+        btn.addEventListener('click', () => switchBenchmark(b.id));
+        container.appendChild(btn);
       });
-    }
 
-    function renderMeta(data) {
-      if (data.updatedAt) {
-        const date = new Date(data.updatedAt);
-        const formatted = date.toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric'
-        }) + ' ' + date.toLocaleTimeString('en-US', {
-          hour: '2-digit',
-          minute: '2-digit',
-          timeZoneName: 'short'
-        });
-        document.getElementById('last-updated').innerHTML = `
-          <span>Updated:</span>
-          <span class="text-neutral-300 font-medium">${formatted}</span>
-        `;
+      // Composite button listener
+      const compositeBtn = container.querySelector('[data-benchmark="composite"]');
+      if (compositeBtn) {
+        compositeBtn.addEventListener('click', () => switchBenchmark('composite'));
       }
     }
 
-    function renderTable() {
-      if (!globalBenchmarkData) return;
-      const headerRow = document.getElementById('table-header');
-      const tableBody = document.getElementById('table-body');
+    function switchBenchmark(id) {
+      activeBenchmarkId = id;
 
-      const models = globalBenchmarkData.models || [];
-      const benchmarkList = globalBenchmarkData.benchmarks || [];
-
-      // 1. Build Header
-      headerRow.innerHTML = `
-        <th class="py-4 px-6 font-semibold tracking-wide text-neutral-200 sticky-col min-w-[240px]">
-          Benchmark Suite
-        </th>
-      `;
-
-      models.forEach(model => {
-        const th = document.createElement('th');
-        th.className = 'py-4 px-6 font-semibold tracking-wide text-neutral-100 text-left min-w-[160px]';
-        
-        if (model.url) {
-          th.innerHTML = `
-            <a href="${model.url}" target="_blank" rel="noopener noreferrer" class="hover:text-blue-400 transition-colors inline-flex items-center gap-1 group">
-              <span>${model.name}</span>
-              <svg class="w-3 h-3 text-neutral-500 group-hover:text-blue-400 transition-colors opacity-70 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
-            </a>
-          `;
+      // Update button active states
+      document.querySelectorAll('.bench-btn').forEach(btn => {
+        if (btn.dataset.benchmark === id) {
+          btn.className = 'bench-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-white text-neutral-950 shadow-sm';
         } else {
-          th.textContent = model.name;
+          btn.className = 'bench-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800';
         }
-        headerRow.appendChild(th);
       });
 
-      // 2. Filter & Group Benchmarks
-      const filtered = currentCategory === 'all' 
-        ? benchmarkList 
-        : benchmarkList.filter(b => b.category === currentCategory);
+      // Update subheader banner info
+      const bObj = (rawData.benchmarks || []).find(b => b.id === id);
+      const titleElem = document.getElementById('current-metric-name');
+      const catElem = document.getElementById('current-metric-category');
+      const chartTitle = document.getElementById('chart-title');
 
-      // Group benchmarks by category
-      const groups = {};
-      filtered.forEach(b => {
-        const cat = b.category || 'General';
-        if (!groups[cat]) groups[cat] = [];
-        groups[cat].push(b);
-      });
+      if (id === 'composite') {
+        titleElem.textContent = 'Artificial Analysis Intelligence Index';
+        catElem.textContent = 'Cross-Disciplinary Composite';
+        chartTitle.textContent = 'Artificial Analysis Intelligence Index';
+      } else if (bObj) {
+        titleElem.textContent = bObj.name;
+        catElem.textContent = bObj.category;
+        chartTitle.textContent = `${bObj.name} Evaluation Rankings`;
+      }
 
-      tableBody.innerHTML = '';
-
-      Object.keys(groups).forEach(cat => {
-        // Render Group Header
-        const groupTr = document.createElement('tr');
-        groupTr.className = 'bg-neutral-900/60 border-y border-borderDark/60';
-        
-        const catColor = CATEGORY_COLORS[cat] || 'text-neutral-400 bg-neutral-800/30 border-neutral-700';
-        groupTr.innerHTML = `
-          <td colspan="${models.length + 1}" class="py-2.5 px-6 font-semibold tracking-wider text-xs uppercase sticky-col">
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded border ${catColor}">
-              ${cat}
-            </span>
-          </td>
-        `;
-        tableBody.appendChild(groupTr);
-
-        // Render Benchmarks in this Category
-        groups[cat].forEach(bench => {
-          const tr = document.createElement('tr');
-          tr.className = 'border-b border-borderDark/40 hover:bg-hoverRow/60 transition-colors group';
-
-          // Benchmark name cell
-          const nameTd = document.createElement('td');
-          nameTd.className = 'py-3.5 px-6 font-medium text-neutral-200 sticky-col group-hover:bg-hoverRow/60 transition-colors';
-          nameTd.innerHTML = `
-            <div class="inline-flex items-center gap-2 cursor-help benchmark-trigger" data-bench-id="${bench.id}" data-bench-name="${bench.name}">
-              <span class="border-b border-dotted border-neutral-600 hover:border-neutral-300 transition-colors">${bench.name}</span>
-              <svg class="w-3.5 h-3.5 text-neutral-600 group-hover:text-neutral-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-          `;
-          tr.appendChild(nameTd);
-
-          // Model score cells
-          models.forEach(model => {
-            const scoreTd = document.createElement('td');
-            scoreTd.className = 'py-3.5 px-6 font-mono text-sm tracking-tight text-neutral-300';
-            
-            const val = model.scores ? model.scores[bench.id] : null;
-            if (val) {
-              scoreTd.textContent = val;
-            } else {
-              scoreTd.innerHTML = '<span class="text-neutral-600 font-sans">-</span>';
-            }
-            tr.appendChild(scoreTd);
-          });
-
-          tableBody.appendChild(tr);
-        });
-      });
-
-      setupTooltips();
+      renderChart();
     }
 
-    function setupTooltips() {
-      const tooltip = document.getElementById('tooltip');
-      const titleElem = document.getElementById('tooltip-title');
-      const categoryElem = document.getElementById('tooltip-category');
-      const descElem = document.getElementById('tooltip-desc');
-      const triggers = document.querySelectorAll('.benchmark-trigger');
+    function renderChart() {
+      const track = document.getElementById('bars-track');
+      track.innerHTML = '';
 
-      triggers.forEach(trigger => {
-        trigger.addEventListener('mouseenter', (e) => {
-          const benchId = trigger.getAttribute('data-bench-id');
-          const benchName = trigger.getAttribute('data-bench-name');
-          const info = benchmarkDescriptions[benchId] || {
-            name: benchName,
-            category: 'Benchmark',
-            description: 'Evaluation benchmark for language models.'
+      const targetModels = rawData.models || [];
+      const comparisonBaselines = rawData.comparisonBaselines || [];
+
+      // Combine models based on toggle
+      let combined = [...targetModels];
+      if (showFrontierBaselines) {
+        combined = [...combined, ...comparisonBaselines];
+      }
+
+      // Calculate score for active benchmark
+      const modelEntries = combined.map(m => {
+        const isTarget = (rawData.targetModels || []).some(tm => 
+          tm.toLowerCase() === m.name.toLowerCase() || tm.toLowerCase() === m.id.toLowerCase()
+        );
+
+        let scoreVal = null;
+        let scoreDisplay = 'N/A';
+        let sourceObj = null;
+
+        if (activeBenchmarkId === 'composite') {
+          scoreVal = m.compositeIndex || 0;
+          scoreDisplay = `${Math.round(scoreVal)}`;
+          sourceObj = {
+            source: 'official',
+            sourceName: 'Curated Benchmark Composite Index',
+            sourceUrl: m.url || '#'
           };
-
-          titleElem.textContent = info.name;
-          categoryElem.textContent = info.category || 'Benchmark';
-          descElem.textContent = info.description;
-
-          tooltip.classList.remove('hidden');
-          requestAnimationFrame(() => {
-            tooltip.classList.remove('opacity-0');
-            tooltip.classList.add('opacity-100');
-          });
-
-          positionTooltip(e);
-        });
-
-        trigger.addEventListener('mousemove', (e) => {
-          positionTooltip(e);
-        });
-
-        trigger.addEventListener('mouseleave', () => {
-          tooltip.classList.remove('opacity-100');
-          tooltip.classList.add('opacity-0');
-          setTimeout(() => {
-            if (tooltip.classList.contains('opacity-0')) {
-              tooltip.classList.add('hidden');
-            }
-          }, 150);
-        });
-      });
-
-      function positionTooltip(e) {
-        const padding = 15;
-        const tooltipWidth = 320;
-        const tooltipHeight = 160;
-
-        let x = e.clientX + padding;
-        let y = e.clientY + padding;
-
-        if (x + tooltipWidth > window.innerWidth) {
-          x = e.clientX - tooltipWidth - padding;
-        }
-        if (y + tooltipHeight > window.innerHeight) {
-          y = e.clientY - tooltipHeight - padding;
-        }
-
-        tooltip.style.left = `${Math.max(10, x)}px`;
-        tooltip.style.top = `${Math.max(10, y)}px`;
-      }
-    }
-
-    const WORKFLOW_STAGES = [
-      {
-        id: 'specs_prd',
-        title: 'Project specs / PRD',
-        badge: 'Architecture & Scope',
-        badgeColor: 'text-indigo-400 bg-indigo-500/10 border-indigo-500/20',
-        icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>',
-        description: 'Translates domain requirements into deep technical specifications, edge-case breakdowns, and architectural trade-offs.',
-        primaryMetric: 'gpqa_diamond',
-        minMetrics: 1,
-        weights: {
-          gpqa_diamond: 0.40,
-          hle: 0.35,
-          mmlu_pro: 0.25
-        }
-      },
-      {
-        id: 'figma_stitch_ui',
-        title: 'Figma / Stitch UI/UX',
-        badge: 'Multimodal Vision',
-        badgeColor: 'text-purple-400 bg-purple-500/10 border-purple-500/20',
-        icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>',
-        description: 'Understands spatial layouts, wireframe screenshots, Material/Stitch components, and converts visual designs to clean UI code.',
-        primaryMetric: 'osworld_verified',
-        minMetrics: 1,
-        weights: {
-          osworld_verified: 0.45,
-          mmmu_pro: 0.35,
-          math_vision: 0.20
-        }
-      },
-      {
-        id: 'implementation',
-        title: 'Implementation',
-        badge: 'Core Coding',
-        badgeColor: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
-        icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>',
-        description: 'Generates production-grade code, deep domain modules, complex business logic, and idiomatic APIs across multiple files.',
-        primaryMetric: 'swe_bench_verified',
-        minMetrics: 2,
-        weights: {
-          swe_bench_verified: 0.40,
-          livecodebench: 0.35,
-          swe_bench_pro: 0.25
-        }
-      },
-      {
-        id: 'spec_validation',
-        title: 'Specs vs Implementation',
-        badge: 'Verification Logic',
-        badgeColor: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
-        icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>',
-        description: 'Cross-checks written PRD contracts against actual repository pull requests, pinpointing missing edge cases and scope drifts.',
-        primaryMetric: 'gpqa_diamond',
-        minMetrics: 2,
-        weights: {
-          gpqa_diamond: 0.40,
-          hle: 0.35,
-          aime_2026: 0.25
-        }
-      },
-      {
-        id: 'code_review',
-        title: 'Code Review',
-        badge: 'Code Smells & Lint',
-        badgeColor: 'text-blue-400 bg-blue-500/10 border-blue-500/20',
-        icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>',
-        description: 'Detects shallow abstraction leaks, regression risks, concurrency pitfalls, and enforces strict architecture style guidelines.',
-        primaryMetric: 'livecodebench',
-        minMetrics: 2,
-        weights: {
-          livecodebench: 0.40,
-          swe_bench_pro: 0.35,
-          swe_bench_verified: 0.25
-        }
-      },
-      {
-        id: 'qa_bug_hunting',
-        title: 'QA / Bug-Hunting & Fix',
-        badge: 'Agentic Execution',
-        badgeColor: 'text-rose-400 bg-rose-500/10 border-rose-500/20',
-        icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>',
-        description: 'Runs CLI diagnostics, drives reproduction scripts in sandboxed terminals, tools with MCP, and verifies automated bug fixes.',
-        primaryMetric: 'terminal_bench_2_1',
-        minMetrics: 2,
-        weights: {
-          terminal_bench_2_1: 0.40,
-          swe_bench_pro: 0.30,
-          mcp_atlas: 0.20,
-          tau_bench: 0.10
-        }
-      }
-    ];
-
-    function parseScoreValue(str) {
-      if (!str || typeof str !== 'string') return null;
-      const clean = str.replace(/[^0-9.]/g, '');
-      const num = parseFloat(clean);
-      return isNaN(num) ? null : num;
-    }
-
-    function renderWorkflowRecommendations() {
-      const container = document.getElementById('workflow-cards-container');
-      if (!container || !globalBenchmarkData) return;
-
-      const models = globalBenchmarkData.models || [];
-      const benchmarkMap = {};
-      (globalBenchmarkData.benchmarks || []).forEach(b => {
-        benchmarkMap[b.id] = b.name;
-      });
-
-      const rankBadges = [
-        { rank: '1', label: '#1 Top Pick', bg: 'bg-amber-400/10 text-amber-300 border-amber-400/30' },
-        { rank: '2', label: '#2 Runner Up', bg: 'bg-slate-300/10 text-slate-200 border-slate-300/30' },
-        { rank: '3', label: '#3 Third Place', bg: 'bg-amber-700/10 text-amber-500 border-amber-700/30' }
-      ];
-
-      container.innerHTML = '';
-
-      WORKFLOW_STAGES.forEach(stage => {
-        // Calculate model rankings for this stage
-        const scoredModels = models.map(m => {
-          let totalWeight = 0;
-          let weightedSum = 0;
-          let countedMetrics = 0;
-
-          Object.keys(stage.weights).forEach(bId => {
-            const weight = stage.weights[bId];
-            const rawVal = m.scores ? m.scores[bId] : null;
-            const parsed = parseScoreValue(rawVal);
-            if (parsed !== null) {
-              weightedSum += parsed * weight;
-              totalWeight += weight;
-              countedMetrics++;
-            }
-          });
-
-          // Normalized composite score
-          const composite = totalWeight > 0 ? (weightedSum / totalWeight) : 0;
-          return {
-            model: m,
-            composite,
-            countedMetrics
-          };
-        })
-        .filter(item => item.countedMetrics >= (stage.minMetrics || 1))
-        .sort((a, b) => b.composite - a.composite)
-        .slice(0, 3);
-
-        const card = document.createElement('div');
-        card.className = 'rounded-xl border border-borderDark/80 bg-cardDark/70 p-6 flex flex-col justify-between hover:border-neutral-700 transition-all shadow-lg hover:shadow-xl';
-
-        // Stage Header
-        let cardHtml = `
-          <div>
-            <div class="flex items-center justify-between gap-2 mb-3">
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] font-semibold border ${stage.badgeColor}">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  ${stage.icon}
-                </svg>
-                ${stage.badge}
-              </span>
-              <span class="text-[11px] text-neutral-500 font-mono">Stage ${WORKFLOW_STAGES.indexOf(stage) + 1} of 6</span>
-            </div>
-            
-            <h3 class="text-lg font-bold text-white tracking-tight mb-2">${stage.title}</h3>
-            <p class="text-xs text-neutral-400 leading-relaxed mb-5 min-h-[40px]">${stage.description}</p>
-
-            <div class="space-y-2.5 mb-2">
-        `;
-
-        // Render Top 3 Models
-        scoredModels.forEach((item, index) => {
-          const badge = rankBadges[index] || rankBadges[2];
-          const m = item.model;
-          
-          // Collect primary score proof points
-          const proofScores = Object.keys(stage.weights).map(bId => {
-            const raw = m.scores ? m.scores[bId] : null;
-            if (!raw) return null;
-            const bName = benchmarkMap[bId] || bId;
-            return `<span class="inline-block bg-neutral-900 border border-neutral-800 text-[10px] px-1.5 py-0.5 rounded text-neutral-400 font-mono">${bName.split(' ')[0]}: <strong class="text-neutral-200">${raw}</strong></span>`;
-          }).filter(Boolean).slice(0, 2).join(' ');
-
-          const modelLink = m.url 
-            ? `<a href="${m.url}" target="_blank" rel="noopener noreferrer" class="hover:text-blue-400 transition-colors inline-flex items-center gap-1 font-semibold text-neutral-200 text-xs">${m.name}</a>`
-            : `<span class="font-semibold text-neutral-200 text-xs">${m.name}</span>`;
-
-          cardHtml += `
-            <div class="p-2.5 rounded-lg bg-neutral-900/60 border border-neutral-800/80 flex flex-col gap-1.5">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                  <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold border ${badge.bg}">${badge.label}</span>
-                  ${modelLink}
-                </div>
-                <div class="text-[11px] font-mono text-emerald-400 font-semibold" title="Composite benchmark index">
-                  ${item.composite.toFixed(1)}% idx
-                </div>
-              </div>
-              <div class="flex flex-wrap items-center gap-1.5 pt-0.5">
-                ${proofScores}
-              </div>
-            </div>
-          `;
-        });
-
-        cardHtml += `
-            </div>
-          </div>
-          
-          <div class="pt-4 mt-2 border-t border-borderDark/50 flex items-center justify-between text-[11px] text-neutral-500 font-mono">
-            <span>Primary driver:</span>
-            <span class="text-neutral-400 font-medium">${benchmarkMap[stage.primaryMetric] || stage.primaryMetric}</span>
-          </div>
-        `;
-
-        card.innerHTML = cardHtml;
-        container.appendChild(card);
-      });
-    }
-
-    function setupLeaderboardModal() {
-      const modal = document.getElementById('leaderboard-modal');
-      const openBtn = document.getElementById('open-leaderboard-modal-btn');
-      const closeBtn = document.getElementById('close-leaderboard-modal-btn');
-      const backdrop = document.getElementById('leaderboard-backdrop');
-
-      if (!modal || !openBtn) return;
-
-      function openModal() {
-        renderLeaderboardList();
-        modal.classList.remove('hidden');
-        requestAnimationFrame(() => {
-          modal.classList.remove('opacity-0');
-          modal.classList.add('opacity-100');
-        });
-        document.body.classList.add('overflow-hidden');
-      }
-
-      function closeModal() {
-        modal.classList.remove('opacity-100');
-        modal.classList.add('opacity-0');
-        setTimeout(() => {
-          if (modal.classList.contains('opacity-0')) {
-            modal.classList.add('hidden');
-            document.body.classList.remove('overflow-hidden');
+        } else {
+          const s = m.scores ? m.scores[activeBenchmarkId] : null;
+          if (s) {
+            scoreVal = typeof s.value === 'number' ? s.value : parseFloat(s.value);
+            scoreDisplay = s.display || `${scoreVal}%`;
+            sourceObj = s;
           }
-        }, 200);
-      }
-
-      openBtn.addEventListener('click', openModal);
-      if (closeBtn) closeBtn.addEventListener('click', closeModal);
-      if (backdrop) backdrop.addEventListener('click', closeModal);
-
-      window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
-          closeModal();
         }
-      });
-    }
-
-    function renderLeaderboardList() {
-      const listContainer = document.getElementById('leaderboard-models-list');
-      if (!listContainer || !globalBenchmarkData) return;
-
-      const models = globalBenchmarkData.models || [];
-      const benchmarks = globalBenchmarkData.benchmarks || [];
-
-      // Compute general overall ranking across all benchmarks
-      const computed = models.map(m => {
-        let sum = 0;
-        let count = 0;
-        let topMetrics = [];
-
-        benchmarks.forEach(b => {
-          const raw = m.scores ? m.scores[b.id] : null;
-          const parsed = parseScoreValue(raw);
-          if (parsed !== null) {
-            sum += parsed;
-            count++;
-            topMetrics.push({ id: b.id, name: b.name, val: parsed, raw });
-          }
-        });
-
-        const overallAverage = count > 0 ? (sum / count) : 0;
-        // Sort top metrics to highlight strengths
-        topMetrics.sort((a, b) => b.val - a.val);
 
         return {
           model: m,
-          overallAverage,
-          count,
-          topMetrics: topMetrics.slice(0, 3)
+          isTarget,
+          scoreVal,
+          scoreDisplay,
+          sourceObj
         };
-      });
+      }).filter(item => item.scoreVal !== null && item.scoreVal > 0);
 
-      computed.sort((a, b) => b.overallAverage - a.overallAverage);
+      // Sort descending by score (matching screenshot)
+      modelEntries.sort((a, b) => b.scoreVal - a.scoreVal);
 
-      listContainer.innerHTML = '';
+      if (modelEntries.length === 0) {
+        track.innerHTML = `<div class="text-neutral-500 text-xs py-10 font-mono">No evaluation scores reported for this benchmark yet.</div>`;
+        return;
+      }
 
-      computed.forEach((item, index) => {
-        const rank = index + 1;
-        const m = item.model;
+      const maxScore = Math.max(...modelEntries.map(e => e.scoreVal), 100);
 
-        // Custom badges for podium ranks
-        let rankBadge = '';
-        let rowBorder = 'border-neutral-800/80';
-        let rowBg = 'bg-neutral-950/40 hover:bg-neutral-800/40';
+      // Render vertical rounded bars
+      modelEntries.forEach((entry, idx) => {
+        const m = entry.model;
+        const barHeightPct = Math.min(100, Math.max(12, (entry.scoreVal / maxScore) * 100));
 
-        if (rank === 1) {
-          rankBadge = '<span class="w-8 h-8 rounded-lg flex items-center justify-center font-mono font-bold text-sm bg-amber-400 text-neutral-950 shadow-md shadow-amber-500/20">#1</span>';
-          rowBorder = 'border-amber-500/30';
-          rowBg = 'bg-amber-500/5 hover:bg-amber-500/10';
-        } else if (rank === 2) {
-          rankBadge = '<span class="w-8 h-8 rounded-lg flex items-center justify-center font-mono font-bold text-sm bg-slate-300 text-neutral-950 shadow-md shadow-slate-300/20">#2</span>';
-          rowBorder = 'border-slate-400/30';
-          rowBg = 'bg-slate-400/5 hover:bg-slate-400/10';
-        } else if (rank === 3) {
-          rankBadge = '<span class="w-8 h-8 rounded-lg flex items-center justify-center font-mono font-bold text-sm bg-amber-700/80 text-white shadow-md shadow-amber-700/20">#3</span>';
-          rowBorder = 'border-amber-700/30';
-          rowBg = 'bg-amber-700/5 hover:bg-amber-700/10';
-        } else {
-          rankBadge = `<span class="w-8 h-8 rounded-lg flex items-center justify-center font-mono font-semibold text-xs bg-neutral-800 text-neutral-400 border border-neutral-700">#${rank}</span>`;
+        // Colors matching screenshot:
+        // Target models highlighted in vibrant solid blue #3B82F6, top 3 in gray/slate or light blue
+        let barBgClass = 'bg-[#8E95A5]'; // default screenshot gray
+        let textScoreClass = 'text-white/80';
+        let glowClass = '';
+
+        if (entry.isTarget) {
+          barBgClass = 'bg-[#3B82F6] bar-glow'; // Vibrant electric blue like Qwen3.8 in screenshot
+          textScoreClass = 'text-white font-bold';
+        } else if (idx >= 4 && idx <= 12) {
+          barBgClass = 'bg-[#A4C2FF]'; // lighter slate blue from screenshot
+          textScoreClass = 'text-[#244280] font-semibold';
         }
 
-        const modelLink = m.url
-          ? `<a href="${m.url}" target="_blank" rel="noopener noreferrer" class="hover:text-blue-400 transition-colors inline-flex items-center gap-1.5 font-bold text-neutral-100 text-sm sm:text-base">
-              <span>${m.name}</span>
-              <svg class="w-3.5 h-3.5 text-neutral-500 hover:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
-             </a>`
-          : `<span class="font-bold text-neutral-100 text-sm sm:text-base">${m.name}</span>`;
+        const colWrapper = document.createElement('div');
+        colWrapper.className = 'group relative flex flex-col items-center justify-end h-full w-12 sm:w-14 cursor-pointer flex-shrink-0';
 
-        const strengthPills = item.topMetrics.map(tm => {
-          return `<span class="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded bg-neutral-900 border border-neutral-800 text-neutral-400">
-            ${tm.name.split(' ')[0]}: <strong class="text-neutral-200">${tm.raw}</strong>
-          </span>`;
-        }).join(' ');
-
-        const row = document.createElement('div');
-        row.className = `p-4 rounded-xl border ${rowBorder} ${rowBg} transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-3`;
-
-        row.innerHTML = `
-          <div class="flex items-start sm:items-center gap-3.5">
-            ${rankBadge}
-            <div>
-              <div class="flex flex-wrap items-center gap-2 mb-1">
-                ${modelLink}
-                ${m.repo ? `<span class="text-[11px] font-mono text-neutral-500">${m.repo}</span>` : ''}
-              </div>
-              <div class="flex flex-wrap items-center gap-1.5 pt-0.5">
-                <span class="text-[10px] uppercase tracking-wider text-neutral-500 font-semibold mr-1">Key scores:</span>
-                ${strengthPills}
-              </div>
+        // Column HTML: Vertical Bar + Logo + Slanted Label
+        colWrapper.innerHTML = `
+          <!-- Bar container -->
+          <div class="w-full flex flex-col items-center justify-end" style="height: ${barHeightPct}%;">
+            <div class="w-full rounded-t-lg ${barBgClass} flex items-center justify-center transition-all duration-200 group-hover:brightness-110 group-hover:scale-y-[1.02] origin-bottom relative" style="height: 100%;">
+              <span class="text-xs font-mono ${textScoreClass} select-none">
+                ${Math.round(entry.scoreVal)}
+              </span>
             </div>
           </div>
 
-          <div class="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center border-t sm:border-t-0 border-neutral-800/80 pt-2 sm:pt-0 pl-11 sm:pl-0">
-            <div class="flex items-baseline gap-1">
-              <span class="text-xs text-neutral-400 font-mono">Index</span>
-              <span class="font-mono text-base sm:text-lg font-bold text-emerald-400 tracking-tight">${item.overallAverage.toFixed(1)}%</span>
-            </div>
-            <span class="text-[10px] text-neutral-500 font-mono">${item.count} / ${benchmarks.length} suites</span>
+          <!-- Bottom Provider Logo Icon -->
+          <div class="mt-2.5 mb-1.5 flex items-center justify-center w-7 h-7 rounded-full bg-neutral-900 border border-neutral-800 group-hover:border-neutral-600 transition-colors">
+            ${getBrandIconSvg(m.provider, m.name)}
+          </div>
+
+          <!-- Angled Label (~ -45deg) -->
+          <div class="h-20 w-12 flex items-start justify-center overflow-visible">
+            <span class="text-[11px] font-medium text-neutral-300 whitespace-nowrap transform -rotate-45 origin-top-left translate-y-2 translate-x-2 group-hover:text-white transition-colors" title="${m.name}">
+              ${m.name}
+            </span>
           </div>
         `;
 
-        listContainer.appendChild(row);
+        // Tooltip interactions
+        colWrapper.addEventListener('mouseenter', (e) => showTooltip(e, entry));
+        colWrapper.addEventListener('mousemove', (e) => updateTooltipPos(e));
+        colWrapper.addEventListener('mouseleave', hideTooltip);
+
+        // Click interaction: Open model url or official evaluation benchmark
+        colWrapper.addEventListener('click', () => {
+          const targetUrl = entry.sourceObj?.sourceUrl || m.url || `https://artificialanalysis.ai/models/${m.slug}#intelligence-breakdown`;
+          window.open(targetUrl, '_blank', 'noopener,noreferrer');
+        });
+
+        track.appendChild(colWrapper);
       });
     }
 
+    // Tooltip management
+    const tooltip = document.getElementById('chart-tooltip');
+    const tooltipLogo = document.getElementById('tooltip-logo');
+    const tooltipModelName = document.getElementById('tooltip-model-name');
+    const tooltipMetricLabel = document.getElementById('tooltip-metric-label');
+    const tooltipScoreVal = document.getElementById('tooltip-score-val');
+    const tooltipSourceBadge = document.getElementById('tooltip-source-badge');
+
+    function showTooltip(e, entry) {
+      const m = entry.model;
+      tooltipLogo.innerHTML = getBrandIconSvg(m.provider, m.name);
+      tooltipModelName.textContent = m.name;
+
+      const activeB = (rawData.benchmarks || []).find(b => b.id === activeBenchmarkId);
+      tooltipMetricLabel.textContent = activeB ? `${activeB.name}:` : 'Intelligence Index:';
+      tooltipScoreVal.textContent = entry.scoreDisplay;
+
+      // Provenance badge
+      if (entry.sourceObj) {
+        let badgeText = entry.sourceObj.sourceName || 'Official Source';
+        if (entry.sourceObj.source === 'fallback-aa') {
+          badgeText = 'Artificial Analysis';
+        } else if (entry.sourceObj.source === 'fallback-hf') {
+          badgeText = 'Hugging Face Card';
+        }
+        tooltipSourceBadge.textContent = badgeText;
+      } else {
+        tooltipSourceBadge.textContent = 'Official Leaderboard';
+      }
+
+      tooltip.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        tooltip.classList.remove('opacity-0');
+        tooltip.classList.add('opacity-100');
+      });
+      updateTooltipPos(e);
+    }
+
+    function updateTooltipPos(e) {
+      const tooltipWidth = 260;
+      const tooltipHeight = 110;
+      let left = e.clientX + 16;
+      let top = e.clientY - 60;
+
+      // Edge prevention
+      if (left + tooltipWidth > window.innerWidth) {
+        left = e.clientX - tooltipWidth - 16;
+      }
+      if (top < 10) top = 10;
+
+      tooltip.style.left = `${left}px`;
+      tooltip.style.top = `${top}px`;
+    }
+
+    function hideTooltip() {
+      tooltip.classList.remove('opacity-100');
+      tooltip.classList.add('opacity-0');
+      setTimeout(() => {
+        if (tooltip.classList.contains('opacity-0')) {
+          tooltip.classList.add('hidden');
+        }
+      }, 150);
+    }
+
+    // Render benchmark reference cards
+    function renderOfficialReferenceGrid() {
+      const grid = document.getElementById('benchmarks-reference-grid');
+      grid.innerHTML = '';
+      const list = rawData.benchmarks || [];
+
+      list.forEach(b => {
+        const info = benchmarkDescriptions[b.id] || {};
+        const card = document.createElement('div');
+        card.className = 'p-3 rounded-lg bg-neutral-900/60 border border-neutral-800/80 hover:border-neutral-700 transition-colors flex flex-col justify-between';
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-bold text-neutral-200">${b.name}</span>
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-neutral-800 text-neutral-400 font-mono">${b.category}</span>
+            </div>
+            <p class="text-neutral-400 text-[11px] leading-relaxed line-clamp-2 mb-2">
+              ${info.description || ''}
+            </p>
+          </div>
+          <div class="pt-2 border-t border-neutral-800/60 flex items-center justify-between text-[11px]">
+            <span class="text-neutral-500 font-medium truncate max-w-[170px]">${b.officialSource || 'Official Source'}</span>
+            <a href="${b.officialUrl}" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 font-medium">Source &rarr;</a>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // Initialize on DOM ready
     window.addEventListener('DOMContentLoaded', init);
   </script>
 </body>

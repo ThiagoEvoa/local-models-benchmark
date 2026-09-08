@@ -35,9 +35,11 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Fetch Latest Benchmarks from Hugging Face
+      - name: Fetch Latest Benchmarks from Multi-Tier Sources
         env:
-          # Ingest model URLs from GitHub Repository Variable vars.MODEL_URLS
+          # Ingest model names from GitHub Repository Variable vars.MODEL_NAMES
+          MODEL_NAMES: ${{ vars.MODEL_NAMES }}
+          # Fallback or supplementary URLs
           MODEL_URLS: ${{ vars.MODEL_URLS }}
         run: |
           node scripts/update_benchmarks.js

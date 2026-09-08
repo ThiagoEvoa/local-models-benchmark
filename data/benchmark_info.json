@@ -2,6 +2,9 @@
   "swe_bench_verified": {
     "name": "SWE-bench Verified",
     "category": "Coding",
+    "officialSource": "SWE-bench (OpenAI & SWE-bench team)",
+    "officialUrl": "https://www.swebench.com/verified.html",
+    "officialRepo": "https://github.com/SWE-bench/SWE-bench",
     "description": "Human-validated subset of 500 real GitHub issues. Evaluates an LLM agent's capability to resolve actual software bugs and write pull requests in complex open-source codebases.",
     "higherIsBetter": true,
     "unit": "%"
@@ -9,6 +12,9 @@
   "swe_bench_pro": {
     "name": "SWE-bench Pro",
     "category": "Coding",
+    "officialSource": "SWE-bench Team",
+    "officialUrl": "https://www.swebench.com/",
+    "officialRepo": "https://github.com/SWE-bench/SWE-bench",
     "description": "Enterprise-grade software engineering benchmark with intricate, multi-file code modifications and strict automated test harnesses.",
     "higherIsBetter": true,
     "unit": "%"
@@ -16,6 +22,9 @@
   "livecodebench": {
     "name": "LiveCodeBench",
     "category": "Coding",
+    "officialSource": "LiveCodeBench (UC Berkeley / MIT / Cornell)",
+    "officialUrl": "https://livecodebench.github.io/",
+    "officialRepo": "https://github.com/LiveCodeBench/LiveCodeBench",
     "description": "Contamination-free competitive programming benchmark collected continuously from LeetCode, AtCoder, and Codeforces to test true generalization.",
     "higherIsBetter": true,
     "unit": "%"
@@ -23,6 +32,9 @@
   "terminal_bench_2_1": {
     "name": "Terminal-Bench 2.1",
     "category": "Agentic & Tool Use",
+    "officialSource": "Terminal-Bench (Stanford / Laude Institute)",
+    "officialUrl": "https://www.tbench.ai/",
+    "officialRepo": "https://github.com/harbor-framework/terminal-bench",
     "description": "Evaluates an AI agent's ability to operate in real bash/terminal environments, execute CLI scripts, troubleshoot servers, and use command-line developer tools.",
     "higherIsBetter": true,
     "unit": "%"
@@ -30,13 +42,19 @@
   "mcp_atlas": {
     "name": "MCP Atlas",
     "category": "Agentic & Tool Use",
-    "description": "Evaluates autonomous agents on complex multi-turn workflows utilizing the Model Context Protocol (MCP) to interact with external tools and services.",
+    "officialSource": "Scale AI Labs (MCP Atlas)",
+    "officialUrl": "https://scale.com/leaderboard/mcp_atlas",
+    "officialRepo": "https://github.com/scaleapi/mcp-atlas",
+    "description": "Evaluates autonomous agents on complex multi-turn workflows utilizing the Model Context Protocol (MCP) across 36 servers and 220 tools.",
     "higherIsBetter": true,
     "unit": "%"
   },
   "tau_bench": {
     "name": "Tau-Bench",
     "category": "Agentic & Tool Use",
+    "officialSource": "Sierra Research (tau2-bench)",
+    "officialUrl": "https://github.com/sierra-research/tau2-bench",
+    "officialRepo": "https://github.com/sierra-research/tau2-bench",
     "description": "Measures conversational agents' ability to reason, call dynamic APIs, and follow strict user policies in airline, banking, and retail domains.",
     "higherIsBetter": true,
     "unit": "%"
@@ -44,6 +62,9 @@
   "aime_2026": {
     "name": "AIME 2026",
     "category": "Reasoning & Math",
+    "officialSource": "American Invitational Mathematics Examination (AoPS)",
+    "officialUrl": "https://artofproblemsolving.com/wiki/index.php/AIME_Problems_and_Solutions",
+    "officialRepo": "https://github.com/openai/simple-evals",
     "description": "American Invitational Mathematics Examination (2026). Tests deep multi-step mathematical Olympiad reasoning and analytical problem-solving.",
     "higherIsBetter": true,
     "unit": "%"
@@ -51,6 +72,9 @@
   "gpqa_diamond": {
     "name": "GPQA Diamond",
     "category": "Reasoning & Math",
+    "officialSource": "GPQA (NYU / David Rein et al.)",
+    "officialUrl": "https://github.com/idavidrein/gpqa",
+    "officialRepo": "https://github.com/idavidrein/gpqa",
     "description": "Google-Proof Q&A Diamond subset: extremely difficult PhD-level questions in physics, chemistry, and biology designed to be resistant to web search.",
     "higherIsBetter": true,
     "unit": "%"
@@ -58,6 +82,9 @@
   "hle": {
     "name": "Humanity's Last Exam (HLE)",
     "category": "Reasoning & Math",
+    "officialSource": "Center for AI Safety & Scale AI (HLE)",
+    "officialUrl": "https://agi.safe.ai/hle",
+    "officialRepo": "https://github.com/centerforaisafety/humanitys-last-exam",
     "description": "Cross-disciplinary benchmark spanning mathematics, humanities, and sciences testing frontier AI reasoning at the upper limits of academic knowledge.",
     "higherIsBetter": true,
     "unit": "%"
@@ -65,6 +92,9 @@
   "mmlu_pro": {
     "name": "MMLU-Pro",
     "category": "Reasoning & Math",
+    "officialSource": "TIGER AI Lab (MMLU-Pro)",
+    "officialUrl": "https://github.com/TIGER-AI-Lab/MMLU-Pro",
+    "officialRepo": "https://huggingface.co/datasets/TIGER-Lab/MMLU-Pro",
     "description": "A significantly more robust and challenging version of MMLU with 10 options per question, requiring genuine multi-step reasoning over memorization.",
     "higherIsBetter": true,
     "unit": "%"
@@ -72,6 +102,9 @@
   "osworld_verified": {
     "name": "OSWorld-Verified",
     "category": "Multimodal & Vision",
+    "officialSource": "OSWorld (XLang Lab / BenchLM)",
+    "officialUrl": "https://os-world.github.io/",
+    "officialRepo": "https://github.com/xlang-ai/OSWorld",
     "description": "Multimodal benchmark assessing an agent's capability to operate a real operating system desktop VM (GUI clicks, window management, keyboard, and cross-application workflows).",
     "higherIsBetter": true,
     "unit": "%"
@@ -79,6 +112,9 @@
   "mmmu_pro": {
     "name": "MMMU-Pro",
     "category": "Multimodal & Vision",
+    "officialSource": "MMMU Benchmark Team",
+    "officialUrl": "https://mmmu-benchmark.github.io/",
+    "officialRepo": "https://github.com/MMMU-Benchmark/MMMU",
     "description": "Massive Multi-discipline Multimodal Understanding Pro subset. Rigorous university-level visual reasoning across charts, diagrams, and technical documents.",
     "higherIsBetter": true,
     "unit": "%"
@@ -86,6 +122,9 @@
   "math_vision": {
     "name": "MathVision",
     "category": "Multimodal & Vision",
+    "officialSource": "CUHK MathVision Team",
+    "officialUrl": "https://mathvision-cuhk.github.io/",
+    "officialRepo": "https://github.com/mathvision-cuhk/MathVision",
     "description": "Evaluates visual mathematical problem solving from competition-level geometry diagrams, plots, and graphical mathematical problems.",
     "higherIsBetter": true,
     "unit": "%"
