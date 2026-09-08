@@ -62,10 +62,6 @@
     <!-- Top Header -->
     <header class="mb-8 border-b border-borderDark/80 pb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
       <div>
-        <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-xs font-medium text-neutral-400 mb-3">
-          <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
-          Repo Variable: <code class="text-blue-400 font-mono text-[11px]">vars.MODEL_NAMES</code>
-        </div>
         <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-white flex items-center gap-3">
           Local LLM Benchmark Intelligence
         </h1>
@@ -100,30 +96,6 @@
       </div>
     </section>
 
-    <!-- Benchmark Extraction & Provenance Bar -->
-    <section class="mb-6 p-4 rounded-xl bg-cardDark border border-borderDark flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
-      <div class="flex flex-wrap items-center gap-2">
-        <span class="text-neutral-400">Active Metric:</span>
-        <span id="current-metric-name" class="font-bold text-white text-sm">Intelligence Index</span>
-        <span id="current-metric-category" class="px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider bg-blue-500/10 text-blue-400 border border-blue-500/20">Composite</span>
-      </div>
-
-      <div class="flex items-center gap-2 text-neutral-400">
-        <span>Fallback Hierarchy:</span>
-        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 font-medium text-[11px]">
-          1. Official Source
-        </span>
-        <span class="text-neutral-600">&rarr;</span>
-        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 text-amber-300 font-medium text-[11px]">
-          2. Artificial Analysis
-        </span>
-        <span class="text-neutral-600">&rarr;</span>
-        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-purple-500/10 border border-purple-500/20 text-purple-300 font-medium text-[11px]">
-          3. Hugging Face
-        </span>
-      </div>
-    </section>
-
     <!-- Main Chart Section (Replicating Screenshot Layout Exactly) -->
     <main class="rounded-2xl border border-borderDark bg-cardDark/95 shadow-2xl p-6 sm:p-8 mb-8">
       
@@ -133,11 +105,8 @@
             Intelligence Index Comparison
           </h2>
           <p class="text-xs text-neutral-400 mt-0.5" id="chart-subtitle">
-            Hover any bar to view exact score, provider, and source link.
+            Hover any bar to view exact score and source link.
           </p>
-        </div>
-        <div class="text-xs font-mono text-neutral-400">
-          Showing <span id="model-count" class="text-white font-bold">3</span> models
         </div>
       </div>
 
@@ -282,19 +251,13 @@
       });
 
       const bObj = (rawData.benchmarks || []).find(b => b.id === id);
-      const titleElem = document.getElementById('current-metric-name');
-      const catElem = document.getElementById('current-metric-category');
       const topCatElem = document.getElementById('active-benchmark-category');
       const chartTitle = document.getElementById('chart-title');
 
       if (id === 'composite') {
-        titleElem.textContent = 'Artificial Analysis Intelligence Index';
-        catElem.textContent = 'Composite';
         topCatElem.textContent = 'All Categories Composite';
         chartTitle.textContent = 'Artificial Analysis Intelligence Index';
       } else if (bObj) {
-        titleElem.textContent = bObj.name;
-        catElem.textContent = bObj.category;
         topCatElem.textContent = bObj.category;
         chartTitle.textContent = `${bObj.name} Evaluation Rankings`;
       }
@@ -308,7 +271,6 @@
 
       // ONLY use models provided by MODEL_NAMES (models array from data)
       const models = rawData.models || [];
-      document.getElementById('model-count').textContent = models.length;
 
       const modelEntries = models.map(m => {
         let scoreVal = null;
