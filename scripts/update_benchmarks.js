@@ -210,67 +210,79 @@ function isFrontierModel(name) {
   return FRONTIER_MODEL_PATTERNS.some(p => p.test(name));
 }
 
-// Convert input model list into structured model descriptor
+function parseModelEntries(value) {
+  if (!value || !value.trim()) return [];
+
+  return value
+    .split(/[\r\n,]+/)
+    .map(line => line.trim())
+    .filter(Boolean)
+    .map(line => {
+      const urlMatch = line.match(/https?:\/\/\S+/i);
+      const url = urlMatch ? urlMatch[0].replace(/\/$/, '') : '';
+      const name = (urlMatch ? line.slice(0, urlMatch.index) : line).trim();
+
+      // URL-only entries remain supported for compatibility with MODEL_URLS.
+      if (!name && url) {
+        const parts = url.split('huggingface.co/')[1]?.split('/') || [];
+        return { name: parts[1] || parts[0] || url, repoUrl: url };
+      }
+
+      return { name, repoUrl: url };
+    })
+    .filter(entry => entry.name);
+}
+
+// Convert MODEL_NAMES and FRONTIER_MODEL_NAMES into structured model descriptors.
 function resolveModelList() {
   const envModelNames = process.env.MODEL_NAMES;
+  const envFrontierNames = process.env.FRONTIER_MODEL_NAMES;
   const envModelUrls = process.env.MODEL_URLS;
+  const hasExplicitFrontierList = Boolean(envFrontierNames && envFrontierNames.trim());
 
-  let rawList = [];
-  if (envModelNames && envModelNames.trim()) {
-    rawList = envModelNames
-      .split(/[\r\n,]+/)
-      .map(s => s.trim())
-      .filter(Boolean);
-  } else if (envModelUrls && envModelUrls.trim()) {
-    rawList = envModelUrls
-      .split(/[\r\n,\s]+/)
-      .map(s => s.trim())
-      .filter(s => s.length > 0 && s.includes('huggingface.co/'))
-      .map(url => {
-        const parts = url.replace(/\/$/, '').split('huggingface.co/')[1].split('/');
-        return parts[1] || parts[0];
-      });
+  let localEntries = parseModelEntries(envModelNames);
+  if (localEntries.length === 0 && envModelUrls && envModelUrls.trim()) {
+    localEntries = parseModelEntries(envModelUrls);
   }
 
-  // If empty, use repository default models
-  if (rawList.length === 0) {
-    rawList = [
-      'qwen3.8-27b',
-      'qwen3.6-27b',
-      'qwen3.6-35b'
+  // If local list is empty, use repository default models.
+  if (localEntries.length === 0) {
+    localEntries = [
+      { name: 'qwen3.8-27b', repoUrl: '' },
+      { name: 'qwen3.6-27b', repoUrl: '' },
+      { name: 'qwen3.6-35b', repoUrl: '' }
     ];
   }
 
-  // Deduplicate and structure
+  const frontierEntries = parseModelEntries(envFrontierNames);
+  const frontierIds = new Set(frontierEntries.map(entry => entry.name.toLowerCase()));
+  const allEntries = [...localEntries, ...frontierEntries];
   const seen = new Set();
   const models = [];
 
-  for (const item of rawList) {
-    const clean = item.replace(/^https?:\/\/huggingface\.co\//, '').replace(/\/$/, '');
-    const id = clean.toLowerCase();
+  for (const entry of allEntries) {
+    const name = entry.name.trim();
+    const id = name.toLowerCase();
     if (seen.has(id)) continue;
     seen.add(id);
 
-    // Map to canonical Hugging Face repo and slug
     let repo = '';
-    let name = clean;
-    if (clean.includes('/')) {
-      repo = clean;
-      name = clean.split('/')[1];
+    if (entry.repoUrl && entry.repoUrl.includes('huggingface.co/')) {
+      repo = entry.repoUrl.split('huggingface.co/')[1].replace(/\/$/, '');
+    } else if (/^qwen/i.test(name)) {
+      repo = `Qwen/${name}`;
+    } else if (/^gemma/i.test(name)) {
+      repo = `google/${name}`;
     } else {
-      // Common repo inference
-      if (/^qwen/i.test(clean)) {
-        repo = `Qwen/${name}`;
-      } else if (/^gemma/i.test(clean)) {
-        repo = `google/${name}`;
-      } else {
-        repo = clean;
-      }
+      repo = name;
     }
 
+    const repoName = repo.includes('/') ? repo.split('/').pop() : name;
     const aaSlug = formatSlugForArtificialAnalysis(name);
     const provider = getProviderDetails(name);
-    const frontier = isFrontierModel(name);
+    const frontier = hasExplicitFrontierList
+      ? frontierIds.has(id)
+      : isFrontierModel(name);
 
     models.push({
       id: name,

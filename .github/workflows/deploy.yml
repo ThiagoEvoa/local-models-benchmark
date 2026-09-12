@@ -37,9 +37,11 @@ jobs:
 
       - name: Fetch Latest Benchmarks from Multi-Tier Sources
         env:
-          # Ingest model names from GitHub Repository Variable vars.MODEL_NAMES
+          # Local/open-weight models. Supports: name [Hugging Face URL]
           MODEL_NAMES: ${{ vars.MODEL_NAMES }}
-          # Fallback or supplementary URLs
+          # Cloud/frontier reference models, one name or name + URL per line.
+          FRONTIER_MODEL_NAMES: ${{ vars.FRONTIER_MODEL_NAMES }}
+          # Legacy fallback when MODEL_NAMES is empty.
           MODEL_URLS: ${{ vars.MODEL_URLS }}
         run: |
           node scripts/update_benchmarks.js
