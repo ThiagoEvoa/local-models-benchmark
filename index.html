@@ -482,10 +482,15 @@
           scoreDisplay,
           sourceObj
         };
-      }).filter(item => item.scoreVal !== null && item.scoreVal > 0);
+      });
 
-      // Sort descending (matching screenshot)
-      modelEntries.sort((a, b) => b.scoreVal - a.scoreVal);
+      // Keep configured models visible even when no benchmark data exists.
+      // Null scores sort last and render as N/A instead of disappearing.
+      modelEntries.sort((a, b) => {
+        if (a.scoreVal === null) return 1;
+        if (b.scoreVal === null) return -1;
+        return b.scoreVal - a.scoreVal;
+      });
 
       if (modelEntries.length === 0) {
         chartTrack.innerHTML = `<div class="text-neutral-500 text-xs py-20 font-mono text-center w-full">No evaluation scores reported for this benchmark yet.</div>`;
@@ -496,7 +501,10 @@
 
       modelEntries.forEach((entry, idx) => {
         const m = entry.model;
-        const barHeightPct = Math.min(100, Math.max(16, (entry.scoreVal / maxScore) * 100));
+        const hasScore = typeof entry.scoreVal === 'number' && Number.isFinite(entry.scoreVal);
+        const barHeightPct = hasScore
+          ? Math.min(100, Math.max(16, (entry.scoreVal / maxScore) * 100))
+          : 16;
 
         // Colors:
         // Grey for frontier models (#7E8696)
@@ -513,7 +521,7 @@
           <div class="w-full h-[260px] flex items-end justify-center pb-0 border-b border-neutral-700/80">
             <div class="w-16 sm:w-20 rounded-t-xl ${barColor} flex items-center justify-center origin-bottom shadow-lg" style="height: ${barHeightPct}%;">
               <span class="text-sm font-mono ${scoreColor} select-none">
-                ${entry.scoreVal.toFixed(2)}
+                ${hasScore ? entry.scoreVal.toFixed(2) : 'N/A'}
               </span>
             </div>
           </div>
