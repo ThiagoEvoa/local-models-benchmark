@@ -468,6 +468,20 @@
       });
     }
 
+    function formatSourceLabel(source) {
+      const labels = {
+        model_card: 'Documented in model card',
+        model_card_thinking: 'Documented thinking profile',
+        model_card_non_thinking: 'Documented non-thinking profile',
+        generation_config: 'From generation_config.json',
+        inferred_from_thinking: 'Inferred from thinking profile',
+        inferred_from_general: 'Inferred from general profile',
+        inferred_baseline: 'Application baseline',
+        application_baseline: 'Application baseline'
+      };
+      return labels[source] || source || 'Source unavailable';
+    }
+
     function escapeHtml(value) {
       return String(value)
         .replace(/&/g, '&amp;')
@@ -543,7 +557,7 @@
             <div class="rounded-xl border border-neutral-800 bg-neutral-900/70 p-4"><p class="text-xs text-neutral-500">Native context</p><p class="mt-1 font-mono text-sm text-white">${config.limits?.nativeContextWindow?.toLocaleString() || 'Unknown'} tokens</p></div>
             <div class="rounded-xl border border-neutral-800 bg-neutral-900/70 p-4"><p class="text-xs text-neutral-500">Recommended max output</p><p class="mt-1 font-mono text-sm text-white">${config.limits?.recommendedMaxTokens?.toLocaleString() || 'Not documented'}</p></div>
           </div>
-          <div><h3 class="mb-2 text-sm font-semibold text-white">Recommended profiles</h3><div class="grid gap-3 sm:grid-cols-2">${Object.entries(config.profiles || {}).map(([name, profile]) => `<button type="button" class="config-profile rounded-xl border border-neutral-800 bg-neutral-900/70 p-4 text-left hover:border-blue-500" data-config='${escapeHtml(JSON.stringify(profile, null, 2))}'><p class="text-xs font-semibold uppercase tracking-wider text-blue-400">${escapeHtml(name)} <span class="ml-1 rounded bg-neutral-800 px-1.5 py-0.5 text-[10px] normal-case tracking-normal text-neutral-400">${escapeHtml(config.profileSources?.[name] || (config.status === 'inferred' ? 'inferred baseline' : 'source unavailable'))}</span></p><pre class="mt-2 overflow-x-auto text-[11px] leading-5 text-neutral-300">${escapeHtml(JSON.stringify(profile, null, 2))}</pre></button>`).join('')}</div></div>
+          <div><h3 class="mb-2 text-sm font-semibold text-white">Recommended profiles</h3><div class="grid gap-3 sm:grid-cols-2">${Object.entries(config.profiles || {}).map(([name, profile]) => `<button type="button" class="config-profile rounded-xl border border-neutral-800 bg-neutral-900/70 p-4 text-left hover:border-blue-500" data-config='${escapeHtml(JSON.stringify(profile, null, 2))}'><p class="text-xs font-semibold uppercase tracking-wider text-blue-400">${escapeHtml(name)} <span class="ml-1 rounded bg-neutral-800 px-1.5 py-0.5 text-[10px] normal-case tracking-normal text-neutral-400">${escapeHtml(formatSourceLabel(config.profileSources?.[name] || (config.status === 'inferred' ? 'inferred_baseline' : 'source unavailable')))}</span></p><pre class="mt-2 overflow-x-auto text-[11px] leading-5 text-neutral-300">${escapeHtml(JSON.stringify(profile, null, 2))}</pre></button>`).join('')}</div></div>
           <div><h3 class="mb-2 text-sm font-semibold text-white">Compatibility</h3><dl class="grid gap-2 text-xs sm:grid-cols-2"><div><dt class="text-neutral-500">Thinking control</dt><dd class="font-mono text-neutral-200">${escapeHtml(config.capabilities?.thinkingControl || 'Unknown')}</dd></div><div><dt class="text-neutral-500">Thinking format</dt><dd class="font-mono text-neutral-200">${escapeHtml(config.capabilities?.thinkingFormat || 'Unknown')}</dd></div><div><dt class="text-neutral-500">Developer role</dt><dd class="font-mono text-neutral-200">${config.capabilities?.supportsDeveloperRole === null ? 'Unknown' : config.capabilities?.supportsDeveloperRole ? 'Supported' : 'Not supported'}</dd></div><div><dt class="text-neutral-500">Reasoning effort</dt><dd class="font-mono text-neutral-200">${config.capabilities?.supportsReasoningEffort ? 'Supported' : 'Not documented'}</dd></div></dl></div>
           <div class="flex flex-wrap items-center justify-between gap-3 border-t border-neutral-800 pt-4"><button id="copy-model-config" type="button" class="rounded-lg bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-500">Copy full JSON</button><a href="${escapeHtml(config.source || model.url)}" target="_blank" rel="noopener noreferrer" class="text-xs text-blue-400 hover:text-blue-300">Open source &rarr;</a></div>`;
 
