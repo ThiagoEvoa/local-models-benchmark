@@ -30,6 +30,7 @@ const path = require('path');
 const BENCHMARK_INFO_FILE = path.join(__dirname, '..', 'data', 'benchmark_info.json');
 const BENCHMARK_DATA_FILE = path.join(__dirname, '..', 'data', 'benchmark_data.json');
 const CURATED_BENCHMARKS_FILE = path.join(__dirname, '..', 'data', 'curated_benchmarks.json');
+const MODEL_CONFIGS_FILE = path.join(__dirname, '..', 'data', 'model_configs.json');
 
 // Canonical benchmark definitions with categories and official provenance
 const BENCHMARK_DEFINITIONS = [
@@ -298,6 +299,113 @@ function resolveModelList() {
   }
 
   return models;
+}
+
+function baselineProfile(reasoning) {
+  return {
+    reasoning,
+    temperature: 0.7,
+    top_p: 0.9,
+    top_k: 20,
+    min_p: 0.0,
+    presence_penalty: 0.0,
+    repetition_penalty: 1.0
+  };
+}
+
+function findConfigValue(config, keys) {
+  if (!config || typeof config !== 'object') return null;
+  for (const [key, value] of Object.entries(config)) {
+    if (keys.includes(key) && typeof value === 'number') return value;
+    if (value && typeof value === 'object') {
+      const found = findConfigValue(value, keys);
+      if (found !== null) return found;
+    }
+  }
+  return null;
+}
+
+async function fetchModelConfig(model) {
+  if (!model.repo || !model.repo.includes('/')) return null;
+  const base = `https://huggingface.co/${model.repo}/raw/main/`;
+  const fetchJson = async name => {
+    try {
+      const res = await fetch(`${base}${name}`, { headers: { 'User-Agent': 'Local-LLMs-Benchmark-Matrix/2.0' } });
+      return res.ok ? await res.json() : null;
+    } catch (_) { return null; }
+  };
+  const fetchText = async name => {
+    try {
+      const res = await fetch(`${base}${name}`, { headers: { 'User-Agent': 'Local-LLMs-Benchmark-Matrix/2.0' } });
+      return res.ok ? await res.text() : '';
+    } catch (_) { return ''; }
+  };
+
+  const [modelConfig, generationConfig, tokenizerConfig, readme] = await Promise.all([
+    fetchJson('config.json'), fetchJson('generation_config.json'),
+    fetchJson('tokenizer_config.json'), fetchText('README.md')
+  ]);
+  const text = readme.toLowerCase();
+  const reasoning = /reasoning|thinking|<think/.test(text) || /thinking|reasoning/i.test(JSON.stringify(tokenizerConfig || {}));
+  const generation = generationConfig || {};
+  const documented = {
+    temperature: generation.temperature,
+    top_p: generation.top_p,
+    top_k: generation.top_k,
+    min_p: generation.min_p,
+    presence_penalty: generation.presence_penalty,
+    repetition_penalty: generation.repetition_penalty
+  };
+  const hasSampling = Object.values(documented).some(value => typeof value === 'number');
+  const general = { ...baselineProfile(reasoning) };
+  for (const [key, value] of Object.entries(documented)) if (typeof value === 'number') general[key] = value;
+  const context = findConfigValue(modelConfig, ['max_position_embeddings', 'max_sequence_length', 'max_seq_len']);
+  const maxTokens = generation.max_new_tokens || generation.max_length || null;
+  const profileSources = {
+    general: hasSampling ? 'generation_config' : 'application_baseline',
+    coding: 'inferred_from_general',
+    fast: 'inferred_baseline'
+  };
+  return {
+    status: hasSampling || context ? 'partial' : 'inferred',
+    source: `https://huggingface.co/${model.repo}`,
+    profileSources,
+    capabilities: {
+      reasoning,
+      thinkingControl: reasoning ? 'model-card/tokenizer-template' : 'Unknown',
+      thinkingFormat: /<think/.test(text) ? 'think_tags' : 'Unknown',
+      supportsDeveloperRole: null,
+      supportsReasoningEffort: /reasoning_effort/.test(text)
+    },
+    limits: { nativeContextWindow: context, recommendedMaxTokens: maxTokens },
+    profiles: {
+      general,
+      coding: { ...general, reasoning: true },
+      fast: { ...baselineProfile(false), top_p: 0.8, presence_penalty: 1.5 }
+    }
+  };
+}
+
+async function updateModelConfigs(modelList) {
+  let existing = {};
+  if (fs.existsSync(MODEL_CONFIGS_FILE)) {
+    try { existing = JSON.parse(fs.readFileSync(MODEL_CONFIGS_FILE, 'utf8')); } catch (_) {}
+  }
+  const generated = {};
+  for (const model of modelList) {
+    if (existing[model.id]?.profileSources && Object.values(existing[model.id].profileSources).some(source => source.includes('model_card'))) {
+      generated[model.id] = existing[model.id];
+      continue;
+    }
+    generated[model.id] = await fetchModelConfig(model) || existing[model.id] || {
+      status: 'inferred', source: model.url, profileSources: { general: 'inferred_baseline', coding: 'inferred_baseline', fast: 'inferred_baseline' },
+      capabilities: { reasoning: false, thinkingControl: 'Unknown', thinkingFormat: 'Unknown', supportsDeveloperRole: null, supportsReasoningEffort: null },
+      limits: { nativeContextWindow: null, recommendedMaxTokens: null },
+      profiles: { general: baselineProfile(false), coding: baselineProfile(true), fast: { ...baselineProfile(false), top_p: 0.8, presence_penalty: 1.5 } }
+    };
+  }
+  fs.writeFileSync(MODEL_CONFIGS_FILE, JSON.stringify(generated, null, 2) + '\n', 'utf8');
+  console.log(`Saved model configurations for ${Object.keys(generated).length} models.`);
 }
 
 function normalizeScore(rawVal) {
@@ -761,6 +869,7 @@ async function main() {
 
   const outputPayload = { updatedAt, ...generatedPayload };
   fs.writeFileSync(BENCHMARK_DATA_FILE, JSON.stringify(outputPayload, null, 2), 'utf8');
+  await updateModelConfigs(modelList);
   console.log(`\nSuccessfully saved updated benchmark dataset to ${BENCHMARK_DATA_FILE}`);
 }
 

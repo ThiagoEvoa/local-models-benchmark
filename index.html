@@ -200,6 +200,19 @@
     </footer>
   </div>
 
+  <!-- Model configuration dialog -->
+  <dialog id="model-config-dialog" class="w-[min(680px,calc(100%-2rem))] max-h-[90vh] rounded-2xl border border-neutral-700 bg-[#16161A] p-0 text-neutral-200 shadow-2xl backdrop:bg-black/70">
+    <div class="flex items-start justify-between gap-4 border-b border-neutral-800 px-6 py-5">
+      <div>
+        <p class="text-[11px] font-mono uppercase tracking-wider text-blue-400">Model configuration</p>
+        <h2 id="model-config-title" class="mt-1 text-xl font-bold text-white"></h2>
+        <p id="model-config-status" class="mt-1 text-xs text-neutral-400"></p>
+      </div>
+      <button id="model-config-close" type="button" aria-label="Close model configuration" class="rounded-lg px-2 py-1 text-xl text-neutral-400 hover:bg-neutral-800 hover:text-white">&times;</button>
+    </div>
+    <div id="model-config-body" class="max-h-[calc(90vh-100px)] space-y-5 overflow-y-auto px-6 py-5"></div>
+  </dialog>
+
   <script>
     // SVG Logos
     const LOGO_SVGS = {
@@ -220,6 +233,7 @@
 
     let rawData = null;
     let benchmarkDescriptions = {};
+    let modelConfigs = {};
     let activeBenchmarkId = 'composite';
     let activeWorkflowPhase = 'specification';
     let showFrontier = true;
@@ -269,13 +283,15 @@
       try {
         // Cache-bust generated data so newly synced models appear on next load.
         const cacheBust = `?t=${Date.now()}`;
-        const [dataRes, infoRes] = await Promise.all([
+        const [dataRes, infoRes, configRes] = await Promise.all([
           fetch(`data/benchmark_data.json${cacheBust}`, { cache: 'no-store' }),
-          fetch(`data/benchmark_info.json${cacheBust}`, { cache: 'no-store' })
+          fetch(`data/benchmark_info.json${cacheBust}`, { cache: 'no-store' }),
+          fetch(`data/model_configs.json${cacheBust}`, { cache: 'no-store' })
         ]);
 
         rawData = await dataRes.json();
         benchmarkDescriptions = await infoRes.json();
+        modelConfigs = await configRes.json();
 
         if (rawData.updatedAt) {
           const date = new Date(rawData.updatedAt);
@@ -300,6 +316,12 @@
             renderWorkflowChart();
           });
         }
+
+        const configDialog = document.getElementById('model-config-dialog');
+        document.getElementById('model-config-close')?.addEventListener('click', () => configDialog.close());
+        configDialog?.addEventListener('click', (event) => {
+          if (event.target === configDialog) configDialog.close();
+        });
 
       } catch (err) {
         console.error('Initialization error:', err);
@@ -446,6 +468,98 @@
       });
     }
 
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function openModelConfig(modelId) {
+      const model = (rawData.models || []).find(item => item.id === modelId);
+      if (!model) return;
+
+      const documentedConfig = modelConfigs[model.id];
+      const config = documentedConfig || {
+        status: 'inferred',
+        source: model.url,
+        capabilities: {
+          reasoning: /qwen|ornith|deepseek|r1|reasoning/i.test(model.name),
+          thinkingControl: 'Unknown',
+          thinkingFormat: 'Unknown',
+          supportsDeveloperRole: null,
+          supportsReasoningEffort: null
+        },
+        limits: {},
+        profiles: {
+          general: {
+            reasoning: /qwen|ornith|deepseek|r1|reasoning/i.test(model.name),
+            temperature: 0.7,
+            top_p: 0.9,
+            top_k: 20,
+            min_p: 0.0,
+            presence_penalty: 0.0,
+            repetition_penalty: 1.0
+          },
+          coding: {
+            reasoning: true,
+            temperature: 0.6,
+            top_p: 0.95,
+            top_k: 20,
+            min_p: 0.0,
+            presence_penalty: 0.0,
+            repetition_penalty: 1.0
+          },
+          fast: {
+            reasoning: false,
+            temperature: 0.7,
+            top_p: 0.8,
+            top_k: 20,
+            min_p: 0.0,
+            presence_penalty: 0.0,
+            repetition_penalty: 1.0
+          }
+        }
+      };
+      const dialog = document.getElementById('model-config-dialog');
+      const body = document.getElementById('model-config-body');
+      const title = document.getElementById('model-config-title');
+      const status = document.getElementById('model-config-status');
+      if (!dialog || !body || !title || !status) return;
+
+      title.textContent = model.name;
+      const statusLabel = config.status === 'documented'
+        ? 'Documented baseline'
+        : config.status === 'partial'
+          ? 'Partial documentation — verify inferred profiles'
+          : 'Inferred baseline — verify before production use';
+      status.textContent = `${statusLabel} · click values to copy JSON`;
+
+      const configJson = JSON.stringify({ id: model.id, ...config }, null, 2);
+      body.innerHTML = `<div class="grid gap-3 sm:grid-cols-2">
+            <div class="rounded-xl border border-neutral-800 bg-neutral-900/70 p-4"><p class="text-xs text-neutral-500">Reasoning</p><p class="mt-1 font-mono text-sm text-white">${config.capabilities?.reasoning ? 'Supported' : 'Not documented'}</p></div>
+            <div class="rounded-xl border border-neutral-800 bg-neutral-900/70 p-4"><p class="text-xs text-neutral-500">Native context</p><p class="mt-1 font-mono text-sm text-white">${config.limits?.nativeContextWindow?.toLocaleString() || 'Unknown'} tokens</p></div>
+            <div class="rounded-xl border border-neutral-800 bg-neutral-900/70 p-4"><p class="text-xs text-neutral-500">Recommended max output</p><p class="mt-1 font-mono text-sm text-white">${config.limits?.recommendedMaxTokens?.toLocaleString() || 'Not documented'}</p></div>
+          </div>
+          <div><h3 class="mb-2 text-sm font-semibold text-white">Recommended profiles</h3><div class="grid gap-3 sm:grid-cols-2">${Object.entries(config.profiles || {}).map(([name, profile]) => `<button type="button" class="config-profile rounded-xl border border-neutral-800 bg-neutral-900/70 p-4 text-left hover:border-blue-500" data-config='${escapeHtml(JSON.stringify(profile, null, 2))}'><p class="text-xs font-semibold uppercase tracking-wider text-blue-400">${escapeHtml(name)} <span class="ml-1 rounded bg-neutral-800 px-1.5 py-0.5 text-[10px] normal-case tracking-normal text-neutral-400">${escapeHtml(config.profileSources?.[name] || (config.status === 'inferred' ? 'inferred baseline' : 'source unavailable'))}</span></p><pre class="mt-2 overflow-x-auto text-[11px] leading-5 text-neutral-300">${escapeHtml(JSON.stringify(profile, null, 2))}</pre></button>`).join('')}</div></div>
+          <div><h3 class="mb-2 text-sm font-semibold text-white">Compatibility</h3><dl class="grid gap-2 text-xs sm:grid-cols-2"><div><dt class="text-neutral-500">Thinking control</dt><dd class="font-mono text-neutral-200">${escapeHtml(config.capabilities?.thinkingControl || 'Unknown')}</dd></div><div><dt class="text-neutral-500">Thinking format</dt><dd class="font-mono text-neutral-200">${escapeHtml(config.capabilities?.thinkingFormat || 'Unknown')}</dd></div><div><dt class="text-neutral-500">Developer role</dt><dd class="font-mono text-neutral-200">${config.capabilities?.supportsDeveloperRole === null ? 'Unknown' : config.capabilities?.supportsDeveloperRole ? 'Supported' : 'Not supported'}</dd></div><div><dt class="text-neutral-500">Reasoning effort</dt><dd class="font-mono text-neutral-200">${config.capabilities?.supportsReasoningEffort ? 'Supported' : 'Not documented'}</dd></div></dl></div>
+          <div class="flex flex-wrap items-center justify-between gap-3 border-t border-neutral-800 pt-4"><button id="copy-model-config" type="button" class="rounded-lg bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-500">Copy full JSON</button><a href="${escapeHtml(config.source || model.url)}" target="_blank" rel="noopener noreferrer" class="text-xs text-blue-400 hover:text-blue-300">Open source &rarr;</a></div>`;
+
+      if (configJson) {
+        document.getElementById('copy-model-config')?.addEventListener('click', async () => {
+          await navigator.clipboard.writeText(configJson);
+          document.getElementById('copy-model-config').textContent = 'Copied';
+        });
+        body.querySelectorAll('.config-profile').forEach(button => button.addEventListener('click', async () => {
+          await navigator.clipboard.writeText(button.dataset.config);
+          button.querySelector('p').textContent = 'Copied';
+        }));
+      }
+      dialog.showModal();
+    }
+
     function renderChart() {
       const chartTrack = document.getElementById('chart-track');
       chartTrack.innerHTML = '';
@@ -514,7 +628,17 @@
 
         // Single unified column container: bar + separator line + angled label
         const col = document.createElement('div');
-        col.className = 'flex flex-col items-center w-24 sm:w-28 flex-shrink-0';
+        col.className = 'flex flex-col items-center w-24 sm:w-28 flex-shrink-0 cursor-pointer rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500';
+        col.tabIndex = 0;
+        col.setAttribute('role', 'button');
+        col.setAttribute('aria-label', `Open configuration for ${m.name}`);
+        col.addEventListener('click', () => openModelConfig(m.id));
+        col.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            openModelConfig(m.id);
+          }
+        });
 
         col.innerHTML = `
           <!-- Bar Track Area -->

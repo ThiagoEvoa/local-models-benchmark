@@ -1,0 +1,1668 @@
+{
+  "qwen3.8-27b": {
+    "status": "partial",
+    "source": "https://huggingface.co/Qwen/Qwen3.8-27B",
+    "profileSources": {
+      "general": "model_card_thinking",
+      "coding": "inferred_from_thinking",
+      "fast": "model_card_non_thinking"
+    },
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "enable_thinking",
+      "thinkingFormat": "think_tags",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": true
+    },
+    "limits": {
+      "nativeContextWindow": 262144,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "qwen3.6-27b": {
+    "status": "partial",
+    "source": "https://huggingface.co/Qwen/Qwen3.6-27B",
+    "profileSources": {
+      "general": "generation_config",
+      "coding": "inferred_from_general",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "model-card/tokenizer-template",
+      "thinkingFormat": "think_tags",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": false
+    },
+    "limits": {
+      "nativeContextWindow": 262144,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "qwen3.6-35b": {
+    "status": "documented",
+    "profileSources": {
+      "general": "model_card",
+      "coding": "model_card",
+      "fast": "model_card"
+    },
+    "source": "https://huggingface.co/Qwen/Qwen3.6-35B-A3B",
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "chat_template_kwargs.enable_thinking",
+      "thinkingFormat": "think_tags",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": false
+    },
+    "limits": {
+      "nativeContextWindow": 262144,
+      "recommendedMaxTokens": 32768
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 0.6,
+        "top_p": 0.95,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "qwen3.5-2b": {
+    "status": "partial",
+    "source": "https://huggingface.co/Qwen/Qwen3.5-2B",
+    "profileSources": {
+      "general": "application_baseline",
+      "coding": "inferred_from_general",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "model-card/tokenizer-template",
+      "thinkingFormat": "Unknown",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": false
+    },
+    "limits": {
+      "nativeContextWindow": 262144,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "qwen3.5-4b": {
+    "status": "partial",
+    "source": "https://huggingface.co/Qwen/Qwen3.5-4B",
+    "profileSources": {
+      "general": "application_baseline",
+      "coding": "inferred_from_general",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "model-card/tokenizer-template",
+      "thinkingFormat": "think_tags",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": false
+    },
+    "limits": {
+      "nativeContextWindow": 262144,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "qwen3.5-9b": {
+    "status": "partial",
+    "source": "https://huggingface.co/Qwen/Qwen3.5-9B",
+    "profileSources": {
+      "general": "application_baseline",
+      "coding": "inferred_from_general",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "model-card/tokenizer-template",
+      "thinkingFormat": "think_tags",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": false
+    },
+    "limits": {
+      "nativeContextWindow": 262144,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "qwen3.5-27b": {
+    "status": "partial",
+    "source": "https://huggingface.co/Qwen/Qwen3.5-27B",
+    "profileSources": {
+      "general": "generation_config",
+      "coding": "inferred_from_general",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "model-card/tokenizer-template",
+      "thinkingFormat": "think_tags",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": false
+    },
+    "limits": {
+      "nativeContextWindow": 262144,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 0.6,
+        "top_p": 0.95,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 0.6,
+        "top_p": 0.95,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "qwen3.5-35b": {
+    "status": "partial",
+    "source": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B",
+    "profileSources": {
+      "general": "generation_config",
+      "coding": "inferred_from_general",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "model-card/tokenizer-template",
+      "thinkingFormat": "think_tags",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": false
+    },
+    "limits": {
+      "nativeContextWindow": 262144,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "qwen3-coder-30b": {
+    "status": "partial",
+    "source": "https://huggingface.co/Qwen/Qwen3-Coder-30B-A3B-Instruct",
+    "profileSources": {
+      "general": "generation_config",
+      "coding": "inferred_from_general",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "model-card/tokenizer-template",
+      "thinkingFormat": "think_tags",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": false
+    },
+    "limits": {
+      "nativeContextWindow": 262144,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1.05
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1.05
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "gemma4-e2b": {
+    "status": "partial",
+    "source": "https://huggingface.co/google/gemma-4-E2B",
+    "profileSources": {
+      "general": "generation_config",
+      "coding": "inferred_from_general",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "model-card/tokenizer-template",
+      "thinkingFormat": "Unknown",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": false
+    },
+    "limits": {
+      "nativeContextWindow": 131072,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 64,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 64,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "gemma4-e4b": {
+    "status": "partial",
+    "source": "https://huggingface.co/google/gemma-4-E4B",
+    "profileSources": {
+      "general": "generation_config",
+      "coding": "inferred_from_general",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "model-card/tokenizer-template",
+      "thinkingFormat": "Unknown",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": false
+    },
+    "limits": {
+      "nativeContextWindow": 131072,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 64,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 64,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "gemma4-12b": {
+    "status": "partial",
+    "source": "https://huggingface.co/google/gemma-4-12B",
+    "profileSources": {
+      "general": "generation_config",
+      "coding": "inferred_from_general",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "model-card/tokenizer-template",
+      "thinkingFormat": "Unknown",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": false
+    },
+    "limits": {
+      "nativeContextWindow": 262144,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 64,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 64,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "gemma4-26b": {
+    "status": "partial",
+    "source": "https://huggingface.co/google/gemma-4-26B-A4B",
+    "profileSources": {
+      "general": "generation_config",
+      "coding": "inferred_from_general",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "model-card/tokenizer-template",
+      "thinkingFormat": "Unknown",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": false
+    },
+    "limits": {
+      "nativeContextWindow": 262144,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 64,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 64,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "gemma4-31b": {
+    "status": "partial",
+    "source": "https://huggingface.co/google/gemma-4-31B",
+    "profileSources": {
+      "general": "generation_config",
+      "coding": "inferred_from_general",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "model-card/tokenizer-template",
+      "thinkingFormat": "Unknown",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": false
+    },
+    "limits": {
+      "nativeContextWindow": 262144,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 64,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 64,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "ornith-1.5-9b": {
+    "status": "partial",
+    "source": "https://huggingface.co/ornith-ai/Ornith-1.5-9B",
+    "profileSources": {
+      "general": "application_baseline",
+      "coding": "inferred_from_general",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "model-card/tokenizer-template",
+      "thinkingFormat": "think_tags",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": false
+    },
+    "limits": {
+      "nativeContextWindow": 262144,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "ornith1.5-35b": {
+    "status": "partial",
+    "source": "https://huggingface.co/ornith-ai/Ornith-1.5-35B-A3B",
+    "profileSources": {
+      "general": "generation_config",
+      "coding": "inferred_from_general",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "model-card/tokenizer-template",
+      "thinkingFormat": "think_tags",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": false
+    },
+    "limits": {
+      "nativeContextWindow": 262144,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "muse-glimmer-30b": {
+    "status": "partial",
+    "source": "https://huggingface.co/meta-models/Muse-Glimmer-30B",
+    "profileSources": {
+      "general": "generation_config",
+      "coding": "inferred_from_general",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "model-card/tokenizer-template",
+      "thinkingFormat": "Unknown",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": false
+    },
+    "limits": {
+      "nativeContextWindow": 131072,
+      "recommendedMaxTokens": 131072
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 64,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 64,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "gpt-oss-20b": {
+    "status": "partial",
+    "source": "https://huggingface.co/openai/gpt-oss-20b",
+    "profileSources": {
+      "general": "application_baseline",
+      "coding": "inferred_from_general",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "model-card/tokenizer-template",
+      "thinkingFormat": "Unknown",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": false
+    },
+    "limits": {
+      "nativeContextWindow": 131072,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "granite4.2-3b": {
+    "status": "partial",
+    "source": "https://huggingface.co/ibm-granite/granite-4.2-3b",
+    "profileSources": {
+      "general": "generation_config",
+      "coding": "inferred_from_general",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "model-card/tokenizer-template",
+      "thinkingFormat": "think_tags",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": false
+    },
+    "limits": {
+      "nativeContextWindow": 131072,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "granite4.2-8b": {
+    "status": "partial",
+    "source": "https://huggingface.co/ibm-granite/granite-4.2-8b",
+    "profileSources": {
+      "general": "generation_config",
+      "coding": "inferred_from_general",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "model-card/tokenizer-template",
+      "thinkingFormat": "think_tags",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": false
+    },
+    "limits": {
+      "nativeContextWindow": 131072,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "granite4.2-30b": {
+    "status": "partial",
+    "source": "https://huggingface.co/ibm-granite/granite-4.2-30b",
+    "profileSources": {
+      "general": "generation_config",
+      "coding": "inferred_from_general",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "model-card/tokenizer-template",
+      "thinkingFormat": "think_tags",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": false
+    },
+    "limits": {
+      "nativeContextWindow": 131072,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "nemotron-3.5-lightning-30b": {
+    "status": "inferred",
+    "source": "https://huggingface.co/unsloth/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-GGUF",
+    "profileSources": {
+      "general": "application_baseline",
+      "coding": "inferred_from_general",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "model-card/tokenizer-template",
+      "thinkingFormat": "Unknown",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": false
+    },
+    "limits": {
+      "nativeContextWindow": null,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "ministral-3-3b": {
+    "status": "partial",
+    "source": "https://huggingface.co/mistralai/Ministral-3-3B-Instruct-2512",
+    "profileSources": {
+      "general": "application_baseline",
+      "coding": "inferred_from_general",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "model-card/tokenizer-template",
+      "thinkingFormat": "Unknown",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": false
+    },
+    "limits": {
+      "nativeContextWindow": 262144,
+      "recommendedMaxTokens": 262144
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "ministral-3-8b": {
+    "status": "partial",
+    "source": "https://huggingface.co/mistralai/Ministral-3-8B-Instruct-2512",
+    "profileSources": {
+      "general": "application_baseline",
+      "coding": "inferred_from_general",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "model-card/tokenizer-template",
+      "thinkingFormat": "Unknown",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": false
+    },
+    "limits": {
+      "nativeContextWindow": 262144,
+      "recommendedMaxTokens": 262144
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "ministral-3-14b": {
+    "status": "partial",
+    "source": "https://huggingface.co/mistralai/Ministral-3-14B-Instruct-2512",
+    "profileSources": {
+      "general": "application_baseline",
+      "coding": "inferred_from_general",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "model-card/tokenizer-template",
+      "thinkingFormat": "Unknown",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": false
+    },
+    "limits": {
+      "nativeContextWindow": 262144,
+      "recommendedMaxTokens": 262144
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "claude-fable-5.1": {
+    "status": "inferred",
+    "source": "https://huggingface.co/claude-fable-5.1",
+    "profileSources": {
+      "general": "inferred_baseline",
+      "coding": "inferred_baseline",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": false,
+      "thinkingControl": "Unknown",
+      "thinkingFormat": "Unknown",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": null
+    },
+    "limits": {
+      "nativeContextWindow": null,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "gpt-6": {
+    "status": "inferred",
+    "source": "https://huggingface.co/gpt-6",
+    "profileSources": {
+      "general": "inferred_baseline",
+      "coding": "inferred_baseline",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": false,
+      "thinkingControl": "Unknown",
+      "thinkingFormat": "Unknown",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": null
+    },
+    "limits": {
+      "nativeContextWindow": null,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "claude-opus-5": {
+    "status": "inferred",
+    "source": "https://huggingface.co/claude-opus-5",
+    "profileSources": {
+      "general": "inferred_baseline",
+      "coding": "inferred_baseline",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": false,
+      "thinkingControl": "Unknown",
+      "thinkingFormat": "Unknown",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": null
+    },
+    "limits": {
+      "nativeContextWindow": null,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "muse-spark": {
+    "status": "inferred",
+    "source": "https://huggingface.co/muse-spark",
+    "profileSources": {
+      "general": "inferred_baseline",
+      "coding": "inferred_baseline",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": false,
+      "thinkingControl": "Unknown",
+      "thinkingFormat": "Unknown",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": null
+    },
+    "limits": {
+      "nativeContextWindow": null,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "glm-5.3": {
+    "status": "inferred",
+    "source": "https://huggingface.co/glm-5.3",
+    "profileSources": {
+      "general": "inferred_baseline",
+      "coding": "inferred_baseline",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": false,
+      "thinkingControl": "Unknown",
+      "thinkingFormat": "Unknown",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": null
+    },
+    "limits": {
+      "nativeContextWindow": null,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "kimi-k3": {
+    "status": "inferred",
+    "source": "https://huggingface.co/kimi-k3",
+    "profileSources": {
+      "general": "inferred_baseline",
+      "coding": "inferred_baseline",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": false,
+      "thinkingControl": "Unknown",
+      "thinkingFormat": "Unknown",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": null
+    },
+    "limits": {
+      "nativeContextWindow": null,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "gemini-3.8-flash": {
+    "status": "inferred",
+    "source": "https://huggingface.co/gemini-3.8-flash",
+    "profileSources": {
+      "general": "inferred_baseline",
+      "coding": "inferred_baseline",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": false,
+      "thinkingControl": "Unknown",
+      "thinkingFormat": "Unknown",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": null
+    },
+    "limits": {
+      "nativeContextWindow": null,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "gemini-3.7-flash": {
+    "status": "inferred",
+    "source": "https://huggingface.co/gemini-3.7-flash",
+    "profileSources": {
+      "general": "inferred_baseline",
+      "coding": "inferred_baseline",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": false,
+      "thinkingControl": "Unknown",
+      "thinkingFormat": "Unknown",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": null
+    },
+    "limits": {
+      "nativeContextWindow": null,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
+  "gpt-5.6-luna": {
+    "status": "inferred",
+    "source": "https://huggingface.co/gpt-5.6-luna",
+    "profileSources": {
+      "general": "inferred_baseline",
+      "coding": "inferred_baseline",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": false,
+      "thinkingControl": "Unknown",
+      "thinkingFormat": "Unknown",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": null
+    },
+    "limits": {
+      "nativeContextWindow": null,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  }
+}
