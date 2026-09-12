@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-12T12:36:44.762Z",
+  "updatedAt": "2026-09-12T12:47:30.018Z",
   "targetModels": [
     "qwen3.8-27b",
     "qwen3.6-27b",
@@ -451,8 +451,37 @@
       "url": "https://huggingface.co/Qwen/Qwen3.5-2B",
       "provider": "Alibaba",
       "logo": "alibaba_small.svg",
-      "compositeIndex": 0,
-      "scores": {}
+      "compositeIndex": 58.9,
+      "scores": {
+        "tau_bench": {
+          "value": 43.2,
+          "display": "43.2%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-2B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-2B"
+        },
+        "gpqa_diamond": {
+          "value": 65.8,
+          "display": "65.8%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-2B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-2B"
+        },
+        "mmlu_pro": {
+          "value": 69.6,
+          "display": "69.6%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-2B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-2B"
+        },
+        "mmmu_pro": {
+          "value": 57,
+          "display": "57.0%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-2B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-2B"
+        }
+      }
     },
     {
       "id": "qwen3.5-4b",
@@ -463,8 +492,44 @@
       "url": "https://huggingface.co/Qwen/Qwen3.5-4B",
       "provider": "Alibaba",
       "logo": "alibaba_small.svg",
-      "compositeIndex": 0,
-      "scores": {}
+      "compositeIndex": 72.6,
+      "scores": {
+        "livecodebench": {
+          "value": 82.7,
+          "display": "82.7%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-4B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-4B"
+        },
+        "gpqa_diamond": {
+          "value": 80.1,
+          "display": "80.1%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-4B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-4B"
+        },
+        "mmlu_pro": {
+          "value": 80.8,
+          "display": "80.8%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-4B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-4B"
+        },
+        "mmmu_pro": {
+          "value": 57.2,
+          "display": "57.2%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-4B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-4B"
+        },
+        "math_vision": {
+          "value": 62.2,
+          "display": "62.2%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-4B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-4B"
+        }
+      }
     },
     {
       "id": "qwen3.5-9b",
@@ -475,8 +540,44 @@
       "url": "https://huggingface.co/Qwen/Qwen3.5-9B",
       "provider": "Alibaba",
       "logo": "alibaba_small.svg",
-      "compositeIndex": 0,
-      "scores": {}
+      "compositeIndex": 72.6,
+      "scores": {
+        "livecodebench": {
+          "value": 82.7,
+          "display": "82.7%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-9B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-9B"
+        },
+        "gpqa_diamond": {
+          "value": 80.1,
+          "display": "80.1%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-9B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-9B"
+        },
+        "mmlu_pro": {
+          "value": 80.8,
+          "display": "80.8%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-9B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-9B"
+        },
+        "mmmu_pro": {
+          "value": 57.2,
+          "display": "57.2%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-9B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-9B"
+        },
+        "math_vision": {
+          "value": 62.2,
+          "display": "62.2%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-9B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-9B"
+        }
+      }
     },
     {
       "id": "qwen3.5-27b",
@@ -487,8 +588,72 @@
       "url": "https://huggingface.co/Qwen/Qwen3.5-27B",
       "provider": "Alibaba",
       "logo": "alibaba_small.svg",
-      "compositeIndex": 0,
-      "scores": {}
+      "compositeIndex": 64.4,
+      "scores": {
+        "swe_bench_verified": {
+          "value": 72,
+          "display": "72.0%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-27B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-27B"
+        },
+        "livecodebench": {
+          "value": 80.5,
+          "display": "80.5%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-27B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-27B"
+        },
+        "terminal_bench_2_1": {
+          "value": 31.9,
+          "display": "31.9%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-27B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-27B"
+        },
+        "tau_bench": {
+          "value": 69.8,
+          "display": "69.8%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-27B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-27B"
+        },
+        "gpqa_diamond": {
+          "value": 82.8,
+          "display": "82.8%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-27B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-27B"
+        },
+        "hle": {
+          "value": 19.4,
+          "display": "19.4%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-27B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-27B"
+        },
+        "mmlu_pro": {
+          "value": 83.7,
+          "display": "83.7%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-27B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-27B"
+        },
+        "mmmu_pro": {
+          "value": 67.3,
+          "display": "67.3%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-27B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-27B"
+        },
+        "math_vision": {
+          "value": 71.9,
+          "display": "71.9%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-27B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-27B"
+        }
+      }
     },
     {
       "id": "qwen3.5-35b",
@@ -499,8 +664,72 @@
       "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B",
       "provider": "Alibaba",
       "logo": "alibaba_small.svg",
-      "compositeIndex": 0,
-      "scores": {}
+      "compositeIndex": 64.4,
+      "scores": {
+        "swe_bench_verified": {
+          "value": 72,
+          "display": "72.0%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-35B-A3B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B"
+        },
+        "livecodebench": {
+          "value": 80.5,
+          "display": "80.5%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-35B-A3B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B"
+        },
+        "terminal_bench_2_1": {
+          "value": 31.9,
+          "display": "31.9%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-35B-A3B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B"
+        },
+        "tau_bench": {
+          "value": 69.8,
+          "display": "69.8%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-35B-A3B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B"
+        },
+        "gpqa_diamond": {
+          "value": 82.8,
+          "display": "82.8%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-35B-A3B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B"
+        },
+        "hle": {
+          "value": 19.4,
+          "display": "19.4%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-35B-A3B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B"
+        },
+        "mmlu_pro": {
+          "value": 83.7,
+          "display": "83.7%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-35B-A3B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B"
+        },
+        "mmmu_pro": {
+          "value": 67.3,
+          "display": "67.3%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-35B-A3B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B"
+        },
+        "math_vision": {
+          "value": 71.9,
+          "display": "71.9%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (Qwen/Qwen3.5-35B-A3B)",
+          "sourceUrl": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B"
+        }
+      }
     },
     {
       "id": "qwen3-coder-30b",
@@ -1065,8 +1294,51 @@
       "url": "https://huggingface.co/ornith-ai/Ornith-1.5-9B",
       "provider": "Independent",
       "logo": "default_model.svg",
-      "compositeIndex": 0,
-      "scores": {}
+      "compositeIndex": 54.2,
+      "scores": {
+        "swe_bench_verified": {
+          "value": 70.6,
+          "display": "70.6%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (ornith-ai/Ornith-1.5-9B)",
+          "sourceUrl": "https://huggingface.co/ornith-ai/Ornith-1.5-9B"
+        },
+        "swe_bench_pro": {
+          "value": 47.5,
+          "display": "47.5%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (ornith-ai/Ornith-1.5-9B)",
+          "sourceUrl": "https://huggingface.co/ornith-ai/Ornith-1.5-9B"
+        },
+        "terminal_bench_2_1": {
+          "value": 46.2,
+          "display": "46.2%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (ornith-ai/Ornith-1.5-9B)",
+          "sourceUrl": "https://huggingface.co/ornith-ai/Ornith-1.5-9B"
+        },
+        "mcp_atlas": {
+          "value": 54.2,
+          "display": "54.2%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (ornith-ai/Ornith-1.5-9B)",
+          "sourceUrl": "https://huggingface.co/ornith-ai/Ornith-1.5-9B"
+        },
+        "gpqa_diamond": {
+          "value": 86.4,
+          "display": "86.4%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (ornith-ai/Ornith-1.5-9B)",
+          "sourceUrl": "https://huggingface.co/ornith-ai/Ornith-1.5-9B"
+        },
+        "hle": {
+          "value": 20.2,
+          "display": "20.2%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (ornith-ai/Ornith-1.5-9B)",
+          "sourceUrl": "https://huggingface.co/ornith-ai/Ornith-1.5-9B"
+        }
+      }
     },
     {
       "id": "ornith1.5-35b",
@@ -1389,8 +1661,37 @@
       "url": "https://huggingface.co/ibm-granite/granite-4.2-3b",
       "provider": "Independent",
       "logo": "default_model.svg",
-      "compositeIndex": 0,
-      "scores": {}
+      "compositeIndex": 67.7,
+      "scores": {
+        "livecodebench": {
+          "value": 69.7,
+          "display": "69.7%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (ibm-granite/granite-4.2-3b)",
+          "sourceUrl": "https://huggingface.co/ibm-granite/granite-4.2-3b"
+        },
+        "aime_2026": {
+          "value": 78.3,
+          "display": "78.3%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (ibm-granite/granite-4.2-3b)",
+          "sourceUrl": "https://huggingface.co/ibm-granite/granite-4.2-3b"
+        },
+        "gpqa_diamond": {
+          "value": 54.8,
+          "display": "54.8%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (ibm-granite/granite-4.2-3b)",
+          "sourceUrl": "https://huggingface.co/ibm-granite/granite-4.2-3b"
+        },
+        "mmlu_pro": {
+          "value": 67.8,
+          "display": "67.8%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (ibm-granite/granite-4.2-3b)",
+          "sourceUrl": "https://huggingface.co/ibm-granite/granite-4.2-3b"
+        }
+      }
     },
     {
       "id": "granite4.2-8b",
@@ -1401,8 +1702,37 @@
       "url": "https://huggingface.co/ibm-granite/granite-4.2-8b",
       "provider": "Independent",
       "logo": "default_model.svg",
-      "compositeIndex": 0,
-      "scores": {}
+      "compositeIndex": 67.7,
+      "scores": {
+        "livecodebench": {
+          "value": 69.7,
+          "display": "69.7%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (ibm-granite/granite-4.2-8b)",
+          "sourceUrl": "https://huggingface.co/ibm-granite/granite-4.2-8b"
+        },
+        "aime_2026": {
+          "value": 78.3,
+          "display": "78.3%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (ibm-granite/granite-4.2-8b)",
+          "sourceUrl": "https://huggingface.co/ibm-granite/granite-4.2-8b"
+        },
+        "gpqa_diamond": {
+          "value": 54.8,
+          "display": "54.8%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (ibm-granite/granite-4.2-8b)",
+          "sourceUrl": "https://huggingface.co/ibm-granite/granite-4.2-8b"
+        },
+        "mmlu_pro": {
+          "value": 67.8,
+          "display": "67.8%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (ibm-granite/granite-4.2-8b)",
+          "sourceUrl": "https://huggingface.co/ibm-granite/granite-4.2-8b"
+        }
+      }
     },
     {
       "id": "granite4.2-30b",
@@ -1413,8 +1743,37 @@
       "url": "https://huggingface.co/ibm-granite/granite-4.2-30b",
       "provider": "Independent",
       "logo": "default_model.svg",
-      "compositeIndex": 0,
-      "scores": {}
+      "compositeIndex": 67.7,
+      "scores": {
+        "livecodebench": {
+          "value": 69.7,
+          "display": "69.7%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (ibm-granite/granite-4.2-30b)",
+          "sourceUrl": "https://huggingface.co/ibm-granite/granite-4.2-30b"
+        },
+        "aime_2026": {
+          "value": 78.3,
+          "display": "78.3%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (ibm-granite/granite-4.2-30b)",
+          "sourceUrl": "https://huggingface.co/ibm-granite/granite-4.2-30b"
+        },
+        "gpqa_diamond": {
+          "value": 54.8,
+          "display": "54.8%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (ibm-granite/granite-4.2-30b)",
+          "sourceUrl": "https://huggingface.co/ibm-granite/granite-4.2-30b"
+        },
+        "mmlu_pro": {
+          "value": 67.8,
+          "display": "67.8%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (ibm-granite/granite-4.2-30b)",
+          "sourceUrl": "https://huggingface.co/ibm-granite/granite-4.2-30b"
+        }
+      }
     },
     {
       "id": "nemotron-3.5-lightning-30b",
