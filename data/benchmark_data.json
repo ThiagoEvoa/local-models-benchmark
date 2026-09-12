@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-12T09:56:44.558Z",
+  "updatedAt": "2026-09-12T12:36:44.762Z",
   "targetModels": [
     "qwen3.8-27b",
     "qwen3.6-27b",
@@ -15,6 +15,7 @@
     "gemma4-12b",
     "gemma4-26b",
     "gemma4-31b",
+    "ornith-1.5-9b",
     "ornith1.5-35b",
     "muse-glimmer-30b",
     "gpt-oss-20b",
@@ -1054,6 +1055,18 @@
           "sourceUrl": "https://mathvision-cuhk.github.io/"
         }
       }
+    },
+    {
+      "id": "ornith-1.5-9b",
+      "name": "ornith-1.5-9b",
+      "slug": "ornith-1-5-9b",
+      "repo": "ornith-ai/Ornith-1.5-9B",
+      "isFrontier": false,
+      "url": "https://huggingface.co/ornith-ai/Ornith-1.5-9B",
+      "provider": "Independent",
+      "logo": "default_model.svg",
+      "compositeIndex": 0,
+      "scores": {}
     },
     {
       "id": "ornith1.5-35b",
