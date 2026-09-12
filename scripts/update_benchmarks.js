@@ -396,8 +396,23 @@ async function fetchFromHuggingFaceReadme(repo, modelName) {
 
   const scores = {};
   const lines = content.split('\n');
+  const sourceUrlForModelCard = `https://huggingface.co/${repo}`;
+
+  // Model cards commonly publish benchmark tables as HTML instead of Markdown.
+  // Parse first score column: model being synced is table's first model column.
+  const htmlRows = [...content.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)]
+    .map(match => [...match[1].matchAll(/<t[dh]\b[^>]*>([\s\S]*?)<\/t[dh]>/gi)]
+      .map(cell => cell[1]
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/&nbsp;/gi, ' ')
+        .replace(/&amp;/gi, '&')
+        .replace(/&#39;/gi, "'")
+        .replace(/&quot;/gi, '"')
+        .replace(/\s+/g, ' ')
+        .trim()));
 
   for (const def of BENCHMARK_DEFINITIONS) {
+    // Markdown table support.
     for (const line of lines) {
       if (!line.includes('|')) continue;
       const cells = line.split('|').map(c => c.trim()).filter(Boolean);
@@ -405,7 +420,6 @@ async function fetchFromHuggingFaceReadme(repo, modelName) {
 
       const hasMatch = def.patterns.some(p => p.test(cells[0]));
       if (hasMatch) {
-        // Try cell 1 or 2
         for (let i = 1; i < cells.length; i++) {
           const norm = normalizeScore(cells[i]);
           if (norm) {
@@ -414,12 +428,30 @@ async function fetchFromHuggingFaceReadme(repo, modelName) {
               display: norm.display,
               source: 'fallback-hf',
               sourceName: `Hugging Face (${repo})`,
-              sourceUrl: `https://huggingface.co/${repo}`
+              sourceUrl: sourceUrlForModelCard
             };
             break;
           }
         }
         if (scores[def.id]) break;
+      }
+    }
+
+    // HTML table fallback for model cards such as Ornith-1.5-9B.
+    if (!scores[def.id]) {
+      for (const cells of htmlRows) {
+        if (cells.length < 2 || !def.patterns.some(p => p.test(cells[0]))) continue;
+        const norm = normalizeScore(cells[1]);
+        if (norm) {
+          scores[def.id] = {
+            value: norm.value,
+            display: norm.display,
+            source: 'fallback-hf',
+            sourceName: `Hugging Face (${repo})`,
+            sourceUrl: sourceUrlForModelCard
+          };
+          break;
+        }
       }
     }
   }
