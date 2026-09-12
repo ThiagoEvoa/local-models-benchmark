@@ -196,9 +196,11 @@
 
     async function init() {
       try {
+        // Cache-bust generated data so newly synced models appear on next load.
+        const cacheBust = `?t=${Date.now()}`;
         const [dataRes, infoRes] = await Promise.all([
-          fetch('data/benchmark_data.json'),
-          fetch('data/benchmark_info.json')
+          fetch(`data/benchmark_data.json${cacheBust}`, { cache: 'no-store' }),
+          fetch(`data/benchmark_info.json${cacheBust}`, { cache: 'no-store' })
         ]);
 
         rawData = await dataRes.json();

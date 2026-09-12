@@ -2,8 +2,8 @@ name: Daily Benchmark Update & Pages Deploy
 
 on:
   schedule:
-    # Runs daily at 00:00 UTC
-    - cron: '0 0 * * *'
+    # Poll repository variables every 15 minutes; GitHub has no variable-change trigger.
+    - cron: '*/15 * * * *'
   push:
     branches:
       - main

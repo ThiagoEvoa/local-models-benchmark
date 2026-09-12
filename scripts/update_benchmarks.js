@@ -690,14 +690,32 @@ async function main() {
     officialUrl: d.officialUrl
   }));
 
-  // Only output the target models from vars.MODEL_NAMES
-  const outputPayload = {
-    updatedAt: new Date().toISOString(),
+  // Only output the target models from vars.MODEL_NAMES.
+  const generatedPayload = {
     targetModels: modelList.map(m => m.name),
     benchmarks: benchmarkList,
     models: finalModels
   };
 
+  // Preserve timestamp when polling finds no data change; avoids a commit every 15 minutes.
+  let updatedAt = new Date().toISOString();
+  if (fs.existsSync(BENCHMARK_DATA_FILE)) {
+    try {
+      const previousPayload = JSON.parse(fs.readFileSync(BENCHMARK_DATA_FILE, 'utf8'));
+      const previousComparable = {
+        targetModels: previousPayload.targetModels,
+        benchmarks: previousPayload.benchmarks,
+        models: previousPayload.models
+      };
+      if (JSON.stringify(previousComparable) === JSON.stringify(generatedPayload)) {
+        updatedAt = previousPayload.updatedAt || updatedAt;
+      }
+    } catch (e) {
+      console.warn('Warning: Could not compare previous benchmark data:', e.message);
+    }
+  }
+
+  const outputPayload = { updatedAt, ...generatedPayload };
   fs.writeFileSync(BENCHMARK_DATA_FILE, JSON.stringify(outputPayload, null, 2), 'utf8');
   console.log(`\nSuccessfully saved updated benchmark dataset to ${BENCHMARK_DATA_FILE}`);
 }
