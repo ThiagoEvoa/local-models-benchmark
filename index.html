@@ -160,6 +160,35 @@
       </div>
     </main>
 
+    <!-- Development Workflow Rankings -->
+    <section class="rounded-2xl border border-borderDark bg-cardDark/95 shadow-2xl p-6 sm:p-8 mb-8">
+      <div class="mb-6 pb-4 border-b border-borderDark/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-lg sm:text-xl font-bold text-white" id="workflow-title">Development Workflow Model Rankings</h2>
+          <p class="mt-1 text-xs text-neutral-400 max-w-3xl leading-relaxed" id="workflow-description">
+            Local models ranked by benchmark capabilities most relevant to each development phase.
+          </p>
+        </div>
+        <span class="text-xs text-neutral-500 font-mono flex-shrink-0" id="workflow-updated">Dynamic ranking</span>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2 mb-6" id="workflow-tabs"></div>
+
+      <div class="relative w-full rounded-xl bg-[#09090B] border border-neutral-800/80 p-6 pt-10 pb-16 overflow-x-auto select-none" id="workflow-chart-frame">
+        <div class="relative min-w-max w-full">
+          <div class="absolute inset-x-0 top-14 h-[1px] dotted-grid pointer-events-none"></div>
+          <div class="absolute inset-x-0 top-32 h-[1px] dotted-grid pointer-events-none"></div>
+          <div class="absolute inset-x-0 top-52 h-[1px] dotted-grid pointer-events-none"></div>
+          <div class="flex items-end justify-start sm:justify-center gap-6 sm:gap-8 md:gap-10 px-4 mx-auto" id="workflow-track"></div>
+        </div>
+      </div>
+
+      <div class="mt-5 pt-4 border-t border-neutral-800/60 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-neutral-400">
+        <span id="workflow-method">Average of relevant benchmark scores. Higher score is better &uarr;</span>
+        <span class="text-[11px] text-neutral-500">Models without scores excluded</span>
+      </div>
+    </section>
+
     <!-- Footer -->
     <footer class="flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs text-neutral-500 gap-4 border-t border-borderDark/40 pt-6">
       <p>
@@ -192,7 +221,47 @@
     let rawData = null;
     let benchmarkDescriptions = {};
     let activeBenchmarkId = 'composite';
+    let activeWorkflowPhase = 'specification';
     let showFrontier = true;
+
+    // Phase scores are derived from current benchmark data, so rankings update with every sync.
+    const WORKFLOW_PHASES = {
+      specification: {
+        name: 'Project Specification',
+        description: 'Reasoning, knowledge, and analytical problem-solving for requirements and product specifications.',
+        benchmarks: ['aime_2026', 'gpqa_diamond', 'hle', 'mmlu_pro']
+      },
+      ux: {
+        name: 'UI/UX Design',
+        description: 'Multimodal understanding and visual reasoning for interface concepts, flows, and design critique.',
+        benchmarks: ['osworld_verified', 'mmmu_pro', 'math_vision', 'mmlu_pro']
+      },
+      architecture: {
+        name: 'Project Architecture',
+        description: 'Deep reasoning plus agentic capability for boundaries, trade-offs, and system design.',
+        benchmarks: ['aime_2026', 'gpqa_diamond', 'hle', 'mmlu_pro', 'mcp_atlas']
+      },
+      implementation: {
+        name: 'Project Implementation',
+        description: 'Software-engineering and coding performance for producing working implementation changes.',
+        benchmarks: ['swe_bench_verified', 'swe_bench_pro', 'livecodebench']
+      },
+      codeReview: {
+        name: 'Implementation Code Review',
+        description: 'Code comprehension, defect detection, and reasoning about implementation correctness.',
+        benchmarks: ['swe_bench_verified', 'swe_bench_pro', 'gpqa_diamond', 'mmlu_pro']
+      },
+      specReview: {
+        name: 'Implementation Specification Review',
+        description: 'Reasoning and consistency checking for validating implementation requirements and scope.',
+        benchmarks: ['aime_2026', 'gpqa_diamond', 'hle', 'mmlu_pro']
+      },
+      qa: {
+        name: 'QA',
+        description: 'Software engineering, terminal operation, API/tool use, and failure investigation.',
+        benchmarks: ['swe_bench_verified', 'swe_bench_pro', 'terminal_bench_2_1', 'mcp_atlas', 'tau_bench']
+      }
+    };
 
     async function init() {
       try {
@@ -217,13 +286,16 @@
         }
 
         renderBenchmarkTabs();
+        renderWorkflowTabs();
         renderChart();
+        renderWorkflowChart();
 
         const toggleBtn = document.getElementById('toggle-frontier');
         if (toggleBtn) {
           toggleBtn.addEventListener('change', (e) => {
             showFrontier = e.target.checked;
             renderChart();
+            renderWorkflowChart();
           });
         }
 
@@ -292,6 +364,78 @@
       }
 
       renderChart();
+    }
+
+    function renderWorkflowTabs() {
+      const container = document.getElementById('workflow-tabs');
+      Object.entries(WORKFLOW_PHASES).forEach(([id, phase], index) => {
+        const btn = document.createElement('button');
+        btn.className = index === 0
+          ? 'workflow-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-white text-neutral-950 shadow-sm'
+          : 'workflow-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800';
+        btn.dataset.phase = id;
+        btn.textContent = phase.name;
+        btn.addEventListener('click', () => switchWorkflowPhase(id));
+        container.appendChild(btn);
+      });
+    }
+
+    function switchWorkflowPhase(id) {
+      if (!WORKFLOW_PHASES[id]) return;
+      activeWorkflowPhase = id;
+      document.querySelectorAll('.workflow-btn').forEach(btn => {
+        const active = btn.dataset.phase === id;
+        btn.className = active
+          ? 'workflow-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-white text-neutral-950 shadow-sm'
+          : 'workflow-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800';
+      });
+      renderWorkflowChart();
+    }
+
+    function renderWorkflowChart() {
+      const track = document.getElementById('workflow-track');
+      const phase = WORKFLOW_PHASES[activeWorkflowPhase];
+      if (!track || !phase || !rawData) return;
+      track.innerHTML = '';
+      document.getElementById('workflow-title').textContent = phase.name + ' Model Rankings';
+      document.getElementById('workflow-description').textContent = phase.description;
+      document.getElementById('workflow-updated').textContent = rawData.updatedAt
+        ? `Updated ${new Date(rawData.updatedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}`
+        : 'Dynamic ranking';
+
+      const entries = (rawData.models || [])
+        .filter(model => !model.isFrontier)
+        .map(model => {
+          const scores = phase.benchmarks
+            .map(id => model.scores?.[id]?.value)
+            .filter(value => typeof value === 'number' && Number.isFinite(value));
+          return { model, score: scores.length ? scores.reduce((sum, value) => sum + value, 0) / scores.length : null, count: scores.length };
+        })
+        .filter(entry => entry.score !== null)
+        .sort((a, b) => b.score - a.score);
+
+      if (!entries.length) {
+        track.innerHTML = '<div class="text-neutral-500 text-xs py-20 font-mono text-center w-full">No relevant evaluation scores reported for this phase yet.</div>';
+        return;
+      }
+
+      entries.forEach((entry, index) => {
+        const barHeightPct = Math.min(100, Math.max(16, entry.score));
+        const col = document.createElement('div');
+        col.className = 'flex flex-col items-center w-24 sm:w-28 flex-shrink-0';
+        col.innerHTML = `
+          <div class="w-full h-[260px] flex items-end justify-center pb-0 border-b border-neutral-700/80">
+            <div class="w-16 sm:w-20 rounded-t-xl bg-[#1D4ED8] bar-glow flex items-center justify-center origin-bottom shadow-lg" style="height: ${barHeightPct}%;">
+              <span class="text-sm font-mono text-white font-bold select-none">${Math.round(entry.score)}</span>
+            </div>
+          </div>
+          <div class="w-full h-28 flex justify-center pt-3 overflow-visible">
+            <span class="text-xs font-semibold text-neutral-300 whitespace-nowrap transform -rotate-45 origin-top-right text-right -translate-x-3" title="${entry.model.name}">
+              ${index + 1}. ${entry.model.name}
+            </span>
+          </div>`;
+        track.appendChild(col);
+      });
     }
 
     function renderChart() {
