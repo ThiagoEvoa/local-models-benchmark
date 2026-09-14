@@ -48,6 +48,55 @@
       }
     }
   },
+  "Qwen3.8-27B-GSQ-RCO-IQ3_S": {
+    "status": "inferred",
+    "source": "https://huggingface.co/ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF",
+    "profileSources": {
+      "general": "application_baseline",
+      "coding": "inferred_from_general",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "model-card/tokenizer-template",
+      "thinkingFormat": "Unknown",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": false
+    },
+    "limits": {
+      "nativeContextWindow": null,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
   "qwen3.6-27b": {
     "status": "partial",
     "source": "https://huggingface.co/Qwen/Qwen3.6-27B",

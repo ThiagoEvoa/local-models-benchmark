@@ -1,7 +1,8 @@
 {
-  "updatedAt": "2026-09-12T12:47:30.018Z",
+  "updatedAt": "2026-09-14T09:03:54.651Z",
   "targetModels": [
     "qwen3.8-27b",
+    "Qwen3.8-27B-GSQ-RCO-IQ3_S",
     "qwen3.6-27b",
     "qwen3.6-35b",
     "qwen3.5-2b",
@@ -233,6 +234,18 @@
           "sourceUrl": "https://mathvision-cuhk.github.io/"
         }
       }
+    },
+    {
+      "id": "Qwen3.8-27B-GSQ-RCO-IQ3_S",
+      "name": "Qwen3.8-27B-GSQ-RCO-IQ3_S",
+      "slug": "qwen3-8-27b-gsq-rco-iq3-s",
+      "repo": "ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF",
+      "isFrontier": false,
+      "url": "https://huggingface.co/ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF",
+      "provider": "Alibaba",
+      "logo": "alibaba_small.svg",
+      "compositeIndex": 0,
+      "scores": {}
     },
     {
       "id": "qwen3.6-27b",
