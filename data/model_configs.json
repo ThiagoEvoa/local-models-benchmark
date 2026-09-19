@@ -1273,6 +1273,55 @@
       }
     }
   },
+  "ternary-bonsai-2-27b": {
+    "status": "inferred",
+    "source": "https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf",
+    "profileSources": {
+      "general": "application_baseline",
+      "coding": "inferred_from_general",
+      "fast": "inferred_baseline"
+    },
+    "capabilities": {
+      "reasoning": true,
+      "thinkingControl": "model-card/tokenizer-template",
+      "thinkingFormat": "Unknown",
+      "supportsDeveloperRole": null,
+      "supportsReasoningEffort": false
+    },
+    "limits": {
+      "nativeContextWindow": null,
+      "recommendedMaxTokens": null
+    },
+    "profiles": {
+      "general": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "coding": {
+        "reasoning": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "repetition_penalty": 1
+      },
+      "fast": {
+        "reasoning": false,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "repetition_penalty": 1
+      }
+    }
+  },
   "claude-fable-5.1": {
     "status": "inferred",
     "source": "https://huggingface.co/claude-fable-5.1",

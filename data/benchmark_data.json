@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-14T09:03:54.651Z",
+  "updatedAt": "2026-09-19T08:28:21.224Z",
   "targetModels": [
     "qwen3.8-27b",
     "Qwen3.8-27B-GSQ-RCO-IQ3_S",
@@ -27,6 +27,7 @@
     "ministral-3-3b",
     "ministral-3-8b",
     "ministral-3-14b",
+    "ternary-bonsai-2-27b",
     "claude-fable-5.1",
     "gpt-6",
     "claude-opus-5",
@@ -1878,6 +1879,40 @@
       "logo": "default_model.svg",
       "compositeIndex": 0,
       "scores": {}
+    },
+    {
+      "id": "ternary-bonsai-2-27b",
+      "name": "ternary-bonsai-2-27b",
+      "slug": "ternary-bonsai-2-27b",
+      "repo": "prism-ml/Ternary-Bonsai-2-27B-gguf",
+      "isFrontier": false,
+      "url": "https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf",
+      "provider": "Independent",
+      "logo": "default_model.svg",
+      "compositeIndex": 89.5,
+      "scores": {
+        "livecodebench": {
+          "value": 90,
+          "display": "90.0%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (prism-ml/Ternary-Bonsai-2-27B-gguf)",
+          "sourceUrl": "https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf"
+        },
+        "aime_2026": {
+          "value": 96.7,
+          "display": "96.7%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (prism-ml/Ternary-Bonsai-2-27B-gguf)",
+          "sourceUrl": "https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf"
+        },
+        "mmmu_pro": {
+          "value": 81.7,
+          "display": "81.7%",
+          "source": "fallback-hf",
+          "sourceName": "Hugging Face (prism-ml/Ternary-Bonsai-2-27B-gguf)",
+          "sourceUrl": "https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf"
+        }
+      }
     },
     {
       "id": "claude-fable-5.1",
