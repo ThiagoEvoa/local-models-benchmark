@@ -184,8 +184,8 @@
       </div>
 
       <div class="mt-5 pt-4 border-t border-neutral-800/60 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-neutral-400">
-        <span id="workflow-method">Average of relevant benchmark scores. Higher score is better &uarr;</span>
-        <span class="text-[11px] text-neutral-500">Minimum 80% benchmark coverage required</span>
+        <span id="workflow-method">Weighted score with missing-data penalty. Higher score is better &uarr;</span>
+        <span class="text-[11px] text-neutral-500">Minimum 80% weighted coverage required</span>
       </div>
     </section>
 
@@ -238,44 +238,45 @@
     let activeWorkflowPhase = 'specification';
     let showFrontier = true;
 
-    // Phase scores are derived from current benchmark data, so rankings update with every sync.
-    // Incomplete benchmark coverage must not produce inflated rankings.
+    // Phase scores use task-specific weights and penalize missing evidence.
+    // This prevents sparse benchmark coverage from producing inflated rankings.
     const MIN_PHASE_COVERAGE = 0.8;
+    const COVERAGE_PENALTY_POWER = 0.5;
     const WORKFLOW_PHASES = {
       specification: {
         name: 'Project Specification',
         description: 'Reasoning, knowledge, and analytical problem-solving for requirements and product specifications.',
-        benchmarks: ['aime_2026', 'gpqa_diamond', 'hle', 'mmlu_pro']
+        weights: { aime_2026: 0.30, gpqa_diamond: 0.25, hle: 0.25, mmlu_pro: 0.20 }
       },
       ux: {
         name: 'UI/UX Design',
         description: 'Multimodal understanding and visual reasoning for interface concepts, flows, and design critique.',
-        benchmarks: ['osworld_verified', 'mmmu_pro', 'math_vision', 'mmlu_pro']
+        weights: { osworld_verified: 0.35, mmmu_pro: 0.30, math_vision: 0.20, mmlu_pro: 0.15 }
       },
       architecture: {
         name: 'Project Architecture',
         description: 'Deep reasoning plus agentic capability for boundaries, trade-offs, and system design.',
-        benchmarks: ['aime_2026', 'gpqa_diamond', 'hle', 'mmlu_pro', 'mcp_atlas']
+        weights: { aime_2026: 0.20, gpqa_diamond: 0.20, hle: 0.20, mmlu_pro: 0.20, mcp_atlas: 0.20 }
       },
       implementation: {
         name: 'Project Implementation',
         description: 'Software-engineering and coding performance for producing working implementation changes.',
-        benchmarks: ['swe_bench_verified', 'swe_bench_pro', 'livecodebench']
+        weights: { swe_bench_verified: 0.40, swe_bench_pro: 0.35, livecodebench: 0.25 }
       },
       codeReview: {
         name: 'Implementation Code Review',
         description: 'Code comprehension, defect detection, and reasoning about implementation correctness.',
-        benchmarks: ['swe_bench_verified', 'swe_bench_pro', 'gpqa_diamond', 'mmlu_pro']
+        weights: { swe_bench_verified: 0.30, swe_bench_pro: 0.25, gpqa_diamond: 0.25, mmlu_pro: 0.20 }
       },
       specReview: {
         name: 'Implementation Specification Review',
         description: 'Reasoning and consistency checking for validating implementation requirements and scope.',
-        benchmarks: ['aime_2026', 'gpqa_diamond', 'hle', 'mmlu_pro']
+        weights: { aime_2026: 0.25, gpqa_diamond: 0.25, hle: 0.25, mmlu_pro: 0.25 }
       },
       qa: {
         name: 'QA',
         description: 'Software engineering, terminal operation, API/tool use, and failure investigation.',
-        benchmarks: ['swe_bench_verified', 'swe_bench_pro', 'terminal_bench_2_1', 'mcp_atlas', 'tau_bench']
+        weights: { swe_bench_verified: 0.25, swe_bench_pro: 0.20, terminal_bench_2_1: 0.25, mcp_atlas: 0.15, tau_bench: 0.15 }
       }
     };
 
@@ -430,16 +431,25 @@
       const entries = (rawData.models || [])
         .filter(model => !model.isFrontier)
         .map(model => {
-          const scores = phase.benchmarks
-            .map(id => model.scores?.[id]?.value)
-            .filter(value => typeof value === 'number' && Number.isFinite(value));
-          const coverage = scores.length / phase.benchmarks.length;
-          return {
-            model,
-            score: scores.length ? scores.reduce((sum, value) => sum + value, 0) / scores.length : null,
-            count: scores.length,
-            coverage
-          };
+          const weights = phase.weights;
+          const totalWeight = Object.values(weights).reduce((sum, weight) => sum + weight, 0);
+          let weightedScore = 0;
+          let availableWeight = 0;
+          let count = 0;
+
+          for (const [id, weight] of Object.entries(weights)) {
+            const value = model.scores?.[id]?.value;
+            if (typeof value !== 'number' || !Number.isFinite(value)) continue;
+            weightedScore += value * weight;
+            availableWeight += weight;
+            count++;
+          }
+
+          const coverage = availableWeight / totalWeight;
+          const rawScore = availableWeight > 0 ? weightedScore / availableWeight : null;
+          // sqrt penalty is proportional but avoids making an 80% covered model unusable.
+          const score = rawScore === null ? null : rawScore * Math.pow(coverage, COVERAGE_PENALTY_POWER);
+          return { model, score, rawScore, count, total: Object.keys(weights).length, coverage };
         })
         .filter(entry => entry.score !== null && entry.coverage >= MIN_PHASE_COVERAGE)
         .sort((a, b) => b.score - a.score);
@@ -460,7 +470,7 @@
             </div>
           </div>
           <div class="w-full h-28 flex justify-center pt-3 overflow-visible">
-            <span class="text-xs font-semibold text-neutral-300 whitespace-nowrap transform -rotate-45 origin-top-right text-right -translate-x-3" title="${entry.model.name} — ${entry.count}/${phase.benchmarks.length} benchmarks">
+            <span class="text-xs font-semibold text-neutral-300 whitespace-nowrap transform -rotate-45 origin-top-right text-right -translate-x-3" title="${entry.model.name} — adjusted ${entry.score.toFixed(2)}, raw ${entry.rawScore.toFixed(2)}, ${entry.count}/${entry.total} benchmarks (${Math.round(entry.coverage * 100)}% weighted coverage)">
               ${entry.model.name}
             </span>
           </div>`;
